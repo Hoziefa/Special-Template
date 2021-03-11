@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "commonjs",
+
+        // "outDir": "./build",
+        // "rootDir": "./src",
+
+        "baseUrl": "src",
+        "paths": {
+            "@appTypes/*": ["types/*", "types/index.ts"],
+            "@views/*": ["views/*"],
+            "@models/*": ["models/*"]
+        },
+
+        "noEmitOnError": true,
+        // "isolatedModules": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+
+        "strict": true,
+
+        "typeRoots": ["./types", "./node_modules/@types"],
+        "skipLibCheck": true,
+
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
+    },
+    "exclude": ["node_modules"]
+}

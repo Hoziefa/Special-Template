@@ -1,4 +1,4 @@
-import { Callback } from '@appTypes/typeAliases';
+import { Callback } from '@appTypes/*';
 
 export class Eventing {
     private events: { [key: string]: Callback[] } = {};

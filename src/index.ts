@@ -1,5 +1,5 @@
 import { DataPersister, Eventing, Model } from '@models/*';
-import { GoToTop, Hero, Loader, SettingsBox } from '@views/*';
+import { About, AppFooter, GoToTop, Hero, Loader, NavigationBullets, SettingsBox } from '@views/*';
 
 import 'assets/scss/_main-style.scss';
 
@@ -20,7 +20,13 @@ class State {
 
     readonly goToTop = new GoToTop(this.root, this.model, this.dataPersister);
 
+    readonly navigationBullets = new NavigationBullets(this.root, this.model, this.dataPersister);
+
     readonly hero = new Hero(this.root, this.model, this.dataPersister);
+
+    readonly about = new About(this.root, this.model, this.dataPersister);
+
+    readonly appFooter = new AppFooter(this.root, this.model, this.dataPersister);
 
     private constructor() {
     }
@@ -35,7 +41,10 @@ class State {
         this.loader.render();
         this.settingsBox.render();
         this.goToTop.render();
+        this.navigationBullets.render();
         this.hero.render();
+        this.about.render();
+        this.appFooter.render();
     }
 }
 

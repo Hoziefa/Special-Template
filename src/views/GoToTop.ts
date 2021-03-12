@@ -1,4 +1,4 @@
-import { View } from '@views/View';
+import { View } from '@views/*';
 
 interface IGoToTopElements {
     gotoTop: HTMLButtonElement

@@ -1,40 +1,46 @@
-// {
-//     //% SELECTORS:::
-//     let navBulletsElm = document.querySelector(elements.navBullets);
-//     let allBulletsElms = navBulletsElm.querySelectorAll(elements.allBullets);
-//     let allLinksElms = document.querySelectorAll(elements.allLinks);
+import { View } from '@views/*';
+import { HTMLElementEvent } from '@appTypes/*';
 
-//     //% FUNCTIONS:::
-//     const navigateController = e => {
-//         document.querySelector(e.target.dataset.goto)?.scrollIntoView({ behavior: 'smooth' });
-//     };
+interface INavigationBulletsElements {
+    navBulletsContainer: HTMLDivElement;
+}
 
-//     //% EVENT-LISTENERS:::
+export class NavigationBullets extends View {
+    readonly bullets = [
+        { goTo: '.about--us', content: 'about us' },
+        { goTo: '.our-skills', content: 'our skills' },
+        { goTo: '.our-gallery', content: 'our gallery' },
+        { goTo: '.timeline', content: 'time line' },
+        { goTo: '.our-features', content: 'our features' },
+        { goTo: '.testimonials', content: 'testimonials' },
+        { goTo: '.contact', content: 'contact us' },
+    ];
 
-//     //$ BULLETS ITEMS
-//     allBulletsElms.forEach(bullet => bullet.addEventListener('click', navigateController));
+    readonly selectors: Record<keyof INavigationBulletsElements, string> = { navBulletsContainer: '.nav-bullets' };
 
-//     //$ UL-LI LIST
-//     allLinksElms.forEach(link => {
-//         link.addEventListener('click', e => {
-//             //> The reason was this not working cause this is an anchor tag and have a behavior so we have to prevent it to make this functionality works
-//             e.preventDefault();
+    // get elements(): INavigationBulletsElements {
+    //     return { navBulletsContainer: document.querySelector<HTMLDivElement>(this.selectors.navBulletsContainer)! };
+    // }
 
-//             navigateController(e);
-//         });
-//     });
-// }
+    protected template(): string {
+        return `
+            <div class="nav-bullets">
+                ${ this.bullets.map(({ goTo, content }) => `<div class="bullet" data-goto="${ goTo }"><div class="tooltip">${ content }</div></div>`).join('') }
+            </div>
+        `;
+    }
 
+    protected eventsMap(): { [p: string]: EventListener & any } {
+        const { navBulletsContainer } = this.selectors;
 
+        return {
+            [`click:${ navBulletsContainer }`]: this.navigationController,
+        };
+    }
 
+    private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>) => {
+        if (!target.matches(`${ this.selectors.navBulletsContainer }, ${ this.selectors.navBulletsContainer } *`)) return;
 
-// <div class="nav-bullets">
-// <div class="bullet" data-goto=".about--us"><div class="tooltip">about us</div></div>
-// <div class="bullet" data-goto=".our-skills"><div class="tooltip">our skills</div></div>
-// <div class="bullet" data-goto=".our-gallery"><div class="tooltip">our gallery</div></div>
-// <div class="bullet" data-goto=".timeline"><div class="tooltip">time line</div></div>
-// <div class="bullet" data-goto=".our-features"><div class="tooltip">our features</div></div>
-// <div class="bullet" data-goto=".testimonials"><div class="tooltip">testimonials</div></div>
-// <div class="bullet" data-goto=".contact"><div class="tooltip">contact us</div></div>
-// </div>
-
+        document.querySelector(target.dataset.goto!)?.scrollIntoView({ behavior: 'smooth' });
+    };
+}

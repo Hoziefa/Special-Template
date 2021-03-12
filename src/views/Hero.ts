@@ -71,7 +71,7 @@ export class Hero extends View<Model, IHeroState> {
                             <ul class="links">
                                 ${ this.links.map(({ goTo, content }, idx) => `
                                     <li class="list-item">
-                                        <a href="#" class="${ idx === 0 ? 'active' : '' }" data-goto="${ goTo }">${ content }</a>
+                                        <a href="#${ goTo.replace('.', '') }" class="${ idx === 0 ? 'active' : '' }" data-goto="${ goTo }">${ content }</a>
                                     </li>`).join('') }
                             </ul>
 
@@ -106,9 +106,9 @@ export class Hero extends View<Model, IHeroState> {
     }
 
     protected eventsMap(): { [key: string]: (e: Event & any) => void } {
-        const { toggleMenuBtn } = this.selectors;
+        const { linksContainer, toggleMenuBtn } = this.selectors;
 
-        return { [`click:${ toggleMenuBtn }`]: this.toggleMenu, 'click:html': this.closeMenuOnBlur };
+        return { [`click:${ toggleMenuBtn }`]: this.toggleMenu, 'click:html': this.closeMenuOnBlur, [`click:${ linksContainer }`]: this.navigationController };
     }
 
     //#region Toggle Menu
@@ -133,28 +133,28 @@ export class Hero extends View<Model, IHeroState> {
     private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>) => {
         const { currentSlide, timer, duration } = this.state;
 
-        //ToDo 1-) SPECIFY DIRECTION OF SLIDE TO GO PREVIOUS.
+        //> 1-) SPECIFY DIRECTION OF SLIDE TO GO PREVIOUS.
         if (direction === 'prev')
             this.setState({ currentSlide: currentSlide === 0 ? slides.length - 1 : currentSlide - 1 });
 
-        //ToDo 2-) SPECIFY DIRECTION OF SLIDE TO GO NEXT.
+        //> 2-) SPECIFY DIRECTION OF SLIDE TO GO NEXT.
         if (direction === 'next')
             this.setState({ currentSlide: currentSlide === slides.length - 1 ? 0 : currentSlide + 1 });
 
-        //ToDo 3-) STOPE AUTO SLIDE WHEN USER CLICK.
+        //> 3-) STOP AUTO SLIDE WHEN USER CLICK.
         timer && clearInterval(timer);
 
-        //ToDo 4-) THEN AFTER CLEAR PREVIOUS START AUTO SLIDE AGAIN FOR KEEP WORKING FROM WHERE THE USER STOPPED.
+        //> 4-) THEN AFTER CLEAR PREVIOUS START AUTO SLIDE AGAIN FOR KEEP WORKING FROM WHERE THE USER STOPPED.
         this.setState({ timer: setInterval(this.autoSlide, duration) });
 
-        //ToDo 5-) REMOVE ACTIVE CLASS FROM SLIDES ITEMS \\ USING .from-METHOD AND SND ARGUMENT OF IT WHICH IS A CALLBACK LOOP-HELPER.
+        //> 5-) REMOVE ACTIVE CLASS FROM SLIDES ITEMS \\ USING .from-METHOD AND SND ARGUMENT OF IT WHICH IS A CALLBACK LOOP-HELPER.
         removeClassAttr(slides);
 
-        //ToDo 6-) ADD CLASS ACTIVE TO CURRENT ITEM.
+        //> 6-) ADD CLASS ACTIVE TO CURRENT ITEM.
         slides[currentSlide].classList.add('active');
         // slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
 
-        //ToDo 7-) SAVE CURRENT SLIDE NUMBER IN LOCAL-STORAGE TO KEEP THE ACTIVE SLIDE ON THE CURRENT IMAGE AND KEEP THIS VARIABLE UPDATED WITH EACH setInterval CALL.
+        //> 7-) SAVE CURRENT SLIDE NUMBER IN LOCAL-STORAGE TO KEEP THE ACTIVE SLIDE ON THE CURRENT IMAGE AND KEEP THIS VARIABLE UPDATED WITH EACH setInterval CALL.
         this.dataPersister.persistData(EDataPersistKeys.CurrentSlide, currentSlide);
     };
 
@@ -196,6 +196,12 @@ export class Hero extends View<Model, IHeroState> {
     };
 
     //#endregion Random Background Controller
+
+    private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>) => {
+        if (!target.matches(`${ this.selectors.linksContainer } .links li a`)) return;
+
+        document.querySelector(target.dataset.goto!)?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     getPersistedData = () => {
         this.persistedRandomBgOption();

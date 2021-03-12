@@ -1,16 +1,23 @@
-import { HTMLElementEvent, EDataPersistKeys, EObservables } from '@appTypes/*';
+import { EDataPersistKeys, EObservables, HTMLElementEvent } from '@appTypes/*';
 import { Model } from '@models/*';
 import { removeClassAttr } from '@utils/*';
 import { View } from '@views/*';
 
-interface ISettingsBoxState {
+interface IHeroState {
     currentSlide: number;
     timer: number;
     duration: number;
 }
 
-export class Hero extends View<Model, ISettingsBoxState> {
-    protected readonly state: ISettingsBoxState = { currentSlide: 0, timer: NaN, duration: 3000 };
+interface IHeroElements {
+    linksContainer?: HTMLDivElement;
+    menuLinksUl: HTMLLinkElement;
+    toggleMenuBtn: HTMLButtonElement;
+    slides: NodeListOf<HTMLDivElement>;
+}
+
+export class Hero extends View<Model, IHeroState> {
+    protected readonly state: IHeroState = { currentSlide: 0, timer: NaN, duration: 3000 };
 
     readonly images = [
         '/images/slider/slide-1.jpg',
@@ -35,34 +42,18 @@ export class Hero extends View<Model, ISettingsBoxState> {
         { goTo: '.contact', content: 'contact' },
     ];
 
-    readonly selectors = {
+    readonly selectors: Record<keyof IHeroElements, string> = {
         linksContainer: '.links-container',
         menuLinksUl: '.links-container .links',
         toggleMenuBtn: '.links-container .toggle-menu',
         slides: '.slides-container .slide-image',
     };
 
-    get elements() {
+    get elements(): IHeroElements {
         return {
             menuLinksUl: document.querySelector<HTMLLinkElement>(this.selectors.menuLinksUl)!,
             toggleMenuBtn: document.querySelector<HTMLButtonElement>(this.selectors.toggleMenuBtn)!,
             slides: document.querySelectorAll<HTMLDivElement>(this.selectors.slides)!,
-        };
-    }
-
-    protected onRender(): void {
-        this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
-
-        this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBg(true));
-        this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBg(false));
-    }
-
-    protected eventsMap(): { [key: string]: (e: Event & any) => void } {
-        const { toggleMenuBtn } = this.selectors;
-
-        return {
-            [`click:${toggleMenuBtn}`]: this.toggleMenu,
-            'click:html': this.closeMenuOnBlur, // blur:.links-container
         };
     }
 
@@ -78,23 +69,14 @@ export class Hero extends View<Model, ISettingsBoxState> {
 
                         <div class="links-container">
                             <ul class="links">
-                                ${this.links
-                                    .map(
-                                        ({ goTo, content }, idx) => `
-                                            <li class="list-item">
-                                                <a href="#" class="${idx === 0 ? 'active' : ''}" data-goto="${goTo}">
-                                                    ${content}
-                                                </a>
-                                            </li>
-                                        `,
-                                    )
-                                    .join('')}
+                                ${ this.links.map(({ goTo, content }, idx) => `
+                                    <li class="list-item">
+                                        <a href="#" class="${ idx === 0 ? 'active' : '' }" data-goto="${ goTo }">${ content }</a>
+                                    </li>`).join('') }
                             </ul>
 
                             <button class="toggle-menu" aria-label="toggle menu">
-                                ${Array.from({ length: 3 })
-                                    .map(() => `<span></span>`)
-                                    .join('')}
+                                ${ Array.from({ length: 3 }).map(() => `<span></span>`).join('') }
                             </button>
                         </div>
                     </nav>
@@ -102,14 +84,7 @@ export class Hero extends View<Model, ISettingsBoxState> {
             </div>
 
             <div class="slides-container">
-                ${this.images
-                    .map(
-                        (url, idx) => `
-                        <div class="slide-image ${idx === 0 ? 'active' : ''}"
-                        style="background: linear-gradient(#000000a6, #000000a6), url('${url}') center no-repeat fixed">
-                        </div>`,
-                    )
-                    .join('')}
+                ${ this.images.map((url, idx) => `<div class="slide-image ${ idx === 0 ? 'active' : '' }" style="background: linear-gradient(#000000a6, #000000a6), url('${ url }') center no-repeat fixed"></div>`).join('') }
             </div>
 
             <div class="introduction-text">
@@ -123,6 +98,19 @@ export class Hero extends View<Model, ISettingsBoxState> {
         `;
     }
 
+    protected onRender(): void {
+        this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
+
+        this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBg(true));
+        this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBg(false));
+    }
+
+    protected eventsMap(): { [key: string]: (e: Event & any) => void } {
+        const { toggleMenuBtn } = this.selectors;
+
+        return { [`click:${ toggleMenuBtn }`]: this.toggleMenu, 'click:html': this.closeMenuOnBlur };
+    }
+
     //#region Toggle Menu
     private toggleMenu = () => {
         this.elements.menuLinksUl.classList.toggle('show');
@@ -132,12 +120,13 @@ export class Hero extends View<Model, ISettingsBoxState> {
 
     //ToDo: Not working yet cause we are selecting the dom elms from the fragment that we pass and the HTML is the absolute parent and the parent of the fragment so to make it work we could make a condition on @method=.bindEvents; to check based the selector that we receive | or we have to figure another way to do this.
     private closeMenuOnBlur = ({ target }: HTMLElementEvent<HTMLElement>) => {
-        if (target.matches(`${this.selectors.linksContainer}, ${this.selectors.linksContainer} *`)) return;
+        if (target.matches(`${ this.selectors.linksContainer }, ${ this.selectors.linksContainer } *`)) return;
 
         this.elements.menuLinksUl.classList.remove('show');
 
         this.elements.toggleMenuBtn.classList.remove('menu-active');
     };
+
     //#endregion Toggle Menu
 
     //#region Slider Implementation
@@ -172,6 +161,7 @@ export class Hero extends View<Model, ISettingsBoxState> {
     private autoSlide = (direction: 'prev' | 'next' = 'next', slides = this.elements.slides): void => {
         this.slide(direction, slides);
     };
+
     //#endregion Slider Implementation
 
     //#region Random Background Controller
@@ -195,7 +185,8 @@ export class Hero extends View<Model, ISettingsBoxState> {
             slides[this.state.currentSlide].classList.add('active');
 
             this.setState({ timer: setInterval(this.autoSlide, duration) });
-        } else if (!isRandomBackgroundPersisted) {
+        }
+        else if (!isRandomBackgroundPersisted) {
             removeClassAttr(slides);
 
             slides[this.state.currentSlide].classList.add('active');
@@ -203,6 +194,7 @@ export class Hero extends View<Model, ISettingsBoxState> {
             clearInterval(timer);
         }
     };
+
     //#endregion Random Background Controller
 
     getPersistedData = () => {

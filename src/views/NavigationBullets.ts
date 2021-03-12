@@ -24,3 +24,17 @@
 //         });
 //     });
 // }
+
+
+
+
+// <div class="nav-bullets">
+// <div class="bullet" data-goto=".about--us"><div class="tooltip">about us</div></div>
+// <div class="bullet" data-goto=".our-skills"><div class="tooltip">our skills</div></div>
+// <div class="bullet" data-goto=".our-gallery"><div class="tooltip">our gallery</div></div>
+// <div class="bullet" data-goto=".timeline"><div class="tooltip">time line</div></div>
+// <div class="bullet" data-goto=".our-features"><div class="tooltip">our features</div></div>
+// <div class="bullet" data-goto=".testimonials"><div class="tooltip">testimonials</div></div>
+// <div class="bullet" data-goto=".contact"><div class="tooltip">contact us</div></div>
+// </div>
+

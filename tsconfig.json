@@ -9,8 +9,9 @@
         "baseUrl": "src",
         "paths": {
             "@appTypes/*": ["types/*", "types/index.ts"],
-            "@views/*": ["views/*"],
-            "@models/*": ["models/*"]
+            "@views/*": ["views/*", "views/index.ts"],
+            "@models/*": ["models/*", "models/index.ts"],
+            "@utils/*": ["utils/*", "utils/index.ts"]
         },
 
         "noEmitOnError": true,

@@ -1,4 +1,4 @@
-@import './variables';
+@import './_variables.scss';
 
 :root {
     font-size: 16px;
@@ -9,9 +9,6 @@
     }
 }
 
-//$ WE DID THIS LOGIC FOR WHEN THE ROOT-VAR CHANGE THIS VARIABLE CHANGE ALSO
-$primary-color: var(--primary-color);
-
 *,
 *::before,
 *::after {
@@ -21,20 +18,14 @@ $primary-color: var(--primary-color);
 }
 
 body {
-    max-width: 100vw; // we have to test with max and without so width: 100vh
+    max-width: 100vw;
     min-height: 100vh;
     overflow: hidden auto;
-    -webkit-user-select: none;
+    user-select: none;
     font-size: 1rem;
-
     font-family: $mainFont, $subFont;
-    -webkit-font-smoothing: antialiased;
 
-    //* The icon gear caused some weird behavior cause the tns of its parent and this one must match
     transition: padding 0.3s;
-
-    //! FOR TESTING
-    // height: 1000vh;
 
     &::-webkit-scrollbar {
         width: 0.45rem;
@@ -46,6 +37,7 @@ body {
 
     &::-webkit-scrollbar-thumb {
         background: $primary-color;
+        border-radius: 0.5rem;
     }
 }
 
@@ -170,25 +162,13 @@ hr {
 .settings-box {
     position: fixed;
     left: 0;
-    top: 0; //* Second approach to not make this elm on the logo is make the top of this elm is the height of logo parent
+    top: 0;
     background-color: $creamWhite-color;
-    width: 16vw;
-    min-height: 100vh; //* Second approach to not make this elm on the logo is make the height of this elm is 100vh - height of logo parent
+    width: 220px;
+    min-height: 100vh;
     z-index: 2;
-    transform: translateX(-100%); //!
+    transform: translateX(-100%);
     transition: 0.3s;
-
-    @media (max-width: 1200px) {
-        width: 20vw !important;
-    }
-
-    @media (max-width: 991px) {
-        width: 30vw !important;
-
-        h4 {
-            font-size: 1.25rem !important;
-        }
-    }
 
     &.show {
         transform: translateX(0);
@@ -232,7 +212,7 @@ hr {
             //background-color: #adadadc4; //|| 666666c7
 
             h4 {
-                font-size: 1.75rem;
+                font-size: 1.25rem;
                 text-shadow: -1px 1px 2px #000;
             }
 
@@ -342,7 +322,7 @@ hr {
                 border: 2px solid $primary-color; // maximumBlueGreen-color
                 color: #333;
                 padding: 2% 1rem;
-                font-size: 1.35rem;
+                font-size: 1.05rem;
                 cursor: pointer;
                 text-transform: inherit;
                 border-radius: 0 20px 0 20px;
@@ -366,32 +346,36 @@ hr {
             margin-top: auto;
             text-align: center;
 
-            @media (max-width: 1250px) {
-                button {
-                    width: 100% !important;
-                    border-radius: initial !important;
-                    padding: 1em 0.5em !important;
-                }
-            }
-
-            @media (max-width: 768px) {
-                button {
-                    font-size: 1.15rem !important;
-                    padding: 1em 0.25em !important;
-                }
-            }
-
             button {
                 background-color: $bootstrap-danger-color;
                 color: $primaryWhite-color;
-                padding: 1em 1.22em;
-                font-size: 1.35rem;
-                cursor: pointer;
+                padding: 0.85rem 1.25rem;
+                font-size: 1.1rem;
                 text-transform: capitalize;
                 line-height: 100%;
-                border-radius: 7px;
+                border-radius: 20px 5px 20px 5px;
+                cursor: pointer;
             }
+
+            // @media (max-width: 1250px) {
+            //     button {
+            //         width: 100% !important;
+            //         border-radius: initial !important;
+            //         padding: 1em 0.5em !important;
+            //     }
+            // }
+
+            // @media (max-width: 768px) {
+            //     button {
+            //         font-size: 1.15rem !important;
+            //         padding: 1em 0.25em !important;
+            //     }
+            // }
         }
+    }
+
+    @media (max-width: 991px) {
+        width: 180px;
     }
 }
 
@@ -533,12 +517,9 @@ div.nav-bullets {
 
 section.hero {
     min-height: 100vh;
-    // background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-    //   url("http://getwallpapers.com/wallpaper/full/c/4/7/489350.jpg") center/cover no-repeat fixed;
-
-    transition: 1.3s;
     position: relative;
     overflow: hidden;
+    transition: 1.3s;
 
     .slides-container {
         position: absolute;
@@ -553,63 +534,10 @@ section.hero {
             height: 100%;
             display: none;
             animation: zoom 0.55s linear forwards;
+            background-size: cover !important;
 
             &.active {
                 display: flex;
-            }
-
-            &:first-child {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/slider/slide-1.jpg') center no-repeat fixed;
-                background-size: cover;
-            }
-
-            &:nth-child(2) {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/slider/software-development-i1.jpg') center no-repeat fixed;
-                background-size: cover;
-            }
-
-            &:nth-child(3) {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/special/Services_Web.jpg') center no-repeat fixed;
-                background-size: cover;
-            }
-
-            &:nth-child(4) {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/slider/SoftwareDevelopmentInfocirclesTechnoogySolutions.jpg') center no-repeat fixed;
-                background-size: cover;
-            }
-
-            &:nth-child(5) {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/slider/Custom-Software-Development.jpg') center no-repeat fixed;
-                background-size: cover;
-            }
-
-            &:nth-child(6) {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/slider/Geometry-Header-1920x1080.jpg') center no-repeat fixed;
-                background-size: cover;
-            }
-
-            &:nth-child(7) {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/home/home-bg1.jpg') center no-repeat fixed;
-                background-size: cover;
-            }
-
-            &:nth-child(8) {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/home/home-bg2.jpg') center no-repeat fixed;
-                background-size: cover;
-            }
-
-            &:nth-child(9) {
-                background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                    url('../images/home/home-bg3.png') center no-repeat fixed;
-                background-size: cover;
             }
         }
     }
@@ -618,12 +546,11 @@ section.hero {
         color: $floralwhite-color;
 
         nav {
-            min-height: 10vh; // 8vh
+            min-height: 10vh;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            // padding: 0 3%;
 
             .logo {
                 h2 {
@@ -642,7 +569,6 @@ section.hero {
             }
 
             .links-container {
-                // width: 100%;
                 flex-wrap: wrap;
                 flex: 1 0 50%;
                 max-width: 50%;
@@ -668,10 +594,6 @@ section.hero {
                     align-items: center;
                     flex-wrap: wrap;
                     gap: 0.5rem;
-                    // // min-width: 50%;
-                    // flex-wrap: wrap;
-                    // flex: 1 0 50%;
-                    // max-width: 50%;
 
                     @media (max-width: 1200px) {
                         // 991px
@@ -741,10 +663,10 @@ section.hero {
                     position: relative;
                     width: 35px;
                     background-color: transparent;
-                    cursor: pointer;
                     display: none;
                     margin-left: auto;
                     margin-right: 20%;
+                    cursor: pointer;
 
                     &::before {
                         content: '';
@@ -758,26 +680,28 @@ section.hero {
                         pointer-events: none;
                         opacity: 0;
                         overflow: hidden;
-                        transition: 0.3s;
+                        transition: 0.3s 0.2s;
                     }
 
                     &.menu-active::before {
                         opacity: 1;
-                    }
-
-                    @media (max-width: 1200px) {
-                        // 991px
-                        display: block;
+                        transition-delay: 0.1s;
                     }
 
                     span {
                         display: block;
                         background-color: $primary-color;
                         height: 3px;
-                        &:not(:last-child) {
-                            margin-bottom: 4.5px;
-                        }
                         pointer-events: none;
+
+                        &:nth-of-type(2) {
+                            margin: 5px 0;
+                        }
+                    }
+
+                    @media (max-width: 1200px) {
+                        // 991px
+                        display: block;
                     }
                 }
             }
@@ -792,7 +716,7 @@ section.hero {
         flex-direction: column;
         color: $floralwhite-color;
         text-transform: capitalize;
-        padding-bottom: 3rem;
+        padding: 0 3rem 3rem;
 
         h1 {
             font-size: 4.35vw;
@@ -916,7 +840,7 @@ section.about--us {
 
 section.our-skills {
     padding: 5% 0;
-    background: url('../images/ourSkills/leadership-bg.jpg') no-repeat;
+    background: url('../../../public/images/ourSkills/leadership-bg.jpg') no-repeat;
     background-size: cover;
 
     .container > h2 {
@@ -1606,10 +1530,8 @@ section.testimonials {
 
 section.contact {
     padding: 5% 0;
-    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.1)), url('../images/contact/contact-bg.jpg');
-    background-image: url('../images/contact/world-map-computer-wallpaper-51297-52993-hd-wallpapers.jpg');
     background-image: linear-gradient(30deg, rgba(255, 255, 255, 0), $primaryWhite-color),
-        url(../images/contact/world-map-computer-wallpaper-51297-52993-hd-wallpapers.jpg);
+        url('../../../public/images/contact/world-map-computer-wallpaper-51297-52993-hd-wallpapers.jpg');
     background-size: 100% 100%;
 
     header {

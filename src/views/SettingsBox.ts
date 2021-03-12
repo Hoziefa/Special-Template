@@ -1,6 +1,7 @@
-import { HTMLElementEvent } from '@appTypes/typeAliases';
-import { removeClassAttr } from 'utils/misc';
-import { View } from './View';
+import { HTMLElementEvent } from '@appTypes/*';
+import { Model } from '@models/*';
+import { removeClassAttr } from '@utils/*';
+import { View } from '@views/*';
 
 interface ISettingsBoxState {
     currentSlide: number;
@@ -8,7 +9,7 @@ interface ISettingsBoxState {
     duration: number;
 }
 
-export class SettingsBox extends View<never, ISettingsBoxState> {
+export class SettingsBox extends View<Model, ISettingsBoxState> {
     protected readonly state: ISettingsBoxState = { currentSlide: 0, timer: NaN, duration: 3000 };
 
     readonly selectors = {
@@ -19,23 +20,25 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
         optionBoxBullets: '.option-box--bullets span',
         resetAllBtn: '.option-box--reset button',
         navigationBullets: '.nav-bullets',
-        slides: '.slide-container .slide-image',
+        slides: '.slides-container .slide-image',
     };
 
-    readonly elements = {
-        settingsBox: document.querySelector<HTMLDivElement>(this.selectors.settingsBox)!,
-        settingsBoxToggleBtn: document.querySelector<HTMLButtonElement>(this.selectors.settingsBoxToggleBtn)!,
-        optionBoxColorsList: document.querySelectorAll<HTMLLIElement>(this.selectors.optionBoxColorsList)!,
-        optionBoxRandomBg: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxRandomBg)!,
-        optionBoxBullets: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxBullets)!,
-        resetAllBtn: document.querySelector<HTMLButtonElement>(this.selectors.resetAllBtn)!,
+    get elements() {
+        return {
+            settingsBox: document.querySelector<HTMLDivElement>(this.selectors.settingsBox)!,
+            settingsBoxToggleBtn: document.querySelector<HTMLButtonElement>(this.selectors.settingsBoxToggleBtn)!,
+            optionBoxColorsList: document.querySelectorAll<HTMLLIElement>(this.selectors.optionBoxColorsList)!,
+            optionBoxRandomBg: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxRandomBg)!,
+            optionBoxBullets: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxBullets)!,
+            resetAllBtn: document.querySelector<HTMLButtonElement>(this.selectors.resetAllBtn)!,
 
-        //>: Control render order to make this work.
-        navigationBullets: document.querySelector<HTMLDivElement>(this.selectors.navigationBullets)!,
-        slides: document.querySelectorAll<HTMLDivElement>(this.selectors.slides)!,
-    };
+            //>: Control render order to make this work.
+            navigationBullets: document.querySelector<HTMLDivElement>(this.selectors.navigationBullets)!,
+            slides: document.querySelectorAll<HTMLDivElement>(this.selectors.slides)!,
+        };
+    }
 
-    protected onRender() {
+    protected onRender(): void {
         this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
     }
 
@@ -49,11 +52,11 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
         } = this.selectors;
 
         return {
-            [`${settingsBoxToggleBtn}:click`]: this.toggleSettingsBoxController,
-            [`${optionBoxColorsList}:click`]: this.ColorOptionsController,
-            [`${optionBoxRandomBg}:click`]: this.randomBgController,
-            [`${optionBoxBullets}:click`]: this.bulletsOptionController,
-            [`${resetAllBtn}:click`]: this.resetAllController,
+            [`click:${settingsBoxToggleBtn}`]: this.toggleSettingsBoxController,
+            [`click:${optionBoxColorsList}`]: this.colorOptionsController,
+            [`click:${optionBoxRandomBg}`]: this.randomBgController,
+            [`click:${optionBoxBullets}`]: this.bulletsOptionController,
+            [`click:${resetAllBtn}`]: this.resetAllController,
         };
     }
 
@@ -99,12 +102,13 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
 
         currentTarget.firstElementChild!.classList.toggle('fa-spin');
 
-        if (!(+document.body.style.paddingLeft > 0)) {
-            document.body.style.paddingLeft = `${16}vw` || `${settingsBox.getBoundingClientRect().width}px`;
-        } else document.body.style.paddingLeft = '';
+        window.innerWidth > 991 && !(+document.body.style.paddingLeft.replace('px', '') > 0)
+            ? (document.body.style.paddingLeft = `${settingsBox.getBoundingClientRect().width}px`)
+            : (document.body.style.paddingLeft = '');
     };
 
-    private ColorOptionsController = ({ currentTarget }: HTMLElementEvent<HTMLLIElement>) => {
+    //#region Color Option Controller
+    private colorOptionsController = ({ currentTarget }: HTMLElementEvent<HTMLLIElement>) => {
         //ToDo 1->) REMOVE CLASS ACTIVE FROM ALL LI-ELEMENTS
         removeClassAttr(currentTarget.parentElement?.children!);
 
@@ -112,40 +116,46 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
         currentTarget!.classList.add('active');
 
         //ToDo 3->) SET COLOR ON ROOT ELEMENT
-        //* THIS APPROACH IS SO STATIC WE IGNORED AND USE THE ONE BELOW CAUSE IT'S MORE DYNAMIC
-        // document.documentElement.style.setProperty("--primary-color", e.target.dataset.color);
-        //* THIS IS THE BETTER APPROACH TO SWITCH THE PAGE-COLORS
         document.documentElement.style.setProperty('--primary-color', getComputedStyle(currentTarget).backgroundColor);
 
         //ToDo 4->) SAVE THE CHOSEN COLOR TO THE LOCAL-STORAGE
         this.dataPersister.persistData('color-option', getComputedStyle(currentTarget).backgroundColor);
+    };
 
-        //>: Was Out this fn
+    private persistedColorOption = () => {
+        //>: Related to colorOptionsController
+
+        const { optionBoxColorsList } = this.elements;
+
         //ToDo 5->) SET THE SAVED CHOSEN COLOR TO THE UI FROM LOCAL-STORAGE \ WHEN THE WINDOW LOADS OR CLOSE
         const persistedColorOption = this.dataPersister.readData<string>('color-option');
 
         document.documentElement.style.setProperty(
             '--primary-color',
-            persistedColorOption || getComputedStyle(this.elements.optionBoxColorsList[0]).backgroundColor,
+            persistedColorOption || getComputedStyle(optionBoxColorsList[0]).backgroundColor,
         );
 
         //ToDo 6->) CHECK FOR ACTIVE CLASS TO KEEP IT ON THE ELEMENT-LI THAT WE CHOSE ITS COLOR
-        this.elements.optionBoxColorsList.forEach(option => {
-            option.classList.remove('active');
+        //! Bad approach:
+        // optionBoxColorsList.forEach(option => {
+        //     option.classList.remove('active');
 
-            if (getComputedStyle(option).backgroundColor.includes(persistedColorOption)) {
-                option.classList.add('active');
-            }
-            //> IF NO LI-ELEMENT INCLUDES OR CONTAINS THIS LOCAL-STORAGE KEY MEANS THERE IS NO SUCH KEY SO WE HAVE TO CHECK IF THERE IS NO SUCH KEY AND THEN DEPENDS ON THAT WE ADD THE ACTIVE CLASS ON THE FIRST ELEMENT CAUSE WE ARE DELETING THIS CLASS FROM ALL LI-ELEMENTS IN LINES ABOVE \\ AND WE HAVE TO BE AWARE OF THAT IF WE JUST USED ELSE-BLOCK INSTEAD OF ELSE-IF THIS CODE THAT IS INSIDE OF ELSE-BLOCK WILL RUN IN EACH ITERATION THAT IS THE IF-BLOCK__CONDITION DON'T SATISFIES SO ONE SOLUTION IS TO RETURN FROM IF-BLOCK SO TO STOP THE EXECUTION AND MOVE THE ELSE-BLOCK OUT OF THE LOOP \ OR WE JUST USE THE ELSE-IF
-            else if (!persistedColorOption) this.elements.optionBoxColorsList[0].classList.add('active');
-        });
+        //     if (getComputedStyle(option).backgroundColor.includes(persistedColorOption)) option.classList.add('active');
+        //     else if (!persistedColorOption) optionBoxColorsList[0].classList.add('active');
+        // });
+
+        //++ Good approach:
+        removeClassAttr(optionBoxColorsList);
+
+        (
+            Array.from(optionBoxColorsList).find(option =>
+                getComputedStyle(option).backgroundColor.includes(persistedColorOption),
+            ) ?? optionBoxColorsList[0]
+        ).classList.add('active');
     };
+    //#endregion Color Option Controller
 
-    private resetAllController = () => {
-        location.reload();
-        localStorage.clear();
-    };
-
+    //#region Bullets Option Controller
     private bulletsOptionController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>) => {
         const { navigationBullets } = this.elements;
 
@@ -175,21 +185,23 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
 
         const { optionBoxBullets, navigationBullets } = this.elements;
 
-        if (localStorage.getItem('bullets-option')?.includes('block')) {
+        if (this.dataPersister.readData<string>('bullets-option')?.includes('block')) {
             removeClassAttr(optionBoxBullets);
             optionBoxBullets[0].classList.add('active');
 
             navigationBullets.style.display = 'block';
         }
         //> WE DID IT AS else-if CAUSE IT IGNORE THE IF-BLOCK IF IT IS NOT TRUE AND RUN THIS AND CAUSED UNEXPECTED ISSUES AND FOR THIS WE HAD TO SPECIFIC THIS LINE CAUSE IF THE IF-BLOCK NOT RUN CHECK FOR THIS INSTEAD OF IF THE IF-BLOCK NOT RUN RUN THIS ELSE-BLOCK IN ALL CASES WE HAD TO SPECIFIC IT
-        else if (localStorage.getItem('bullets-option')?.includes('none')) {
+        else if (this.dataPersister.readData<string>('bullets-option')?.includes('none')) {
             removeClassAttr(optionBoxBullets);
             optionBoxBullets[1].classList.add('active');
 
             navigationBullets.style.display = 'none';
         }
     };
+    //#endregion Bullets Option Controller
 
+    //#region Random Background Controller
     private randomBgController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>) => {
         const { timer, duration } = this.state;
 
@@ -225,7 +237,7 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
         this.setState({ currentSlide: parseInt(this.dataPersister.readData('currentSlide'), 10) || 0 });
 
         //> OPTIONAL-CHAINING-OPERATOR USED TO AVOID ERRORS IF THERE IS NO KEY LIKE THIS SO WE CAN'T USE .includes[METHOD] ON IT SO THIS WILL CAUSED AN ERROR
-        if (localStorage.getItem('random-bg')?.includes('true')) {
+        if (this.dataPersister.readData<boolean>('random-bg')) {
             removeClassAttr(optionBoxRandomBg);
             optionBoxRandomBg[0].classList.add('active');
 
@@ -235,7 +247,7 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
             this.setState({ timer: setInterval(this.autoSlide, duration) });
         }
         //> WE DID IT AS else-if CAUSE IT IGNORE THE IF-BLOCK IF IT IS NOT TRUE AND RUN THIS AND CAUSED UNEXPECTED ISSUES AND FOR THIS WE HAD TO SPECIFIC THIS LINE CAUSE IF THE IF-BLOCK NOT RUN CHECK FOR THIS INSTEAD OF IF THE IF-BLOCK NOT RUN RUN THIS ELSE-BLOCK IN ALL CASES WE HAD TO SPECIFIC IT
-        else if (localStorage.getItem('random-bg')?.includes('false')) {
+        else if (!this.dataPersister.readData<boolean>('random-bg')) {
             removeClassAttr(optionBoxRandomBg);
             optionBoxRandomBg[1].classList.add('active');
 
@@ -244,6 +256,12 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
 
             clearInterval(timer);
         }
+    };
+    //#endregion Random Background Controller
+
+    private resetAllController = () => {
+        location.reload();
+        this.dataPersister.clearData();
     };
 
     private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>) => {
@@ -279,7 +297,8 @@ export class SettingsBox extends View<never, ISettingsBoxState> {
     };
 
     onDomLoads = () => {
-        this.persistedRandomBgOption();
+        this.persistedColorOption();
         this.persistedBulletsOption();
+        this.persistedRandomBgOption();
     };
 }

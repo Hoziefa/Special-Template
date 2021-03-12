@@ -8,4 +8,8 @@ export class DataPersister {
     static readData<T>(key: string): T {
         return JSON.parse(localStorage.getItem(key) ?? 'null');
     }
+
+    static clearData(): void {
+        localStorage.clear();
+    }
 }

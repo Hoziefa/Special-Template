@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
-@import url("https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
 
 /*=============================================
 //%=        START VARIABLES SECTION        =%//
@@ -149,22 +149,22 @@ $bootstrap-white-color: #f8f9fa;
 
 //ToDo-*----------  START FONTS BASE  ----------*/
 
-$proxima-font: "Proxima Nova";
-$comicSnsMs-font: "Comic Sans MS";
-$montserrat-font: "Montserrat";
-$poppins-font: "Poppins";
-$openSans-font: "Open Sans";
-$raleway-font: "raleway";
-$celias-font: "CeliasW05-Regular";
-$helveticaNeue-font: "Helvetica Neue";
-$droidSans-font: "Droid Sans";
-$helveticaNeue-font: "Helvetica Neue WGL", "Helvetica Neue";
-$dejaVuSansCode-font: "DejaVu Sans Code";
-$verdanaHand-font: "Verdana Hand";
-$nexaRustShadow-font: "Nexa Rust Slab Shadow 01";
-$indieFlower-font: "Indie Flower";
-$caveat-font: "Caveat";
-$introRustLine-font: "Intro Rust G Base 2 Line";
+$proxima-font: 'Proxima Nova';
+$comicSnsMs-font: 'Comic Sans MS';
+$montserrat-font: 'Montserrat';
+$poppins-font: 'Poppins';
+$openSans-font: 'Open Sans';
+$raleway-font: 'raleway';
+$celias-font: 'CeliasW05-Regular';
+$helveticaNeue-font: 'Helvetica Neue';
+$droidSans-font: 'Droid Sans';
+$helveticaNeue-font: 'Helvetica Neue WGL', 'Helvetica Neue';
+$dejaVuSansCode-font: 'DejaVu Sans Code';
+$verdanaHand-font: 'Verdana Hand';
+$nexaRustShadow-font: 'Nexa Rust Slab Shadow 01';
+$indieFlower-font: 'Indie Flower';
+$caveat-font: 'Caveat';
+$introRustLine-font: 'Intro Rust G Base 2 Line';
 
 // fa5-proxima-nova,"Helvetica Neue",Helvetica,Arial,sans-serif
 
@@ -195,3 +195,5 @@ $paragraphsFont: $celias-font;
 $secondaryParagraphsFont: $helveticaNeue-font;
 $shapesFont: $verdanaHand-font;
 $shapes2Font: $introRustLine-font;
+
+$primary-color: var(--primary-color);

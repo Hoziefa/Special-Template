@@ -19,6 +19,6 @@ export interface IASyncActions<T> {
 
 export interface IDataPersister {
     persistData<T>(key: string, data: T): void;
-
     readData<T>(key: string): T;
+    clearData(): void;
 }

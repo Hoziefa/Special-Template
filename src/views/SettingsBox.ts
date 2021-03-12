@@ -1,17 +1,8 @@
-import { HTMLElementEvent } from '@appTypes/*';
-import { Model } from '@models/*';
+import { HTMLElementEvent, EDataPersistKeys, EObservables } from '@appTypes/*';
 import { removeClassAttr } from '@utils/*';
 import { View } from '@views/*';
 
-interface ISettingsBoxState {
-    currentSlide: number;
-    timer: number;
-    duration: number;
-}
-
-export class SettingsBox extends View<Model, ISettingsBoxState> {
-    protected readonly state: ISettingsBoxState = { currentSlide: 0, timer: NaN, duration: 3000 };
-
+export class SettingsBox extends View {
     readonly selectors = {
         settingsBox: '.settings-box',
         settingsBoxToggleBtn: '.toggle-settings',
@@ -19,8 +10,9 @@ export class SettingsBox extends View<Model, ISettingsBoxState> {
         optionBoxRandomBg: '.option-box--random_bg span',
         optionBoxBullets: '.option-box--bullets span',
         resetAllBtn: '.option-box--reset button',
+
+        //>: Control render order to make this work or move it to it's component.
         navigationBullets: '.nav-bullets',
-        slides: '.slides-container .slide-image',
     };
 
     get elements() {
@@ -32,14 +24,9 @@ export class SettingsBox extends View<Model, ISettingsBoxState> {
             optionBoxBullets: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxBullets)!,
             resetAllBtn: document.querySelector<HTMLButtonElement>(this.selectors.resetAllBtn)!,
 
-            //>: Control render order to make this work.
+            //>: Control render order to make this work or move it to it's component.
             navigationBullets: document.querySelector<HTMLDivElement>(this.selectors.navigationBullets)!,
-            slides: document.querySelectorAll<HTMLDivElement>(this.selectors.slides)!,
         };
-    }
-
-    protected onRender(): void {
-        this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
     }
 
     protected eventsMap(): { [key: string]: (e: Event & any) => void } {
@@ -203,8 +190,6 @@ export class SettingsBox extends View<Model, ISettingsBoxState> {
 
     //#region Random Background Controller
     private randomBgController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>) => {
-        const { timer, duration } = this.state;
-
         //ToDo 1->) REMOVE CLASS ACTIVE FROM ALL SPAN-ELEMENTS
         removeClassAttr(currentTarget.parentElement?.children!);
 
@@ -212,49 +197,30 @@ export class SettingsBox extends View<Model, ISettingsBoxState> {
         currentTarget.classList.add('active');
 
         //ToDo 3->) CHECK IF THE OPTION IS YES SO RUN THE SLIDER IF NO STOP THE SLIDER BY SET AN CLEAR THE INTERVAL AND SET THE STATE VARIABLE TO THE LOCAL-STORAGE DEPENDS ON STATE-VARIABLE VALUE
-        //> IN THE CODE BELOW WE HAVE TO UPDATE THE time-VARIABLE WITH THE NEW setInterval CAUSE IT HAVE A DEFERENT IDENTIFIER SO WITH EACH CALL WE HAVE TO UPDATE THE NEW TO CLEAR IT IN THE NEXT CALL TO THE TIMER EITHER IF IT setTimeOut OR setInterval \\ ALWAYS MAKE THE MAIN IMPLEMENTATION FIRST OF ALL AND THE IMPLEMENTATION OF LOCAL-STORAGE LAST OF ALL FOR AVOID WIRED BEHAVIOR
         if (currentTarget.classList.contains('yes')) {
-            this.setState({ timer: setInterval(this.autoSlide, duration) });
+            this.dataPersister.persistData(EDataPersistKeys.RandomBackground, true);
 
-            this.dataPersister.persistData('random-bg', true);
+            this.model.trigger(EObservables.EnableRandomBackground);
         } else if (currentTarget.classList.contains('no')) {
-            clearInterval(timer);
+            this.dataPersister.persistData(EDataPersistKeys.RandomBackground, false);
 
-            this.dataPersister.persistData('random-bg', false);
+            this.model.trigger(EObservables.DisableRandomBackground);
         }
     };
 
     private persistedRandomBgOption = () => {
-        //>: Related to @method=randomBgController();
+        const { optionBoxRandomBg } = this.elements;
 
-        const { currentSlide, timer, duration } = this.state;
-        const { slides, optionBoxRandomBg } = this.elements;
+        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
 
-        //ToDo 5->) SET THE SAVED CHOICE OPTION TO APP FROM LOCAL-STORAGE \ WHEN THE WINDOW LOADS OR CLOSE
-        //> THE LOGIC OF BUILDING THIS LOGIC IS DEPENDS ON STATE-VARIABLE SO IF TRUE DO THIS IF FALSE DO THE OPPOSITE
-
-        //> PARSE CURRENT-SLIDE TO SET IT TO THE FUNCTION-SLIDE TO KEEP THE CLASS-ACTIVE ON THE LAST ELEMENT BEFORE WE RELOAD THE PAGE OR CLOSE IT TO THE HELP THE RANDOM-IMAGE BEHAVIOR
-        this.setState({ currentSlide: parseInt(this.dataPersister.readData('currentSlide'), 10) || 0 });
-
-        //> OPTIONAL-CHAINING-OPERATOR USED TO AVOID ERRORS IF THERE IS NO KEY LIKE THIS SO WE CAN'T USE .includes[METHOD] ON IT SO THIS WILL CAUSED AN ERROR
-        if (this.dataPersister.readData<boolean>('random-bg')) {
+        if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) {
             removeClassAttr(optionBoxRandomBg);
+
             optionBoxRandomBg[0].classList.add('active');
-
-            removeClassAttr(slides);
-            slides[currentSlide].classList.add('active');
-
-            this.setState({ timer: setInterval(this.autoSlide, duration) });
-        }
-        //> WE DID IT AS else-if CAUSE IT IGNORE THE IF-BLOCK IF IT IS NOT TRUE AND RUN THIS AND CAUSED UNEXPECTED ISSUES AND FOR THIS WE HAD TO SPECIFIC THIS LINE CAUSE IF THE IF-BLOCK NOT RUN CHECK FOR THIS INSTEAD OF IF THE IF-BLOCK NOT RUN RUN THIS ELSE-BLOCK IN ALL CASES WE HAD TO SPECIFIC IT
-        else if (!this.dataPersister.readData<boolean>('random-bg')) {
+        } else if (!isRandomBackgroundPersisted) {
             removeClassAttr(optionBoxRandomBg);
+
             optionBoxRandomBg[1].classList.add('active');
-
-            removeClassAttr(slides);
-            slides[currentSlide].classList.add('active');
-
-            clearInterval(timer);
         }
     };
     //#endregion Random Background Controller
@@ -264,39 +230,7 @@ export class SettingsBox extends View<Model, ISettingsBoxState> {
         this.dataPersister.clearData();
     };
 
-    private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>) => {
-        const { currentSlide, timer, duration } = this.state;
-
-        //ToDo 1-) SPECIFY DIRECTION OF SLIDE TO GO PREVIOUS.
-        if (direction === 'prev')
-            this.setState({ currentSlide: currentSlide === 0 ? slides.length - 1 : currentSlide - 1 });
-
-        //ToDo 2-) SPECIFY DIRECTION OF SLIDE TO GO NEXT.
-        if (direction === 'next')
-            this.setState({ currentSlide: currentSlide === slides.length - 1 ? 0 : currentSlide + 1 });
-
-        //ToDo 3-) STOPE AUTO SLIDE WHEN USER CLICK.
-        timer && clearInterval(timer);
-
-        //ToDo 4-) THEN AFTER CLEAR PREVIOUS START AUTO SLIDE AGAIN FOR KEEP WORKING FROM WHERE THE USER STOPPED.
-        this.setState({ timer: setInterval(this.autoSlide, duration) });
-
-        //ToDo 5-) REMOVE ACTIVE CLASS FROM SLIDES ITEMS \\ USING .from-METHOD AND SND ARGUMENT OF IT WHICH IS A CALLBACK LOOP-HELPER.
-        removeClassAttr(slides);
-
-        //ToDo 6-) ADD CLASS ACTIVE TO CURRENT ITEM.
-        slides[currentSlide].classList.add('active');
-
-        //$ OPTIONAL THIS LINE BELOW IS FOR THE OPTION-BOX RANDOM-BACKGROUND TO STICK IT ON THE CURRENT BG WHEN THE PAGE LOADS OR CLOSED
-        //ToDo 7-) SAVE CURRENT SLIDE NUMBER IN LOCAL-STORAGE TO KEEP THE ACTIVE SLIDE ON THE CURRENT IMAGE AND KEEP THIS VARIABLE UPDATED WITH EACH setInterval CALL.
-        this.dataPersister.persistData('currentSlide', currentSlide);
-    };
-
-    private autoSlide = (direction: 'prev' | 'next' = 'next', slides = this.elements.slides): void => {
-        this.slide(direction, slides);
-    };
-
-    onDomLoads = () => {
+    getPersistedData = () => {
         this.persistedColorOption();
         this.persistedBulletsOption();
         this.persistedRandomBgOption();

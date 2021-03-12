@@ -1,8 +1,17 @@
-import { HTMLElementEvent } from '@appTypes/*';
+import { HTMLElementEvent, EDataPersistKeys, EObservables } from '@appTypes/*';
 import { Model } from '@models/*';
+import { removeClassAttr } from '@utils/*';
 import { View } from '@views/*';
 
-export class Hero extends View<Model> {
+interface ISettingsBoxState {
+    currentSlide: number;
+    timer: number;
+    duration: number;
+}
+
+export class Hero extends View<Model, ISettingsBoxState> {
+    protected readonly state: ISettingsBoxState = { currentSlide: 0, timer: NaN, duration: 3000 };
+
     readonly images = [
         '/images/slider/slide-1.jpg',
         '/images/slider/software-development-i1.jpg',
@@ -26,13 +35,26 @@ export class Hero extends View<Model> {
         { goTo: '.contact', content: 'contact' },
     ];
 
-    readonly selectors = { menuLinksUl: '.links-container .links', toggleMenuBtn: '.links-container .toggle-menu' };
+    readonly selectors = {
+        linksContainer: '.links-container',
+        menuLinksUl: '.links-container .links',
+        toggleMenuBtn: '.links-container .toggle-menu',
+        slides: '.slides-container .slide-image',
+    };
 
     get elements() {
         return {
-            menuLinksUl: document.querySelector(this.selectors.menuLinksUl)!,
-            toggleMenuBtn: document.querySelector(this.selectors.toggleMenuBtn)!,
+            menuLinksUl: document.querySelector<HTMLLinkElement>(this.selectors.menuLinksUl)!,
+            toggleMenuBtn: document.querySelector<HTMLButtonElement>(this.selectors.toggleMenuBtn)!,
+            slides: document.querySelectorAll<HTMLDivElement>(this.selectors.slides)!,
         };
+    }
+
+    protected onRender(): void {
+        this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
+
+        this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBg(true));
+        this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBg(false));
     }
 
     protected eventsMap(): { [key: string]: (e: Event & any) => void } {
@@ -40,7 +62,7 @@ export class Hero extends View<Model> {
 
         return {
             [`click:${toggleMenuBtn}`]: this.toggleMenu,
-            [`click:body`]: this.closeMenuOnBlur,
+            'click:html': this.closeMenuOnBlur, // blur:.links-container
         };
     }
 
@@ -69,7 +91,7 @@ export class Hero extends View<Model> {
                                     .join('')}
                             </ul>
 
-                            <button class="toggle-menu">
+                            <button class="toggle-menu" aria-label="toggle menu">
                                 ${Array.from({ length: 3 })
                                     .map(() => `<span></span>`)
                                     .join('')}
@@ -101,17 +123,89 @@ export class Hero extends View<Model> {
         `;
     }
 
+    //#region Toggle Menu
     private toggleMenu = () => {
         this.elements.menuLinksUl.classList.toggle('show');
 
         this.elements.toggleMenuBtn.classList.toggle('menu-active');
     };
 
+    //ToDo: Not working yet cause we are selecting the dom elms from the fragment that we pass and the HTML is the absolute parent and the parent of the fragment so to make it work we could make a condition on @method=.bindEvents; to check based the selector that we receive | or we have to figure another way to do this.
     private closeMenuOnBlur = ({ target }: HTMLElementEvent<HTMLElement>) => {
-        if (target.matches(`.links-container, .links-container *`)) return;
+        if (target.matches(`${this.selectors.linksContainer}, ${this.selectors.linksContainer} *`)) return;
 
         this.elements.menuLinksUl.classList.remove('show');
 
         this.elements.toggleMenuBtn.classList.remove('menu-active');
+    };
+    //#endregion Toggle Menu
+
+    //#region Slider Implementation
+    private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>) => {
+        const { currentSlide, timer, duration } = this.state;
+
+        //ToDo 1-) SPECIFY DIRECTION OF SLIDE TO GO PREVIOUS.
+        if (direction === 'prev')
+            this.setState({ currentSlide: currentSlide === 0 ? slides.length - 1 : currentSlide - 1 });
+
+        //ToDo 2-) SPECIFY DIRECTION OF SLIDE TO GO NEXT.
+        if (direction === 'next')
+            this.setState({ currentSlide: currentSlide === slides.length - 1 ? 0 : currentSlide + 1 });
+
+        //ToDo 3-) STOPE AUTO SLIDE WHEN USER CLICK.
+        timer && clearInterval(timer);
+
+        //ToDo 4-) THEN AFTER CLEAR PREVIOUS START AUTO SLIDE AGAIN FOR KEEP WORKING FROM WHERE THE USER STOPPED.
+        this.setState({ timer: setInterval(this.autoSlide, duration) });
+
+        //ToDo 5-) REMOVE ACTIVE CLASS FROM SLIDES ITEMS \\ USING .from-METHOD AND SND ARGUMENT OF IT WHICH IS A CALLBACK LOOP-HELPER.
+        removeClassAttr(slides);
+
+        //ToDo 6-) ADD CLASS ACTIVE TO CURRENT ITEM.
+        slides[currentSlide].classList.add('active');
+        // slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+
+        //ToDo 7-) SAVE CURRENT SLIDE NUMBER IN LOCAL-STORAGE TO KEEP THE ACTIVE SLIDE ON THE CURRENT IMAGE AND KEEP THIS VARIABLE UPDATED WITH EACH setInterval CALL.
+        this.dataPersister.persistData(EDataPersistKeys.CurrentSlide, currentSlide);
+    };
+
+    private autoSlide = (direction: 'prev' | 'next' = 'next', slides = this.elements.slides): void => {
+        this.slide(direction, slides);
+    };
+    //#endregion Slider Implementation
+
+    //#region Random Background Controller
+    private onRandomBg = (isActive: boolean) => {
+        const { timer, duration } = this.state;
+
+        isActive ? this.setState({ timer: setInterval(this.autoSlide, duration) }) : clearInterval(timer);
+    };
+
+    private persistedRandomBgOption = () => {
+        const { timer, duration } = this.state;
+        const { slides } = this.elements;
+
+        this.setState({ currentSlide: parseInt(this.dataPersister.readData(EDataPersistKeys.CurrentSlide), 10) || 0 });
+
+        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
+
+        if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) {
+            removeClassAttr(slides);
+
+            slides[this.state.currentSlide].classList.add('active');
+
+            this.setState({ timer: setInterval(this.autoSlide, duration) });
+        } else if (!isRandomBackgroundPersisted) {
+            removeClassAttr(slides);
+
+            slides[this.state.currentSlide].classList.add('active');
+
+            clearInterval(timer);
+        }
+    };
+    //#endregion Random Background Controller
+
+    getPersistedData = () => {
+        this.persistedRandomBgOption();
     };
 }

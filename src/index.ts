@@ -25,13 +25,25 @@ class State {
     }
 
     renderElementsToDOM(): void {
-        // this.loader.render();
-        this.hero.render();
+        this.loader.render();
         this.settingsBox.render();
+        this.hero.render();
     }
 }
 
 const state = State.state();
+
+state.renderElementsToDOM();
+
+window.addEventListener('load', () => {
+    state.loader.onLoadDisplayLoader();
+
+    state.settingsBox.getPersistedData();
+
+    state.hero.getPersistedData();
+});
+
+//>: Replaced with code above with @event=load;
 
 // document.addEventListener('DOMContentLoaded', () => {
 //     state.renderElementsToDOM();
@@ -40,11 +52,3 @@ const state = State.state();
 
 //     state.settingsBox.onDomLoads();
 // });
-
-state.renderElementsToDOM();
-
-window.addEventListener('load', () => {
-    state.loader.onLoadDisplayLoader();
-
-    state.settingsBox.onDomLoads();
-});

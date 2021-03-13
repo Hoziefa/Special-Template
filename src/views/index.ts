@@ -6,4 +6,5 @@ export * from './NavigationBullets';
 export * from './Hero';
 export * from './About';
 export * from './Skills';
+export * from './Gallery';
 export * from './AppFooter';

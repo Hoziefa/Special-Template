@@ -10,6 +10,7 @@
     "author": "Hoziefa Alhassan",
     "license": "ISC",
     "devDependencies": {
+        "@types/aos": "^3.0.3",
         "css-loader": "^5.0.2",
         "file-loader": "^6.2.0",
         "node-sass": "^5.0.0",
@@ -24,5 +25,8 @@
         "webpack-cli": "^4.5.0",
         "webpack-dev-server": "^3.11.2",
         "webpack-shell-plugin": "^0.5.0"
+    },
+    "dependencies": {
+        "aos": "^2.3.4"
     }
 }

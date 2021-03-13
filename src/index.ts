@@ -1,5 +1,5 @@
 import { DataPersister, Eventing, Model } from '@models/*';
-import { About, AppFooter, GoToTop, Hero, Loader, NavigationBullets, SettingsBox } from '@views/*';
+import { About, AppFooter, GoToTop, Hero, Loader, NavigationBullets, SettingsBox, Skills } from '@views/*';
 
 import 'assets/scss/_main-style.scss';
 
@@ -26,6 +26,8 @@ class State {
 
     readonly about = new About(this.root, this.model, this.dataPersister);
 
+    readonly skills = new Skills(this.root, this.model, this.dataPersister);
+
     readonly appFooter = new AppFooter(this.root, this.model, this.dataPersister);
 
     private constructor() {
@@ -44,6 +46,7 @@ class State {
         this.navigationBullets.render();
         this.hero.render();
         this.about.render();
+        this.skills.render();
         this.appFooter.render();
     }
 }

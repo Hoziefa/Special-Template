@@ -1,96 +1,63 @@
-// {
-//     //% FUNCTIONS:::
-//     // calculation is: window.pageYoffset > (elements.ourSkills.offsetTop + elements.ourSkills.offsetHeight - window.innerHeight)
-//     const scrollController = e => {
-//         let firstTextElement = document.querySelector('.card:nth-child(1) .number');
-//         let secondTextElement = document.querySelector('.card:nth-child(2) .number');
-//         let thirdTextElement = document.querySelector('.card:nth-child(3) .number');
+import { View } from '@views/*';
 
-//         const pureText = [];
+interface ISkillsElements {
+    skillsContainer: HTMLDivElement
+}
 
-//         for (let elm of [firstTextElement, secondTextElement, thirdTextElement])
-//             pureText.push(elm.textContent.trim().replace('%', ''));
+export class Skills extends View {
+    readonly skillsList = [
+        { number: 90, text: 'html' },
+        { number: 85, text: 'css' },
+        { number: 60, text: 'javascript' },
+        { number: 75, text: 'typescript' },
+        { number: 50, text: 'node' },
+        { number: 70, text: 'git' },
+    ];
 
-//         let [firstText, secondText, thirdText] = pureText;
+    readonly selectors: Record<keyof ISkillsElements, string> = { skillsContainer: '.our-skills' };
 
-//         if (pageYOffset + 250 > elements.ourSkills.offsetTop) {
-//             document
-//                 .querySelector('.card:nth-child(1) svg circle:nth-child(2)')
-//                 .style.setProperty('stroke-dashoffset', `calc(440 - (440 * ${firstText}) / 100)`);
+    get elements(): ISkillsElements {
+        return { skillsContainer: document.querySelector<HTMLDivElement>(this.selectors.skillsContainer)! };
+    }
 
-//             document
-//                 .querySelector('.card:nth-child(2) svg circle:nth-child(2)')
-//                 .style.setProperty('stroke-dashoffset', `calc(440 - (440 * ${secondText}) / 100)`);
+    protected template(): string {
 
-//             document
-//                 .querySelector('.card:nth-child(3) svg circle:nth-child(2)')
-//                 .style.setProperty('stroke-dashoffset', `calc(440 - (440 * ${thirdText}) / 100)`);
-//         }
-//     };
+        return `
+            <section class="our-skills">
+                <div class="container">
+                    <h2>our skills</h2>
+                    <hr />
+                    <div class="skills-container">
+                        ${ this.skillsList.map(({ number, text }) => `
+                            <div class="card">
+                                <div class="box">
+                                    <div class="percent">
+                                        <svg><circle cx="70" cy="70" r="70"></circle><circle cx="70" cy="70" r="70"></circle</svg>
+                                        <div class="number"><h2>${ number }<span>%</span></h2></div>
+                                    </div>
+                                    <h2 class="text">${ text }</h2>
+                                </div>
+                            </div>
+                        `).join('') }
+                    </div>
+                </div>
+            </section>
+        `;
+    }
 
-//     //% EVENT-LISTENERS:::
-//     window.addEventListener('scroll', scrollController);
-// }
+    protected eventsMap(): { [p: string]: EventListener } {
+        return { 'scroll:html': this.scrollController };
+    }
 
+    private scrollController = () => {
+        const domCardsNumber = document.querySelectorAll<HTMLDivElement>('.card .number')!;
 
+        const texts = Array.from(domCardsNumber).map(domElm => domElm?.textContent?.trim().replace('%', ''));
 
-// <section class="our-skills">
-// <div class="container">
-//     <h2>our skills</h2>
-//
-// <hr />
-//
-// <div class="skills-container">
-// <div class="card">
-// <div class="box">
-// <div class="percent">
-// <svg>
-//     <circle cx="70" cy="70" r="70"></circle>
-//     <circle cx="70" cy="70" r="70"></circle>
-//     </svg>
-//
-//     <div class="number">
-//     <h2>90<span>%</span></h2>
-// </div>
-// </div>
-//
-// <h2 class="text">html</h2>
-//     </div>
-//     </div>
-//
-//     <div class="card">
-// <div class="box">
-// <div class="percent">
-// <svg>
-//     <circle cx="70" cy="70" r="70"></circle>
-//     <circle cx="70" cy="70" r="70"></circle>
-//     </svg>
-//
-//     <div class="number">
-//     <h2>85<span>%</span></h2>
-// </div>
-// </div>
-//
-// <h2 class="text">css</h2>
-//     </div>
-//     </div>
-//
-//     <div class="card">
-// <div class="box">
-// <div class="percent">
-// <svg>
-//     <circle cx="70" cy="70" r="70"></circle>
-//     <circle cx="70" cy="70" r="70"></circle>
-//     </svg>
-//
-//     <div class="number">
-//     <h2>60<span>%</span></h2>
-// </div>
-// </div>
-//
-// <h2 class="text">javascript</h2>
-//     </div>
-//     </div>
-//     </div>
-//     </div>
-//     </section>
+        texts.forEach((text, idx) => {
+            const svgCircleDomElm = document.querySelector<SVGCircleElement>(`.card:nth-child(${ idx + 1 }) svg circle:nth-child(2)`);
+
+            pageYOffset + 250 > this.elements.skillsContainer.offsetTop && svgCircleDomElm?.style.setProperty('stroke-dashoffset', `calc(440 - (440 * ${ text }) / 100)`);
+        });
+    };
+}

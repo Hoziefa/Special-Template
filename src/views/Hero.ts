@@ -17,7 +17,7 @@ interface IHeroElements {
 }
 
 export class Hero extends View<Model, IHeroState> {
-    protected readonly state: IHeroState = { currentSlide: 0, timer: NaN, duration: 3000 };
+    protected readonly state: IHeroState = { currentSlide: 0, timer: NaN, duration: 5000 };
 
     readonly images = [
         '/images/slider/slide-1.jpg',
@@ -99,7 +99,11 @@ export class Hero extends View<Model, IHeroState> {
     }
 
     protected onRender(): void {
-        this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
+        //>: This What caused the issue with slider not stopping even after clicking `no` random background option cause here we are running the slider when this component mounts,and then in
+        // @method=.persistedRandomBgOption(); we are checking if user didn't cash anything in browser we are running another interval without stopping this one
+        // and this interval will be lost and can't track it anymore so for this, this interval keep running so we had to just keep in the @method=persist; and it will do the job and must consider
+        // that any interval we run must track it and stop it.
+        // this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
 
         this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBg(true));
         this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBg(false));
@@ -118,7 +122,6 @@ export class Hero extends View<Model, IHeroState> {
         this.elements.toggleMenuBtn.classList.toggle('menu-active');
     };
 
-    //ToDo: Not working yet cause we are selecting the dom elms from the fragment that we pass and the HTML is the absolute parent and the parent of the fragment so to make it work we could make a condition on @method=.bindEvents; to check based the selector that we receive | or we have to figure another way to do this.
     private closeMenuOnBlur = ({ target }: HTMLElementEvent<HTMLElement>) => {
         if (target.matches(`${ this.selectors.linksContainer }, ${ this.selectors.linksContainer } *`)) return;
 
@@ -134,12 +137,10 @@ export class Hero extends View<Model, IHeroState> {
         const { currentSlide, timer, duration } = this.state;
 
         //> 1-) SPECIFY DIRECTION OF SLIDE TO GO PREVIOUS.
-        if (direction === 'prev')
-            this.setState({ currentSlide: currentSlide === 0 ? slides.length - 1 : currentSlide - 1 });
+        if (direction === 'prev') this.setState({ currentSlide: currentSlide === 0 ? slides.length - 1 : currentSlide - 1 });
 
         //> 2-) SPECIFY DIRECTION OF SLIDE TO GO NEXT.
-        if (direction === 'next')
-            this.setState({ currentSlide: currentSlide === slides.length - 1 ? 0 : currentSlide + 1 });
+        if (direction === 'next') this.setState({ currentSlide: currentSlide === slides.length - 1 ? 0 : currentSlide + 1 });
 
         //> 3-) STOP AUTO SLIDE WHEN USER CLICK.
         timer && clearInterval(timer);

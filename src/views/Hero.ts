@@ -105,8 +105,8 @@ export class Hero extends View<Model, IHeroState> {
         // that any interval we run must track it and stop it.
         // this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
 
-        this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBg(true));
-        this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBg(false));
+        this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBackgroundOptionChange(true));
+        this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBackgroundOptionChange(false));
     }
 
     protected eventsMap(): { [key: string]: (e: Event & any) => void } {
@@ -116,13 +116,13 @@ export class Hero extends View<Model, IHeroState> {
     }
 
     //#region Toggle Menu
-    private toggleMenu = () => {
+    private toggleMenu = (): void => {
         this.elements.menuLinksUl.classList.toggle('show');
 
         this.elements.toggleMenuBtn.classList.toggle('menu-active');
     };
 
-    private closeMenuOnBlur = ({ target }: HTMLElementEvent<HTMLElement>) => {
+    private closeMenuOnBlur = ({ target }: HTMLElementEvent<HTMLElement>): void => {
         if (target.matches(`${ this.selectors.linksContainer }, ${ this.selectors.linksContainer } *`)) return;
 
         this.elements.menuLinksUl.classList.remove('show');
@@ -133,7 +133,7 @@ export class Hero extends View<Model, IHeroState> {
     //#endregion Toggle Menu
 
     //#region Slider Implementation
-    private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>) => {
+    private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>): void => {
         const { currentSlide, timer, duration } = this.state;
 
         //> 1-) SPECIFY DIRECTION OF SLIDE TO GO PREVIOUS.
@@ -164,24 +164,23 @@ export class Hero extends View<Model, IHeroState> {
     //#endregion Slider Implementation
 
     //#region Random Background Controller
-    private onRandomBg = (isActive: boolean) => {
+    private onRandomBackgroundOptionChange = (enableRandomBackground: boolean): void => {
         const { timer, duration } = this.state;
 
-        isActive ? this.setState({ timer: setInterval(this.autoSlide, duration) }) : clearInterval(timer);
+        enableRandomBackground ? this.setState({ timer: setInterval(this.autoSlide, duration) }) : clearInterval(timer);
     };
 
-    private persistedRandomBgOption = () => {
+    private persistedRandomBgOption = (): void => {
         const { timer, duration } = this.state;
         const { slides } = this.elements;
-
-        //>: No need to parse or convert the returned value from @method=readData; cause it's already parsing it with JSON.parse and return the parsed value which is a number.
-        this.setState({ currentSlide: this.dataPersister.readData<number>(EDataPersistKeys.CurrentSlide) || 0 });
-
+        const currentSlide = this.dataPersister.readData<number>(EDataPersistKeys.CurrentSlide) ?? 0;
         const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
+
+        this.setState({ currentSlide });
 
         removeClassAttr(slides);
 
-        slides[this.state.currentSlide].classList.add('active');
+        slides[currentSlide].classList.add('active');
 
         if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) this.setState({ timer: setInterval(this.autoSlide, duration) });
         else if (!isRandomBackgroundPersisted) clearInterval(timer);

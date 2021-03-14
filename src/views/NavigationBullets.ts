@@ -1,11 +1,18 @@
 import { View } from '@views/*';
 import { EDataPersistKeys, EObservables, HTMLElementEvent } from '@appTypes/*';
+import { Model } from '@models/*';
+
+interface INavigationBulletsState {
+    showNavigationBullets: 'block' | 'none';
+}
 
 interface INavigationBulletsElements {
     navigationBulletsContainer: HTMLDivElement;
 }
 
-export class NavigationBullets extends View {
+export class NavigationBullets extends View<Model, INavigationBulletsState> {
+    protected readonly state: INavigationBulletsState = { showNavigationBullets: this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption) ?? 'block' };
+
     private readonly bullets = [
         { goTo: '.about--us', content: 'about us' },
         { goTo: '.our-skills', content: 'our skills' },
@@ -31,8 +38,8 @@ export class NavigationBullets extends View {
     }
 
     protected onRender(): void {
-        this.model.on(EObservables.ShowNavigationBullets, () => this.onBulletsOptionChosen(true));
-        this.model.on(EObservables.HideNavigationBullets, () => this.onBulletsOptionChosen(false));
+        this.model.on(EObservables.ShowNavigationBullets, () => this.onBulletsOptionChosen('block'));
+        this.model.on(EObservables.HideNavigationBullets, () => this.onBulletsOptionChosen('none'));
     }
 
     protected eventsMap(): { [p: string]: EventListener & any } {
@@ -43,25 +50,24 @@ export class NavigationBullets extends View {
         };
     }
 
-    private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>) => {
+    private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>): void => {
         if (!target.matches(`${ this.selectors.navigationBulletsContainer }, ${ this.selectors.navigationBulletsContainer } *`)) return;
 
         document.querySelector(target.dataset.goto!)?.scrollIntoView({ behavior: 'smooth' });
     };
 
     //#region Bullets Option Controller
-    private onBulletsOptionChosen = (showNavigationBullets: boolean) => this.elements.navigationBulletsContainer.style.display = showNavigationBullets ? 'block' : 'none';
+    private onBulletsOptionChosen = (showNavigationBullets: 'block' | 'none'): void => {
+        this.elements.navigationBulletsContainer.style.display = showNavigationBullets;
 
-    private persistedBulletsOption = () => {
-        const { navigationBulletsContainer } = this.elements;
-
-        if (this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption)?.includes('block')) navigationBulletsContainer.style.display = 'block';
-        else if (this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption)?.includes('none')) navigationBulletsContainer.style.display = 'none';
+        this.setState({ showNavigationBullets });
     };
+
+    private persistedBulletsOption = (): void => (this.elements.navigationBulletsContainer.style.display = this.state.showNavigationBullets) && undefined;
 
     //#endregion Bullets Option Controller
 
-    getPersistedData = () => {
+    getPersistedData = (): void => {
         this.persistedBulletsOption();
     };
 }

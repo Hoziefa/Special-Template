@@ -5,7 +5,5 @@ export class Loader extends View {
         return `<div class="loader"></div>`;
     }
 
-    onLoadDisplayLoader = () => {
-        document.querySelector<HTMLDivElement>('.loader')?.classList.add('active');
-    };
+    onLoadDisplayLoader = (): void => document.querySelector<HTMLDivElement>('.loader')?.classList.add('active');
 }

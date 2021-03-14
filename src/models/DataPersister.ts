@@ -5,7 +5,7 @@ export class DataPersister {
         localStorage.setItem(key, JSON.stringify(data));
     }
 
-    static readData<T>(key: string): T {
+    static readData<T>(key: string): T | null {
         return JSON.parse(localStorage.getItem(key) ?? 'null');
     }
 

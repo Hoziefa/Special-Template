@@ -58,11 +58,11 @@ export class Gallery extends View {
         return { [`click:${ galleryPopup }`]: this.hidePopupController, [`click:${ galleryContainer }`]: this.galleryPopup };
     }
 
-    private hidePopupController = ({ currentTarget, target }: HTMLElementEvent<HTMLButtonElement, HTMLDivElement>) => {
+    private hidePopupController = ({ currentTarget, target }: HTMLElementEvent<HTMLButtonElement, HTMLDivElement>): void => {
         target.matches(`${ this.selectors.galleryPopup }, ${ this.selectors.galleryPopup } button, ${ this.selectors.galleryPopup } button *`) && currentTarget.classList.remove('active');
     };
 
-    private galleryPopup = ({ target }: HTMLElementEvent<HTMLImageElement>) => {
+    private galleryPopup = ({ target }: HTMLElementEvent<HTMLImageElement>): void => {
         // if (!target.matches(`${ this.selectors.galleryContainer } .images-box img`)) return;
 
         //>: Second approach is to do @Type=Guard;.

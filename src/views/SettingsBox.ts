@@ -80,20 +80,20 @@ export class SettingsBox extends View {
         };
     }
 
-    private toggleSettingsBoxController = ({ currentTarget }: HTMLElementEvent<HTMLButtonElement>) => {
+    private toggleSettingsBoxController = ({ currentTarget }: HTMLElementEvent<HTMLButtonElement>): void => {
         const { settingsBox } = this.elements;
 
         settingsBox.classList.toggle('show');
 
         currentTarget.firstElementChild!.classList.toggle('fa-spin');
 
-        window.innerWidth > 991 && !(+document.body.style.paddingLeft.replace('px', '') > 0)
-            ? (document.body.style.paddingLeft = `${ settingsBox.getBoundingClientRect().width }px`)
-            : (document.body.style.paddingLeft = '');
+        document.body.style.paddingLeft = window.innerWidth > 991 && !(+document.body.style.paddingLeft.replace('px', '') > 0)
+            ? `${ settingsBox.getBoundingClientRect().width }px`
+            : '';
     };
 
     //#region Color Option Controller
-    private colorOptionsController = ({ currentTarget }: HTMLElementEvent<HTMLLIElement>) => {
+    private colorOptionsController = ({ currentTarget }: HTMLElementEvent<HTMLLIElement>): void => {
         // 1->) REMOVE CLASS ACTIVE FROM ALL LI-ELEMENTS
         removeClassAttr(currentTarget.parentElement?.children!);
 
@@ -101,29 +101,22 @@ export class SettingsBox extends View {
         currentTarget.classList.add('active');
 
         // 3->) SET COLOR ON ROOT ELEMENT
-        document.documentElement.style.setProperty('--primary-color', getComputedStyle(currentTarget).backgroundColor);
+        const chosenColorOption = getComputedStyle(currentTarget).backgroundColor;
 
-        // 4->) SAVE THE CHOSEN COLOR TO THE LOCAL-STORAGE
-        this.dataPersister.persistData(EDataPersistKeys.ColorOption, getComputedStyle(currentTarget).backgroundColor);
+        document.documentElement.style.setProperty('--primary-color', chosenColorOption);
+
+        // 4->) SAVE THE CHOSEN COLOR TO THE persisting provider
+        this.dataPersister.persistData(EDataPersistKeys.ColorOption, chosenColorOption);
     };
 
-    private persistedColorOption = () => {
+    private persistedColorOption = (): void => {
         const { optionBoxColorsList } = this.elements;
 
         // 5->) SET THE SAVED CHOSEN COLOR TO THE UI FROM LOCAL-STORAGE \ WHEN THE WINDOW LOADS OR CLOSE
-        const persistedColorOption = this.dataPersister.readData<string>(EDataPersistKeys.ColorOption);
+        const persistedColorOption = this.dataPersister.readData<string>(EDataPersistKeys.ColorOption) ?? '';
 
         document.documentElement.style.setProperty('--primary-color', persistedColorOption || getComputedStyle(optionBoxColorsList[0]).backgroundColor);
 
-        // 6->) CHECK FOR ACTIVE CLASS TO KEEP IT ON THE ELEMENT-LI THAT WE CHOSE ITS COLOR
-        //! Bad approach:
-        // optionBoxColorsList.forEach(option => {
-        //     option.classList.remove('active');
-        //     if (getComputedStyle(option).backgroundColor.includes(persistedColorOption)) option.classList.add('active');
-        //     else if (!persistedColorOption) optionBoxColorsList[0].classList.add('active');
-        // });
-
-        //++ Good approach:
         removeClassAttr(optionBoxColorsList);
 
         (Array.from(optionBoxColorsList).find(option => getComputedStyle(option).backgroundColor.includes(persistedColorOption)) ?? optionBoxColorsList[0]).classList.add('active');
@@ -132,7 +125,7 @@ export class SettingsBox extends View {
     //#endregion Color Option Controller
 
     //#region Bullets Option Controller
-    private bulletsOptionController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>) => {
+    private bulletsOptionController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>): void => {
         // 1->) REMOVE CLASS ACTIVE FROM ALL SPAN-ELEMENTS
         removeClassAttr(currentTarget.parentElement?.children!);
 
@@ -153,38 +146,25 @@ export class SettingsBox extends View {
         }
     };
 
-    private persistedBulletsOption = () => {
+    private persistedBulletsOption = (): void => {
         const { optionBoxBullets } = this.elements;
 
-        if (this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption)?.includes('block')) {
-            removeClassAttr(optionBoxBullets);
+        const persistedBulletsOption = this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption);
 
-            optionBoxBullets[0].classList.add('active');
-        }
-            //>: WE DID IT AS else-if CAUSE IF THE USER DON'T HAVE A PREFERENCE VALUE STORED THE CONDITION ON @IF-BLOCK; WON'T BE SATISFIED AND THE @ELSE-BLOCK; WILL RUN AND THIS WHAT WE DON'T WANT
-            //>: CAUSE IF THE USER DON'T HAVE A PREFERENCE VALUE IT DOESN'T MEANS THAT THE USER WANT THE NAVIGATION BULLETS TO SHOWN IT MEANS THAT THE USER DIDN'T CHOOSE AN OPTION SO IN THIS CASE WE
-            //>: HAVE TO DISPLAY THE DEFAULT WHICH IS YES OPTION AND WE DON'T HAVE TO DO IT LIKE WE DID IN @method=persistedRandomBgOption(); IN @IF-BLOCK; WHEN WE CHECKED FOR OUR CUSTOM FAILING VALUE
-            // WHICH IS @NULL; AND THE REASON FOR WE DON'T HAVE TO ADD A OR PART IN OUR @IF-BLOCK; WITH OUR CUSTOM DEFAULT FAILING VALUE @NULL; IS CAUSE THE VALUE ALREADY TAKEN FROM
-            // @method=template(); WHEN WE RENDER THE OPTIONS WE DEFAULT FIRST OPTION WITH active SO WE HAVE A DEFAULT VALUE THAT'S ADDED ON RENDER
-        //>: We can't use shorting syntax for @if-block; and @else-block; here case we are not ranging all true cases in the @if-block; as we explaining above, we have to range if wanna use.
-        else if (this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption)?.includes('none')) {
-            removeClassAttr(optionBoxBullets);
+        persistedBulletsOption && removeClassAttr(optionBoxBullets);
 
-            optionBoxBullets[1].classList.add('active');
-        }
+        if (persistedBulletsOption?.includes('block')) optionBoxBullets[0].classList.add('active');
+        else if (persistedBulletsOption?.includes('none')) optionBoxBullets[1].classList.add('active');
     };
 
     //#endregion Bullets Option Controller
 
     //#region Random Background Controller
-    private randomBgController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>) => {
-        // 1->) REMOVE CLASS ACTIVE FROM ALL SPAN-ELEMENTS
+    private randomBgController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>): void => {
         removeClassAttr(currentTarget.parentElement?.children!);
 
-        // 2->) ADD CLASS ACTIVE TO THE SPAN-ELEMENT THAT WE CLICK ON
         currentTarget.classList.add('active');
 
-        // 3->) CHECK IF THE OPTION IS YES SO RUN THE SLIDER IF NO STOP THE SLIDER BY SET AN CLEAR THE INTERVAL AND SET THE STATE VARIABLE TO THE LOCAL-STORAGE DEPENDS ON STATE-VARIABLE VALUE
         if (currentTarget.classList.contains('yes')) {
             this.model.trigger(EObservables.EnableRandomBackground);
 
@@ -197,7 +177,7 @@ export class SettingsBox extends View {
         }
     };
 
-    private persistedRandomBgOption = () => {
+    private persistedRandomBgOption = (): void => {
         const { optionBoxRandomBg } = this.elements;
 
         const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
@@ -209,12 +189,12 @@ export class SettingsBox extends View {
 
     //#endregion Random Background Controller
 
-    private resetAllController = () => {
+    private resetAllController = (): void => {
         this.dataPersister.clearData();
         location.reload();
     };
 
-    getPersistedData = () => {
+    getPersistedData = (): void => {
         this.persistedColorOption();
         this.persistedBulletsOption();
         this.persistedRandomBgOption();

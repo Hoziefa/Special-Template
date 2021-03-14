@@ -50,12 +50,12 @@ export class Skills extends View {
         return { 'scroll:html': this.scrollController };
     }
 
-    private scrollController = () => {
+    private scrollController = (): void => {
         const domCardsNumber = document.querySelectorAll<HTMLDivElement>('.card .number')!;
 
         const texts = Array.from(domCardsNumber).map(domElm => domElm?.textContent?.trim().replace('%', ''));
 
-        texts.forEach((text, idx) => {
+        texts.forEach((text, idx): void => {
             const svgCircleDomElm = document.querySelector<SVGCircleElement>(`.card:nth-child(${ idx + 1 }) svg circle:nth-child(2)`);
 
             pageYOffset + 250 > this.elements.skillsContainer.offsetTop && svgCircleDomElm?.style.setProperty('stroke-dashoffset', `calc(440 - (440 * ${ text }) / 100)`);

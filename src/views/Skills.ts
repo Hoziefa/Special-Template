@@ -5,7 +5,7 @@ interface ISkillsElements {
 }
 
 export class Skills extends View {
-    readonly skillsList = [
+    private readonly skillsList = [
         { number: 90, text: 'html' },
         { number: 85, text: 'css' },
         { number: 60, text: 'javascript' },

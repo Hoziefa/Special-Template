@@ -6,7 +6,7 @@ interface INavigationBulletsElements {
 }
 
 export class NavigationBullets extends View {
-    readonly bullets = [
+    private readonly bullets = [
         { goTo: '.about--us', content: 'about us' },
         { goTo: '.our-skills', content: 'our skills' },
         { goTo: '.our-gallery', content: 'our gallery' },

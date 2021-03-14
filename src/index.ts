@@ -1,5 +1,5 @@
 import { DataPersister, Eventing, Model } from '@models/*';
-import { About, AppFooter, Gallery, GoToTop, Hero, Loader, NavigationBullets, SettingsBox, Skills } from '@views/*';
+import { About, AppFooter, Contact, Features, Gallery, GoToTop, Hero, Loader, NavigationBullets, SettingsBox, Skills, Testimonials, TimeLine } from '@views/*';
 
 import 'assets/scss/_main-style.scss';
 
@@ -30,6 +30,14 @@ class State {
 
     readonly gallery = new Gallery(this.root, this.model, this.dataPersister);
 
+    readonly timeLine = new TimeLine(this.root, this.model, this.dataPersister);
+
+    readonly features = new Features(this.root, this.model, this.dataPersister);
+
+    readonly testimonials = new Testimonials(this.root, this.model, this.dataPersister);
+
+    readonly contact = new Contact(this.root, this.model, this.dataPersister);
+
     readonly appFooter = new AppFooter(this.root, this.model, this.dataPersister);
 
     private constructor() {
@@ -50,6 +58,10 @@ class State {
         this.about.render();
         this.skills.render();
         this.gallery.render();
+        this.timeLine.render();
+        this.features.render();
+        this.testimonials.render();
+        this.contact.render();
         this.appFooter.render();
     }
 }

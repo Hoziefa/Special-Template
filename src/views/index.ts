@@ -7,4 +7,8 @@ export * from './Hero';
 export * from './About';
 export * from './Skills';
 export * from './Gallery';
+export * from './TimeLine';
+export * from './Features';
+export * from './Testimonials';
+export * from './Contact';
 export * from './AppFooter';

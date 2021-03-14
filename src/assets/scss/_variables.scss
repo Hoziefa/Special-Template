@@ -10,7 +10,7 @@
 //%=        START VARIABLES SECTION        =%//
 =============================================*/
 
-//ToDo-*----------  START COLORS BASE  ----------*/
+//-*----------  START COLORS BASE  ----------*/
 
 $fancyFuchsiaColor-color: #E91E63;
 
@@ -145,32 +145,34 @@ $bootstrap-primaryGray-color: #6C757D;
 $bootstrap-black-color: #343A40;
 $bootstrap-white-color: #F8F9FA;
 
-//ToDo-*----------  END COLORS BASE  ----------*/
+//-*----------  END COLORS BASE  ----------*/
 
-//ToDo-*----------  START FONTS BASE  ----------*/
+//-*----------  START FONTS BASE  ----------*/
 
 $montserrat-font: "Montserrat";
 $raleway-font: "raleway";
 $caveat-font: "Caveat";
 $workSans-font: "Work Sans", sans-serif;
 
-// fa5-proxima-nova,"Helvetica Neue",Helvetica,Arial,sans-serif
-
-//ToDo-*----------  END FONTS BASE  ----------*/
+//-*----------  END FONTS BASE  ----------*/
 
 //%-*=====  End of GLOBAL STYLE SECTION  ======*-//
 
 $primary-color: $google-green;
 
-$optionOne-box: $primary-color;
-$optionTwo-box: $amazon-orange;
-$optionThree-box: $fancyFuchsiaColor-color;
-$optionFour-box: $fancyPureBlue-color;
-$optionFive-box: $littleDarkTeal-color;
+$optionGreen-box: $primary-color;
+$optionOrange-box: $amazon-orange;
+$optionPink-box: $fancyFuchsiaColor-color;
+$optionBlue-box: $fancyPureBlue-color;
+$optionTeal-box: $littleDarkTeal-color;
+$optionPurple-box: #4a148c;
 
 $primaryWhite-color: $creamWhite-color;
 
 $main-font: $montserrat-font;
 $title-font: $raleway-font;
+
+$text-color: #2D2D2D;
+$primary-background-color: white;
 
 $primary-color: var(--primary-color);

@@ -13,8 +13,7 @@ section.our-skills {
         }
 
         hr {
-            @include hr-elm-custom-styling;
-            @include box-shadow;
+            @include custom-hr;
             width: 40%;
             margin: 1% auto 2%;
         }

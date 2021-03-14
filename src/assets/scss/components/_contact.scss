@@ -15,27 +15,18 @@ section.contact {
             position: relative;
             z-index: 1;
 
-            @media (max-width: 1000px) {
-                &::before,
-                &::after { width: 25% !important; }
-            }
-
-            @media (max-width: 400px) {
-                &::before,
-                &::after { width: 18% !important; }
-            }
-
             &::before,
             &::after {
                 content: "";
                 position: absolute;
                 top: 50%;
+                z-index: -1;
                 transform: translateY(-50%);
-                background-color: $primary-color;
                 width: 35%;
                 height: 6px;
-                z-index: -1;
-                @include box-shadow;
+                background-color: $primary-color;
+                border-radius: 0.5rem;
+                @include box-shadow($primary-color, #CCC);
             }
 
             &::before {
@@ -44,6 +35,16 @@ section.contact {
 
             &::after {
                 right: 0;
+            }
+
+            @media (max-width: 1000px) {
+                &::before,
+                &::after { width: 25%; }
+            }
+
+            @media (max-width: 400px) {
+                &::before,
+                &::after { width: 18%; }
             }
         }
     }

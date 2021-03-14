@@ -13,8 +13,7 @@ section.our-features {
         }
 
         hr {
-            @include hr-elm-custom-styling;
-            @include box-shadow;
+            @include custom-hr;
             width: 35%;
             margin: 1.25% auto;
         }

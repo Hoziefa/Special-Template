@@ -15,8 +15,7 @@ section.about--us {
         }
 
         hr {
-            @include hr-elm-custom-styling;
-            @include box-shadow;
+            @include custom-hr;
         }
 
         p {

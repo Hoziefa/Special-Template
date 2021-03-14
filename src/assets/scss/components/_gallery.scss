@@ -11,8 +11,7 @@ section.our-gallery {
         }
 
         hr {
-            @include hr-elm-custom-styling;
-            @include box-shadow;
+            @include custom-hr;
             margin: 1% auto 3%;
             width: 35%;
         }

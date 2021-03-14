@@ -1,0 +1,138 @@
+@import "../abstracts/mixins";
+
+section.our-gallery {
+    padding: 5% 0;
+
+    header {
+        text-align: center;
+
+        h2 {
+            color: $primary-color;
+            @include text-shadow;
+            letter-spacing: 3px;
+        }
+
+        hr {
+            @include hr-elm-custom-styling;
+            @include box-shadow;
+            margin: 1% auto 3%;
+            width: 35%;
+        }
+    }
+
+    .images-box {
+        $auto-grid-min-size: 20em; // (100% / 5 - 1%)
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax($auto-grid-min-size, 1fr));
+        gap: 1em;
+
+        .image-box {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            padding: 3px;
+            background-color: #F6F6F6;
+            border: 1px solid #CCC;
+            height: 250px;
+
+            &::after {
+                content: "\f302";
+                font-family: "Font Awesome 5 Free", sans-serif;
+                font-weight: 900;
+                font-size: 3rem;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 0;
+                transform: translateY(50%);
+                background-color: rgba(51, 51, 51, 0.801);
+                // z-index: -1;
+                color: $primaryWhite-color;
+                transition: 0.3s;
+                pointer-events: none;
+            }
+
+            &:hover::after {
+                height: 100%;
+            }
+
+            img {
+                display: block;
+                width: 100%; // max-width
+                height: 100%; // auto
+                object-fit: cover;
+            }
+        }
+
+        .popup {
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(51, 51, 51, 0.432);
+            z-index: 100;
+            opacity: 0;
+            transition: top 0.3s;
+
+            &.active {
+                top: 0;
+                opacity: 1;
+            }
+
+            button {
+                width: 1.55em;
+                height: 1.55em;
+                border-radius: 50%;
+                position: absolute;
+                top: 12%;
+                right: 14%;
+                font-size: 2rem;
+                background-color: $primaryWhite-color;
+                color: $primary-color;
+                cursor: pointer;
+                transition: 0.3s;
+                z-index: 1;
+
+                &:hover {
+                    color: $primaryWhite-color;
+                    background-color: $primary-color;
+                }
+            }
+
+            .popup-box {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 70%;
+                height: 70%;
+                background-color: $primaryWhite-color;
+                padding: 30px;
+                overflow: hidden;
+                border-radius: 10px;
+
+                .title {
+                    text-align: center;
+                    color: $primary-color;
+                    @include text-shadow;
+                    text-transform: uppercase;
+                    font-size: 3rem;
+                }
+
+                img {
+                    display: block;
+                    max-width: 100%;
+                    width: 100%;
+                    height: 90%; // auto
+                    max-height: max-content;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}

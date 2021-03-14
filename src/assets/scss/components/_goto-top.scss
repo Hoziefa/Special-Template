@@ -1,0 +1,41 @@
+@import "../abstracts/variables";
+
+.goto-top {
+    position: fixed;
+    bottom: 2%;
+    right: 3%;
+    z-index: 3;
+    background-color: $primary-color;
+    color: $primaryWhite-color;
+    padding: 0.2em 0.5em;
+    text-align: center;
+    cursor: pointer;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 5px;
+    transform: translateX(200%);
+    transition: transform 0.3s ease-out, height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    &.render {
+        // display: block;
+        transform: translateX(0);
+    }
+
+    &:hover {
+        height: 50px;
+    }
+
+    span {
+        text-transform: capitalize;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: 0.2s;
+        // transform: translateY(-100%);
+        // position: absolute;
+        display: block;
+    }
+
+    [class*="fa-angle-double-up"] {
+        font-size: 1.65rem;
+    }
+}

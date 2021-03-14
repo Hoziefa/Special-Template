@@ -1,0 +1,70 @@
+@import "variables";
+
+@mixin hr-elm-custom-styling {
+    background-image: repeating-linear-gradient(30deg, $primary-color 0%, $primaryWhite-color 15%, $primary-color 35%);
+    width: 55%;
+    margin: 1% 0 3%;
+    height: 7px;
+    border-radius: 20px;
+}
+
+@mixin text-shadow {
+    text-shadow: 0 1px 0 gray, 1px 0 0 $goodBlackGray-color, 1px 2px 1px gray, 2px 1px 1px $goodBlackGray-color,
+    2px 3px 2px gray, 3px 2px 2px $goodBlackGray-color, 3px 4px 2px gray, 4px 3px 3px $goodBlackGray-color,
+    4px 5px 3px gray, 5px 4px 2px $goodBlackGray-color, 5px 6px 2px gray, 6px 5px 2px $goodBlackGray-color,
+    6px 7px 1px gray, 7px 6px 1px $goodBlackGray-color, 7px 8px 0 gray, 8px 7px 0 $goodBlackGray-color;
+}
+
+@mixin box-shadow {
+    box-shadow: 0 1px 0 gray, 1px 0 0 $goodBlackGray-color, 1px 2px 1px gray, 2px 1px 1px $goodBlackGray-color,
+    2px 3px 2px gray, 3px 2px 2px $goodBlackGray-color, 3px 4px 2px gray, 4px 3px 3px $goodBlackGray-color,
+    4px 5px 3px gray, 5px 4px 2px $goodBlackGray-color, 5px 6px 2px gray, 6px 5px 2px $goodBlackGray-color,
+    6px 7px 1px gray, 7px 6px 1px $goodBlackGray-color, 7px 8px 0 gray, 8px 7px 0 $goodBlackGray-color;
+}
+
+//Media Query manager
+/*
+    0 - 425px   phone
+    425px - 768px Tablet portrait
+    768px - 1024px Tablet landscape
+    1024px - 1400px is where our normal styles apply
+    1800 +  ; Big desktop
+    $breakpoint argument choices:
+    - phone
+    - tab-port
+    - tab-land
+    - laptop
+    - big-desktop
+*/
+
+@mixin respond($breakpoint) {
+    @if $breakpoint==phone {
+        @media (max-width: 425px) {
+            @content
+        }
+    };
+
+    @if $breakpoint==tab-port {
+        @media (max-width: 768px) {
+            @content
+        }
+    };
+
+    @if $breakpoint==tab-land {
+        @media (max-width: 1024px) {
+            @content
+        }
+    };
+
+    @if $breakpoint==laptop {
+        @media (min-width: 1400px) {
+            @content
+        }
+    };
+
+    @if $breakpoint==desktop {
+        @media (min-width: 1800px) {
+            @content
+        }
+    };
+}

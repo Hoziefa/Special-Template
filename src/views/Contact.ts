@@ -3,7 +3,7 @@ import { View } from '@views/*';
 export class Contact extends View {
     protected template(): string {
         return `
-            <section class="contact">
+            <section class="contact" style="background-image: linear-gradient(30deg, #ffffff00, #F8F8FF), url('/images/contact/world-map-computer-wallpaper-51297-52993-hd-wallpapers.jpg')">
                 <div class="container">
                     <header><h2>contact us</h2></header>
                     <div class="form">

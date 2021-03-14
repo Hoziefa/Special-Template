@@ -1,0 +1,103 @@
+@import "../abstracts/mixins";
+
+section.our-features {
+    padding: 5% 0;
+
+    header {
+        margin-bottom: 3rem;
+
+        h2 {
+            text-transform: capitalize;
+            @include text-shadow;
+            color: $primary-color;
+            text-align: center;
+        }
+
+        hr {
+            @include hr-elm-custom-styling;
+            @include box-shadow;
+            width: 35%;
+            margin: 1.25% auto;
+        }
+    }
+
+    .feat-box__container {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .feat-box {
+            flex: 1 0 (100% / 3);
+            max-width: 100%;
+            text-align: center;
+            height: 425px;
+
+            &:nth-of-type(-n + 3) {
+                margin-bottom: 4%;
+            }
+
+            &:not(:nth-of-type(3n-6)) {
+                margin-right: 3%;
+                flex: 1 0 (100% / 3 - 3%);
+            }
+
+            img {
+                display: block;
+                max-width: 100%;
+                height: 65%;
+                margin: 0 auto;
+            }
+
+            .title {
+                margin: 3% 0 6%;
+                text-transform: uppercase;
+                color: $primary-color;
+                font-weight: bold;
+                position: relative;
+                text-shadow: 0 0 2px $text-color;
+
+                &::before {
+                    content: "";
+                    background-color: $primary-color;
+                    width: 10%;
+                    height: 4px;
+                    position: absolute;
+                    bottom: -100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+            }
+
+            .description {
+                font-size: 1.05rem;
+            }
+
+            @media only screen and (max-width: 992px) {
+                flex: 1 0 (100% / 2) !important;
+                margin-right: 0 !important;
+                &:nth-of-type(-2n + 6) {
+                    margin-right: 3% !important;
+                    flex: 1 0 (100% / 2 - 3%) !important;
+                }
+                &:nth-of-type(-n + 3) {
+                    margin-bottom: 4%;
+                }
+                img {
+                    height: 50%;
+                }
+            }
+            @media only screen and (max-width: 768px) {
+                flex: 1 0 100% !important;
+                margin-bottom: 4% !important;
+                margin-right: 0 !important;
+                &:last-of-type {
+                    margin-bottom: 0 !important;
+                }
+                img {
+                    height: 50%;
+                }
+            }
+        }
+    }
+}

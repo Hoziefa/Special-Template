@@ -4,15 +4,15 @@
     background-image: repeating-linear-gradient(30deg, $primary-color 0%, $primaryWhite-color 15%, $primary-color 35%);
     width: 55%;
     margin: 1% 0 3%;
-    height: 7px;
+    height: 4.5px;
     border-radius: 20px;
 }
 
-@mixin text-shadow {
-    text-shadow: 0 1px 0 gray, 1px 0 0 $goodBlackGray-color, 1px 2px 1px gray, 2px 1px 1px $goodBlackGray-color,
-    2px 3px 2px gray, 3px 2px 2px $goodBlackGray-color, 3px 4px 2px gray, 4px 3px 3px $goodBlackGray-color,
-    4px 5px 3px gray, 5px 4px 2px $goodBlackGray-color, 5px 6px 2px gray, 6px 5px 2px $goodBlackGray-color,
-    6px 7px 1px gray, 7px 6px 1px $goodBlackGray-color, 7px 8px 0 gray, 8px 7px 0 $goodBlackGray-color;
+@mixin text-shadow($color: $goodBlackGray-color, $secondary-color: gray) {
+    text-shadow: 0 1px 0 $secondary-color, 1px 0 0 $color, 1px 2px 1px $secondary-color, 2px 1px 1px $color,
+    2px 3px 2px $secondary-color, 3px 2px 2px $color, 3px 4px 2px $secondary-color, 4px 3px 3px $color,
+    4px 5px 3px $secondary-color, 5px 4px 2px $color, 5px 6px 2px $secondary-color, 6px 5px 2px $color,
+    6px 7px 1px $secondary-color, 7px 6px 1px $color, 7px 8px 0 $secondary-color, 8px 7px 0 $color;
 }
 
 @mixin box-shadow {
@@ -20,6 +20,14 @@
     2px 3px 2px gray, 3px 2px 2px $goodBlackGray-color, 3px 4px 2px gray, 4px 3px 3px $goodBlackGray-color,
     4px 5px 3px gray, 5px 4px 2px $goodBlackGray-color, 5px 6px 2px gray, 6px 5px 2px $goodBlackGray-color,
     6px 7px 1px gray, 7px 6px 1px $goodBlackGray-color, 7px 8px 0 gray, 8px 7px 0 $goodBlackGray-color;
+}
+
+@mixin custom-heading {
+    @include text-shadow(#ccc, $primary-color);
+    color: transparent;
+    -webkit-background-clip: text;
+    //background-image: repeating-linear-gradient(90deg, $primary-color 50%, whitesmoke 51%, $primary-color 100%);
+    letter-spacing: 3px;
 }
 
 //Media Query manager

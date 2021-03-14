@@ -5,10 +5,8 @@ section.our-skills {
     background-size: cover !important;
 
     .container > h2 {
-        color: $primary-color;
-        letter-spacing: 3px;
+        @include custom-heading;
         text-align: center;
-        @include text-shadow;
     }
 
     hr {

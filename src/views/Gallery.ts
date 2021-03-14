@@ -12,11 +12,11 @@ export class Gallery extends View {
         { url: '/images/gallery/10.jpg', alt: 'artist' },
         { url: '/images/gallery/4.jpg', alt: 'wave' },
         { url: '/images/gallery/9rQ3DP.jpg', alt: 'wave sea' },
-        { url: 'https://eskipaper.com/images/sci-fi-wallpaper-1.jpg', alt: 'something' },
+        { url: 'https://eskipaper.com/images/sci-fi-wallpaper-1.jpg', alt: 'night view' },
         { url: 'https://wallpaperaccess.com/full/439756.jpg', alt: 'storm' },
         { url: 'https://i.imgur.com/5VOiHDo.jpg', alt: 'nice look' },
         { url: '/images/gallery/cool-nature-background.jpg', alt: 'nature' },
-        { url: '/images/gallery/548309.jpg', alt: 'something' },
+        { url: '/images/gallery/548309.jpg', alt: 'castle vania' },
         { url: '/images/gallery/Shenandoah-national.jpg', alt: 'Shenandoah' },
     ];
 

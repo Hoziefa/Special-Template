@@ -8,25 +8,21 @@ section.contact {
         margin-bottom: 3rem;
 
         h2 {
-            @include text-shadow;
-            color: $primary-color;
+            @include custom-heading;
             text-align: center;
             margin-top: 2.65%;
             margin-bottom: 3%;
             position: relative;
             z-index: 1;
-            letter-spacing: 3px;
+
             @media (max-width: 1000px) {
                 &::before,
-                &::after {
-                    width: 25% !important;
-                }
+                &::after { width: 25% !important; }
             }
+
             @media (max-width: 400px) {
                 &::before,
-                &::after {
-                    width: 18% !important;
-                }
+                &::after { width: 18% !important; }
             }
 
             &::before,

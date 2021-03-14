@@ -7,9 +7,7 @@ section.our-gallery {
         text-align: center;
 
         h2 {
-            color: $primary-color;
-            @include text-shadow;
-            letter-spacing: 3px;
+            @include custom-heading;
         }
 
         hr {
@@ -50,7 +48,6 @@ section.our-gallery {
                 height: 0;
                 transform: translateY(50%);
                 background-color: rgba(51, 51, 51, 0.801);
-                // z-index: -1;
                 color: $primaryWhite-color;
                 transition: 0.3s;
                 pointer-events: none;
@@ -62,8 +59,8 @@ section.our-gallery {
 
             img {
                 display: block;
-                width: 100%; // max-width
-                height: 100%; // auto
+                width: 100%;
+                height: 100%;
                 object-fit: cover;
             }
         }
@@ -85,13 +82,13 @@ section.our-gallery {
             }
 
             button {
-                width: 1.55em;
-                height: 1.55em;
+                width: 1.25em;
+                height: 1.25em;
                 border-radius: 50%;
                 position: absolute;
-                top: 12%;
-                right: 14%;
-                font-size: 2rem;
+                top: 13%;
+                right: 14.5%;
+                font-size: 1.75rem;
                 background-color: $primaryWhite-color;
                 color: $primary-color;
                 cursor: pointer;
@@ -112,23 +109,23 @@ section.our-gallery {
                 width: 70%;
                 height: 70%;
                 background-color: $primaryWhite-color;
-                padding: 30px;
                 overflow: hidden;
                 border-radius: 10px;
 
                 .title {
-                    text-align: center;
-                    color: $primary-color;
-                    @include text-shadow;
-                    text-transform: uppercase;
-                    font-size: 3rem;
+                    text-transform: capitalize;
+                    font-size: 1.75rem;
+                    font-weight: bold;
+                    display: block;
+                    margin-left: 2rem;
+                    padding-top: 0.5rem;
                 }
 
                 img {
                     display: block;
                     max-width: 100%;
                     width: 100%;
-                    height: 90%; // auto
+                    height: 90%;
                     max-height: max-content;
                     object-fit: cover;
                 }

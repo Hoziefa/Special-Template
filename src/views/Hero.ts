@@ -17,7 +17,7 @@ interface IHeroElements {
 }
 
 export class Hero extends View<Model, IHeroState> {
-    protected readonly state: IHeroState = { currentSlide: 0, timer: NaN, duration: 5000 };
+    protected readonly state: IHeroState = { currentSlide: 0, timer: NaN, duration: 3000 };
 
     private readonly images = [
         '/images/slider/slide-1.jpg',
@@ -64,7 +64,7 @@ export class Hero extends View<Model, IHeroState> {
                 <header class="header-area">
                     <nav>
                         <div class="logo">
-                            <h2>special design</h2>
+                            <h2>dmc</h2>
                         </div>
 
                         <div class="links-container">

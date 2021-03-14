@@ -11,9 +11,7 @@ section.about--us {
 
     .info-box {
         h2 {
-            color: $primary-color;
-            letter-spacing: 3px;
-            @include text-shadow;
+            @include custom-heading;
         }
 
         hr {
@@ -22,7 +20,7 @@ section.about--us {
         }
 
         p {
-            font-size: 1.35rem;
+            font-size: 1.15rem;
             font-weight: 500;
 
             @media screen and (max-width: 768px) {

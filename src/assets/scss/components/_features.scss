@@ -8,9 +8,8 @@ section.our-features {
 
         h2 {
             text-transform: capitalize;
-            @include text-shadow;
-            color: $primary-color;
             text-align: center;
+            @include custom-heading;
         }
 
         hr {

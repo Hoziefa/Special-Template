@@ -11,7 +11,7 @@ interface IHeroState {
 
 interface IHeroElements {
     linksContainer?: HTMLDivElement;
-    menuLinksUl: HTMLLinkElement;
+    menuLinksUl: HTMLUListElement;
     toggleMenuBtn: HTMLButtonElement;
     slides: NodeListOf<HTMLDivElement>;
 }
@@ -51,7 +51,7 @@ export class Hero extends View<Model, IHeroState> {
 
     get elements(): IHeroElements {
         return {
-            menuLinksUl: document.querySelector<HTMLLinkElement>(this.selectors.menuLinksUl)!,
+            menuLinksUl: document.querySelector<HTMLUListElement>(this.selectors.menuLinksUl)!,
             toggleMenuBtn: document.querySelector<HTMLButtonElement>(this.selectors.toggleMenuBtn)!,
             slides: document.querySelectorAll<HTMLDivElement>(this.selectors.slides)!,
         };
@@ -159,9 +159,7 @@ export class Hero extends View<Model, IHeroState> {
         this.dataPersister.persistData(EDataPersistKeys.CurrentSlide, currentSlide);
     };
 
-    private autoSlide = (direction: 'prev' | 'next' = 'next', slides = this.elements.slides): void => {
-        this.slide(direction, slides);
-    };
+    private autoSlide = (direction: 'prev' | 'next' = 'next', slides = this.elements.slides): void => this.slide(direction, slides);
 
     //#endregion Slider Implementation
 
@@ -176,24 +174,17 @@ export class Hero extends View<Model, IHeroState> {
         const { timer, duration } = this.state;
         const { slides } = this.elements;
 
-        this.setState({ currentSlide: parseInt(this.dataPersister.readData(EDataPersistKeys.CurrentSlide), 10) || 0 });
+        //>: No need to parse or convert the returned value from @method=readData; cause it's already parsing it with JSON.parse and return the parsed value which is a number.
+        this.setState({ currentSlide: this.dataPersister.readData<number>(EDataPersistKeys.CurrentSlide) || 0 });
 
         const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
 
-        if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) {
-            removeClassAttr(slides);
+        removeClassAttr(slides);
 
-            slides[this.state.currentSlide].classList.add('active');
+        slides[this.state.currentSlide].classList.add('active');
 
-            this.setState({ timer: setInterval(this.autoSlide, duration) });
-        }
-        else if (!isRandomBackgroundPersisted) {
-            removeClassAttr(slides);
-
-            slides[this.state.currentSlide].classList.add('active');
-
-            clearInterval(timer);
-        }
+        if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) this.setState({ timer: setInterval(this.autoSlide, duration) });
+        else if (!isRandomBackgroundPersisted) clearInterval(timer);
     };
 
     //#endregion Random Background Controller

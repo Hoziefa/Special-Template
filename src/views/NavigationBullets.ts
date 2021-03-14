@@ -1,8 +1,8 @@
 import { View } from '@views/*';
-import { HTMLElementEvent } from '@appTypes/*';
+import { EDataPersistKeys, EObservables, HTMLElementEvent } from '@appTypes/*';
 
 interface INavigationBulletsElements {
-    navBulletsContainer: HTMLDivElement;
+    navigationBulletsContainer: HTMLDivElement;
 }
 
 export class NavigationBullets extends View {
@@ -16,11 +16,11 @@ export class NavigationBullets extends View {
         { goTo: '.contact', content: 'contact us' },
     ];
 
-    readonly selectors: Record<keyof INavigationBulletsElements, string> = { navBulletsContainer: '.nav-bullets' };
+    readonly selectors: Record<keyof INavigationBulletsElements, string> = { navigationBulletsContainer: '.nav-bullets' };
 
-    // get elements(): INavigationBulletsElements {
-    //     return { navBulletsContainer: document.querySelector<HTMLDivElement>(this.selectors.navBulletsContainer)! };
-    // }
+    get elements(): INavigationBulletsElements {
+        return { navigationBulletsContainer: document.querySelector<HTMLDivElement>(this.selectors.navigationBulletsContainer)! };
+    }
 
     protected template(): string {
         return `
@@ -30,17 +30,38 @@ export class NavigationBullets extends View {
         `;
     }
 
+    protected onRender(): void {
+        this.model.on(EObservables.ShowNavigationBullets, () => this.onBulletsOptionChosen(true));
+        this.model.on(EObservables.HideNavigationBullets, () => this.onBulletsOptionChosen(false));
+    }
+
     protected eventsMap(): { [p: string]: EventListener & any } {
-        const { navBulletsContainer } = this.selectors;
+        const { navigationBulletsContainer } = this.selectors;
 
         return {
-            [`click:${ navBulletsContainer }`]: this.navigationController,
+            [`click:${ navigationBulletsContainer }`]: this.navigationController,
         };
     }
 
     private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>) => {
-        if (!target.matches(`${ this.selectors.navBulletsContainer }, ${ this.selectors.navBulletsContainer } *`)) return;
+        if (!target.matches(`${ this.selectors.navigationBulletsContainer }, ${ this.selectors.navigationBulletsContainer } *`)) return;
 
         document.querySelector(target.dataset.goto!)?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    //#region Bullets Option Controller
+    private onBulletsOptionChosen = (showNavigationBullets: boolean) => this.elements.navigationBulletsContainer.style.display = showNavigationBullets ? 'block' : 'none';
+
+    private persistedBulletsOption = () => {
+        const { navigationBulletsContainer } = this.elements;
+
+        if (this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption)?.includes('block')) navigationBulletsContainer.style.display = 'block';
+        else if (this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption)?.includes('none')) navigationBulletsContainer.style.display = 'none';
+    };
+
+    //#endregion Bullets Option Controller
+
+    getPersistedData = () => {
+        this.persistedBulletsOption();
     };
 }

@@ -21,12 +21,13 @@ export class Skills extends View {
     }
 
     protected template(): string {
-
         return `
             <section class="our-skills" style="background: url('/images/skills/fav-1.jpg') no-repeat">
                 <div class="container">
-                    <h2>our skills</h2>
-                    <hr />
+                    <header>
+                        <h2>our skills</h2>
+                        <hr />
+                    </header>
                     <div class="skills-container">
                         ${ this.skillsList.map(({ number, text }) => `
                             <div class="card">

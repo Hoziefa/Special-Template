@@ -9,8 +9,6 @@ interface ISettingsBoxElements {
     optionBoxRandomBg: NodeListOf<HTMLSpanElement>;
     optionBoxBullets: NodeListOf<HTMLSpanElement>;
     resetAllBtn: HTMLButtonElement;
-
-    navigationBullets: HTMLDivElement;
 }
 
 export class SettingsBox extends View {
@@ -21,9 +19,6 @@ export class SettingsBox extends View {
         optionBoxRandomBg: '.option-box--random_bg span',
         optionBoxBullets: '.option-box--bullets span',
         resetAllBtn: '.option-box--reset button',
-
-        //>: Control render order to make this work or move it to it's component.
-        navigationBullets: '.nav-bullets',
     };
 
     get elements(): ISettingsBoxElements {
@@ -34,9 +29,6 @@ export class SettingsBox extends View {
             optionBoxRandomBg: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxRandomBg)!,
             optionBoxBullets: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxBullets)!,
             resetAllBtn: document.querySelector<HTMLButtonElement>(this.selectors.resetAllBtn)!,
-
-            //>: Control render order to make this work or move it to it's component.
-            navigationBullets: document.querySelector<HTMLDivElement>(this.selectors.navigationBullets)!,
         };
     }
 
@@ -44,10 +36,10 @@ export class SettingsBox extends View {
         return `
             <div class="settings-box">
                 <div class="toggle-settings"><i class="fas fa-cog"></i></div>
-
+        
                 <div class="settings-container">
                     <div class="option-box--colors-switch">
-                        <h4>colors options</h4>
+                        <h4>color option</h4>
                         <ul class="colors-list">
                             <li class="active" data-color="#34a853"></li>
                             <li data-color="#ffeb3b"></li>
@@ -57,19 +49,19 @@ export class SettingsBox extends View {
                             <li data-color="#4a148c"></li>
                         </ul>
                     </div>
-
+        
                     <div class="option-box--random_bg">
                         <h4>random background</h4>
                         <span class="yes active">yes</span>
                         <span class="no">no</span>
                     </div>
-
+        
                     <div class="option-box--bullets">
                         <h4>show bullets</h4>
                         <span class="yes active">show</span>
                         <span class="no">hide</span>
                     </div>
-
+        
                     <div class="option-box--reset"><button>reset all options</button></div>
                 </div>
             </div>
@@ -141,8 +133,6 @@ export class SettingsBox extends View {
 
     //#region Bullets Option Controller
     private bulletsOptionController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>) => {
-        const { navigationBullets } = this.elements;
-
         // 1->) REMOVE CLASS ACTIVE FROM ALL SPAN-ELEMENTS
         removeClassAttr(currentTarget.parentElement?.children!);
 
@@ -152,34 +142,35 @@ export class SettingsBox extends View {
         // 3->) CHECK WHICH OPTION IS CLICKED TO SET THE LOGIC
         // 4->) STORE OPTION IN LOCAL-STORAGE
         if (currentTarget.classList.contains('yes')) {
-            navigationBullets.style.display = 'block';
+            this.model.trigger(EObservables.ShowNavigationBullets);
 
             this.dataPersister.persistData(EDataPersistKeys.BulletsOption, 'block');
         }
         else if (currentTarget.classList.contains('no')) {
-            navigationBullets.style.display = 'none';
+            this.model.trigger(EObservables.HideNavigationBullets);
 
             this.dataPersister.persistData(EDataPersistKeys.BulletsOption, 'none');
         }
     };
 
     private persistedBulletsOption = () => {
-        //>: Related to bulletsOptionController
+        const { optionBoxBullets } = this.elements;
 
-        const { optionBoxBullets, navigationBullets } = this.elements;
-
-        if (this.dataPersister.readData<string>(EDataPersistKeys.BulletsOption)?.includes('block')) {
+        if (this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption)?.includes('block')) {
             removeClassAttr(optionBoxBullets);
+
             optionBoxBullets[0].classList.add('active');
-
-            navigationBullets.style.display = 'block';
         }
-        //> WE DID IT AS else-if CAUSE IT IGNORE THE IF-BLOCK IF IT IS NOT TRUE AND RUN THIS AND CAUSED UNEXPECTED ISSUES AND FOR THIS WE HAD TO SPECIFIC THIS LINE CAUSE IF THE IF-BLOCK NOT RUN CHECK FOR THIS INSTEAD OF IF THE IF-BLOCK NOT RUN RUN THIS ELSE-BLOCK IN ALL CASES WE HAD TO SPECIFIC IT
-        else if (this.dataPersister.readData<string>(EDataPersistKeys.BulletsOption)?.includes('none')) {
+            //>: WE DID IT AS else-if CAUSE IF THE USER DON'T HAVE A PREFERENCE VALUE STORED THE CONDITION ON @IF-BLOCK; WON'T BE SATISFIED AND THE @ELSE-BLOCK; WILL RUN AND THIS WHAT WE DON'T WANT
+            //>: CAUSE IF THE USER DON'T HAVE A PREFERENCE VALUE IT DOESN'T MEANS THAT THE USER WANT THE NAVIGATION BULLETS TO SHOWN IT MEANS THAT THE USER DIDN'T CHOOSE AN OPTION SO IN THIS CASE WE
+            //>: HAVE TO DISPLAY THE DEFAULT WHICH IS YES OPTION AND WE DON'T HAVE TO DO IT LIKE WE DID IN @method=persistedRandomBgOption(); IN @IF-BLOCK; WHEN WE CHECKED FOR OUR CUSTOM FAILING VALUE
+            // WHICH IS @NULL; AND THE REASON FOR WE DON'T HAVE TO ADD A OR PART IN OUR @IF-BLOCK; WITH OUR CUSTOM DEFAULT FAILING VALUE @NULL; IS CAUSE THE VALUE ALREADY TAKEN FROM
+            // @method=template(); WHEN WE RENDER THE OPTIONS WE DEFAULT FIRST OPTION WITH active SO WE HAVE A DEFAULT VALUE THAT'S ADDED ON RENDER
+        //>: We can't use shorting syntax for @if-block; and @else-block; here case we are not ranging all true cases in the @if-block; as we explaining above, we have to range if wanna use.
+        else if (this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption)?.includes('none')) {
             removeClassAttr(optionBoxBullets);
-            optionBoxBullets[1].classList.add('active');
 
-            navigationBullets.style.display = 'none';
+            optionBoxBullets[1].classList.add('active');
         }
     };
 
@@ -187,22 +178,22 @@ export class SettingsBox extends View {
 
     //#region Random Background Controller
     private randomBgController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>) => {
-        //ToDo 1->) REMOVE CLASS ACTIVE FROM ALL SPAN-ELEMENTS
+        // 1->) REMOVE CLASS ACTIVE FROM ALL SPAN-ELEMENTS
         removeClassAttr(currentTarget.parentElement?.children!);
 
-        //ToDo 2->) ADD CLASS ACTIVE TO THE SPAN-ELEMENT THAT WE CLICK ON
+        // 2->) ADD CLASS ACTIVE TO THE SPAN-ELEMENT THAT WE CLICK ON
         currentTarget.classList.add('active');
 
-        //ToDo 3->) CHECK IF THE OPTION IS YES SO RUN THE SLIDER IF NO STOP THE SLIDER BY SET AN CLEAR THE INTERVAL AND SET THE STATE VARIABLE TO THE LOCAL-STORAGE DEPENDS ON STATE-VARIABLE VALUE
+        // 3->) CHECK IF THE OPTION IS YES SO RUN THE SLIDER IF NO STOP THE SLIDER BY SET AN CLEAR THE INTERVAL AND SET THE STATE VARIABLE TO THE LOCAL-STORAGE DEPENDS ON STATE-VARIABLE VALUE
         if (currentTarget.classList.contains('yes')) {
-            this.dataPersister.persistData(EDataPersistKeys.RandomBackground, true);
-
             this.model.trigger(EObservables.EnableRandomBackground);
+
+            this.dataPersister.persistData(EDataPersistKeys.RandomBackground, true);
         }
         else if (currentTarget.classList.contains('no')) {
-            this.dataPersister.persistData(EDataPersistKeys.RandomBackground, false);
-
             this.model.trigger(EObservables.DisableRandomBackground);
+
+            this.dataPersister.persistData(EDataPersistKeys.RandomBackground, false);
         }
     };
 
@@ -211,16 +202,9 @@ export class SettingsBox extends View {
 
         const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
 
-        if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) {
-            removeClassAttr(optionBoxRandomBg);
+        removeClassAttr(optionBoxRandomBg);
 
-            optionBoxRandomBg[0].classList.add('active');
-        }
-        else if (!isRandomBackgroundPersisted) {
-            removeClassAttr(optionBoxRandomBg);
-
-            optionBoxRandomBg[1].classList.add('active');
-        }
+        optionBoxRandomBg[isRandomBackgroundPersisted || isRandomBackgroundPersisted === null ? 0 : 1].classList.add('active');
     };
 
     //#endregion Random Background Controller

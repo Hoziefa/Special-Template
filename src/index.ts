@@ -7,20 +7,20 @@ class State {
     private static instance: State;
 
     //>: Based:
-    readonly root = document.getElementById('root')!;
+    private readonly root = document.getElementById('root')!;
 
-    readonly model = new Model(new Eventing());
+    private readonly model = new Model(new Eventing());
 
-    readonly dataPersister = DataPersister;
+    private readonly dataPersister = DataPersister;
 
     //>: DOM:
     readonly loader = new Loader(this.root, this.model, this.dataPersister);
 
     readonly settingsBox = new SettingsBox(this.root, this.model, this.dataPersister);
 
-    readonly goToTop = new GoToTop(this.root, this.model, this.dataPersister);
-
     readonly navigationBullets = new NavigationBullets(this.root, this.model, this.dataPersister);
+
+    readonly goToTop = new GoToTop(this.root, this.model, this.dataPersister);
 
     readonly hero = new Hero(this.root, this.model, this.dataPersister);
 
@@ -52,8 +52,8 @@ class State {
     renderElementsToDOM(): void {
         this.loader.render();
         this.settingsBox.render();
-        this.goToTop.render();
         this.navigationBullets.render();
+        this.goToTop.render();
         this.hero.render();
         this.about.render();
         this.skills.render();
@@ -74,6 +74,8 @@ window.addEventListener('load', () => {
     state.loader.onLoadDisplayLoader();
 
     state.settingsBox.getPersistedData();
+
+    state.navigationBullets.getPersistedData();
 
     state.hero.getPersistedData();
 });

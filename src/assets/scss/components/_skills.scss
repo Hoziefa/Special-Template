@@ -4,16 +4,20 @@ section.our-skills {
     padding: 5% 0;
     background-size: cover !important;
 
-    .container > h2 {
-        @include custom-heading;
-        text-align: center;
-    }
+    header {
+        margin-bottom: 2rem;
 
-    hr {
-        @include hr-elm-custom-styling;
-        @include box-shadow;
-        width: 40%;
-        margin: 1% auto 2%;
+        h2 {
+            @include custom-heading;
+            text-align: center;
+        }
+
+        hr {
+            @include hr-elm-custom-styling;
+            @include box-shadow;
+            width: 40%;
+            margin: 1% auto 2%;
+        }
     }
 
     .skills-container {
@@ -140,7 +144,7 @@ section.our-skills {
                 text-shadow: 1px 3px 5px gray;
             }
 
-            &:nth-child(1) svg circle:nth-child(2) {
+            &:first-child svg circle:nth-child(2) {
                 stroke: #28A745;
             }
 
@@ -160,8 +164,8 @@ section.our-skills {
                 stroke: #673AB7;
             }
 
-            &:nth-child(6) svg circle:nth-child(2) {
-                stroke: $primary-color;
+            &:last-child svg circle:nth-child(2) {
+                stroke: #D32F2F;
             }
         }
 

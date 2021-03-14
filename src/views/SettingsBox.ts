@@ -54,6 +54,7 @@ export class SettingsBox extends View {
                             <li data-color="#e91e63"></li>
                             <li data-color="#03a9f4"></li>
                             <li data-color="#009688"></li>
+                            <li data-color="#4a148c"></li>
                         </ul>
                     </div>
 

@@ -19,19 +19,19 @@ interface IHeroElements {
 export class Hero extends View<Model, IHeroState> {
     protected readonly state: IHeroState = { currentSlide: 0, timer: NaN, duration: 5000 };
 
-    readonly images = [
+    private readonly images = [
         '/images/slider/slide-1.jpg',
-        '/images/slider/software-development-i1.jpg',
-        '/images/special/Services_Web.jpg',
-        '/images/slider/SoftwareDevelopmentInfocirclesTechnoogySolutions.jpg',
-        '/images/slider/Custom-Software-Development.jpg',
-        '/images/slider/Geometry-Header-1920x1080.jpg',
-        '/images/home/home-bg1.jpg',
-        '/images/home/home-bg2.jpg',
-        '/images/home/home-bg3.png',
+        '/images/slider/slide-2.jpg',
+        '/images/slider/slide-3.jpg',
+        '/images/slider/slide-4.jpg',
+        '/images/slider/slide-5.jpg',
+        '/images/slider/slide-6.jpg',
+        '/images/slider/slide-7.jpg',
+        '/images/slider/slide-8.jpg',
+        '/images/slider/slide-9.png',
     ];
 
-    readonly links = [
+    private readonly links = [
         { goTo: '', content: 'home' },
         { goTo: '.about--us', content: 'about' },
         { goTo: '.our-skills', content: 'skills' },

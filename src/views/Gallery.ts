@@ -7,11 +7,11 @@ interface IGalleryElements {
 }
 
 export class Gallery extends View {
-    readonly images = [
-        { url: '/images/ourSkills/H4DcmF.jpg"', alt: 'grass green' },
-        { url: '/images/ourSkills/10.jpg', alt: 'artist' },
-        { url: '/images/ourSkills/4.jpg', alt: 'wave' },
-        { url: '/images/ourSkills/9rQ3DP.jpg', alt: 'wave sea' },
+    private readonly images = [
+        { url: '/images/gallery/H4DcmF.jpg"', alt: 'grass green' },
+        { url: '/images/gallery/10.jpg', alt: 'artist' },
+        { url: '/images/gallery/4.jpg', alt: 'wave' },
+        { url: '/images/gallery/9rQ3DP.jpg', alt: 'wave sea' },
         { url: 'https://eskipaper.com/images/sci-fi-wallpaper-1.jpg', alt: 'something' },
         { url: 'https://wallpaperaccess.com/full/439756.jpg', alt: 'storm' },
         { url: 'https://i.imgur.com/5VOiHDo.jpg', alt: 'nice look' },
@@ -38,7 +38,7 @@ export class Gallery extends View {
                     <div class="images-box">
                         ${ this.images.map(({ url, alt }) => `<div class="image-box"><img src="${ url }" alt="${ alt }" /></div>`).join('') }
                         <div class="popup">
-                            <button><i class="fas fa-times"></i></button>
+                            <button aria-label="cancel-popup"><i class="fas fa-times"></i></button>
                             <div class="popup-box">
                                 <img src="" alt="" />
                                 <span class="title"></span>

@@ -1,0 +1,24 @@
+@import "../abstracts/variables";
+
+footer.app--footer {
+    padding: 3% 0;
+    background: linear-gradient(to right, black 35%, $primary-color 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        color: $primaryWhite-color;
+        text-transform: capitalize;
+        font-size: 1.25rem;
+
+        span {
+            text-transform: capitalize;
+            background-image: linear-gradient($primaryWhite-color, $primary-color);
+            font-size: larger;
+            color: transparent;
+            -webkit-background-clip: text;
+            font-family: $raleway-font;
+        }
+    }
+}

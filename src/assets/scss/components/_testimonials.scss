@@ -1,0 +1,126 @@
+@import "../abstracts/mixins";
+
+section.testimonials {
+    padding: 5% 0;
+    position: relative;
+
+    &::before,
+    &::after {
+        content: "";
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        z-index: -1;
+    }
+
+    &::before {
+        background-color: $primary-color;
+        left: 0;
+    }
+
+    &::after {
+        background-color: $primary-color;
+        right: 0;
+        filter: opacity(0.8);
+    }
+
+    header {
+        margin-bottom: 3rem;
+
+        h2 {
+            text-transform: capitalize;
+            @include text-shadow;
+            color: $primaryWhite-color;
+        }
+    }
+
+    .testimonials-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+
+        .testimonials-box {
+            background-color: whitesmoke;
+            flex: 1;
+            padding: 2rem 1rem;
+            transition: transform 0.3s;
+
+            .description {
+                font-size: 1.25rem;
+                margin-bottom: 2%;
+                font-weight: 500;
+                color: $bootstrap-black-color;
+            }
+
+            .person-info {
+                img {
+                    display: block;
+                    max-width: 100%;
+                    height: auto;
+                    margin: 0 auto;
+                }
+
+                .person-name {
+                    @include text-shadow;
+                    display: block;
+                    font-size: 1.75rem;
+                    font-weight: bold;
+                    color: $primary-color;
+                    text-align: center;
+                    margin: 1.5rem 0;
+                    position: relative;
+                    z-index: 1;
+
+                    &::before,
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background-color: $primary-color;
+                        width: 30%;
+                        height: 3px;
+                        z-index: -1;
+                    }
+
+                    &::before {
+                        left: 0;
+                    }
+
+                    &::after {
+                        right: 0;
+                    }
+                }
+
+                .person-job--title {
+                    text-align: center;
+                    display: block;
+                    text-transform: uppercase;
+                    font-size: 1.35rem;
+                    font-weight: 500;
+                    @include text-shadow;
+                    color: $primary-color;
+                    filter: opacity(0.8);
+                }
+            }
+
+            &:not(:last-of-type) {
+                margin-right: 2%;
+            }
+
+            &:hover {
+                transform: translateY(-2%);
+            }
+
+            @media only screen and (max-width: 992px) {
+                flex: 1 0 100% !important;
+                margin-right: 0 !important;
+                &:not(:last-of-type) {
+                    margin-bottom: 3rem;
+                }
+            }
+        }
+    }
+}

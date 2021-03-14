@@ -1,0 +1,58 @@
+@import "../abstracts/mixins";
+
+section.about--us {
+    padding: 5% 0 0;
+
+    > div {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(476px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .info-box {
+        h2 {
+            color: $primary-color;
+            letter-spacing: 3px;
+            @include text-shadow;
+        }
+
+        hr {
+            @include hr-elm-custom-styling;
+            @include box-shadow;
+        }
+
+        p {
+            font-size: 1.35rem;
+            font-weight: 500;
+
+            @media screen and (max-width: 768px) {
+                width: 100%;
+                margin: 0;
+            }
+        }
+    }
+
+    .image-box {
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin-left: auto;
+            object-fit: cover;
+            object-position: center;
+            animation: swapImgColors 5s infinite alternate;
+        }
+    }
+}
+
+@keyframes swapImgColors {
+    0% {
+        filter: hue-rotate(0);
+    }
+    50% {
+        filter: hue-rotate(90deg);
+    }
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}

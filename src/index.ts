@@ -1,7 +1,7 @@
 import { DataPersister, Eventing, Model } from '@models/*';
 import { About, AppFooter, Contact, Features, Gallery, GoToTop, Hero, Loader, NavigationBullets, SettingsBox, Skills, Testimonials, TimeLine } from '@views/*';
 
-import 'assets/scss/_main-style.scss';
+import 'assets/scss/index.scss';
 
 class State {
     private static instance: State;

@@ -1,9 +1,11 @@
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
+const { NODE_ENV = 'development' } = process.env;
+
 module.exports = {
     entry: './src/index.ts',
-    output: { filename: 'index.js', path: path.resolve(__dirname, 'public') },
+    output: { filename: 'index.js', path: path.resolve(__dirname, NODE_ENV === 'development' ? 'public' : 'dist') },
 
     module: {
         rules: [
@@ -22,7 +24,6 @@ module.exports = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            // Prefer `dart-sass`
                             implementation: require('node-sass'),
                         },
                     },
@@ -38,5 +39,9 @@ module.exports = {
         plugins: [new TsconfigPathsPlugin({ baseUrl: 'src' })],
     },
 
-    devServer: { contentBase: path.join(__dirname, 'public'), inline: true, port: 3000 },
+    devServer: {
+        contentBase: path.join(__dirname, NODE_ENV === 'development' ? 'public' : 'dist'),
+        inline: true,
+        port: 3000,
+    },
 };

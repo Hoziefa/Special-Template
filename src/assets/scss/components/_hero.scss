@@ -65,26 +65,6 @@ section.hero {
                     margin-left: auto;
                     margin-right: 20px;
 
-                    &::before {
-                        content: "";
-                        border-width: 15px 18px;
-                        border-style: solid;
-                        border-color: transparent transparent $primaryWhite-color transparent;
-                        position: absolute;
-                        bottom: 0;
-                        left: 50%;
-                        transform: translate(-50%, calc(15px + 87%));
-                        pointer-events: none;
-                        opacity: 0;
-                        overflow: hidden;
-                        transition: 0.3s 0.2s;
-                    }
-
-                    &.menu-active::before {
-                        opacity: 1;
-                        transition-delay: 0.1s;
-                    }
-
                     span {
                         display: block;
                         background-color: $primary-color;
@@ -95,12 +75,33 @@ section.hero {
                             margin: 5px 0;
                         }
                     }
+
+                    &::before {
+                        content: "";
+                        border-width: 15px 18px;
+                        border-style: solid;
+                        border-color: transparent transparent $primaryWhite-color transparent;
+                        position: absolute;
+                        bottom: 0;
+                        left: 50%;
+                        transform: translate(-50%, 7vh);
+                        pointer-events: none;
+                        opacity: 0;
+                        overflow: hidden;
+                        transition: opacity 0.3s 0.2s;
+                    }
+
+                    &.menu-active::before {
+                        opacity: 1;
+                        transition-delay: 0.1s;
+                    }
                 }
 
                 @media (min-width: 1200px) and (max-width: 1500px) {
                     flex-basis: 60%;
                     max-width: 60%;
                 }
+
                 @media (max-width: 1200px) {
                     .links {
                         position: absolute;
@@ -152,17 +153,26 @@ section.hero {
                             transition-delay: 0s;
                         }
                     }
+
                     .toggle-menu {
                         display: block;
                     }
                 }
+
                 @media (max-width: 768px) {
                     flex: 1 !important;
                 }
+
                 @media (max-width: 600px) {
                     .links {
                         li {
                             font-size: 1.25rem;
+                        }
+                    }
+
+                    .toggle-menu {
+                        &:before {
+                            transform: translate(-50%, 5vh);
                         }
                     }
                 }

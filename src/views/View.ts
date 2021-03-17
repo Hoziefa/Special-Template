@@ -31,7 +31,6 @@ export abstract class View<T extends Model = Model, S extends Readonly<IState> =
         Object.entries(this.eventsMap()).forEach(([eventType, callback]) => {
             const [eventName, selector] = eventType.split(':');
 
-            //Todo: Must figure a better way to do this handling thing.
             if (selector === 'html') return document.addEventListener(eventName, callback);
 
             fragment.querySelectorAll(selector).forEach(elm => elm.addEventListener(eventName, callback));

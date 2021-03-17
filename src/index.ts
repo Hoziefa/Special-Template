@@ -3,17 +3,18 @@ import { About, AppFooter, Contact, Features, Gallery, GoToTop, Hero, Loader, Na
 
 import 'assets/scss/main.scss';
 
-class State {
-    private static instance: State;
+//>: Controller
+class StateController {
+    private static instance: StateController;
 
-    //>: Based:
+    //>: Based Models:
     private readonly root = document.getElementById('root')!;
 
     private readonly model = new Model(new Eventing());
 
     private readonly dataPersister = DataPersister;
 
-    //>: DOM:
+    //>: DOM View:
     readonly loader = new Loader(this.root, this.model, this.dataPersister);
 
     readonly settingsBox = new SettingsBox(this.root, this.model, this.dataPersister);
@@ -43,10 +44,10 @@ class State {
     private constructor() {
     }
 
-    static state(): State {
-        if (!State.instance) State.instance = new State();
+    static state(): StateController {
+        if (!StateController.instance) StateController.instance = new StateController();
 
-        return State.instance;
+        return StateController.instance;
     }
 
     renderElementsToDOM(): void {
@@ -66,7 +67,7 @@ class State {
     }
 }
 
-const state = State.state();
+const state = StateController.state();
 
 state.renderElementsToDOM();
 

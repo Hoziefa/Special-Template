@@ -1,36 +1,5 @@
 @import "variables";
 
-@mixin custom-hr {
-    background-image: repeating-linear-gradient(30deg, $primary-color 0%, $primaryWhite-color 15%, $primary-color 35%);
-    width: 55%;
-    margin: 1% 0 3%;
-    height: 4.5px;
-    border-radius: 20px;
-    @include box-shadow($primary-color, #CCC)
-}
-
-@mixin text-shadow($color: $goodBlackGray-color, $secondary-color: gray) {
-    text-shadow: 0 1px 0 $secondary-color, 1px 0 0 $color, 1px 2px 1px $secondary-color, 2px 1px 1px $color,
-    2px 3px 2px $secondary-color, 3px 2px 2px $color, 3px 4px 2px $secondary-color, 4px 3px 3px $color,
-    4px 5px 3px $secondary-color, 5px 4px 2px $color, 5px 6px 2px $secondary-color, 6px 5px 2px $color,
-    6px 7px 1px $secondary-color, 7px 6px 1px $color, 7px 8px 0 $secondary-color, 8px 7px 0 $color;
-}
-
-@mixin box-shadow($color: $goodBlackGray-color, $secondary-color: gray) {
-    box-shadow: 0 1px 0 $secondary-color, 1px 0 0 $color, 1px 2px 1px $secondary-color, 2px 1px 1px $color,
-    2px 3px 2px $secondary-color, 3px 2px 2px $color, 3px 4px 2px $secondary-color, 4px 3px 3px $color,
-    4px 5px 3px $secondary-color, 5px 4px 2px $color, 5px 6px 2px $secondary-color, 6px 5px 2px $color,
-    6px 7px 1px $secondary-color, 7px 6px 1px $color, 7px 8px 0 $secondary-color, 8px 7px 0 $color;
-}
-
-@mixin custom-heading {
-    @include text-shadow(#CCC, $primary-color);
-    color: transparent;
-    -webkit-background-clip: text;
-    //background-image: repeating-linear-gradient(90deg, $primary-color 50%, whitesmoke 51%, $primary-color 100%);
-    letter-spacing: 3px;
-}
-
 //Media Query manager
 /*
     0 - 425px   phone
@@ -45,8 +14,7 @@
     - laptop
     - big-desktop
 */
-
-@mixin respond($breakpoint) {
+@mixin responsiveMedias($breakpoint) {
     @if $breakpoint==phone {
         @media (max-width: 425px) {
             @content
@@ -76,4 +44,34 @@
             @content
         }
     };
+}
+
+@mixin customHorizontalRule {
+    background-image: repeating-linear-gradient(30deg, $primary-color 0%, $primaryWhite-color 15%, $primary-color 35%);
+    width: 55%;
+    margin: 1% 0 3%;
+    height: 4.5px;
+    border-radius: 20px;
+    @include box-shadow($primary-color, #CCC);
+}
+
+@mixin text-shadow($color: $goodBlackGray-color, $secondary-color: gray) {
+    text-shadow: 0 1px 0 $secondary-color, 1px 0 0 $color, 1px 2px 1px $secondary-color, 2px 1px 1px $color,
+    2px 3px 2px $secondary-color, 3px 2px 2px $color, 3px 4px 2px $secondary-color, 4px 3px 3px $color,
+    4px 5px 3px $secondary-color, 5px 4px 2px $color, 5px 6px 2px $secondary-color, 6px 5px 2px $color,
+    6px 7px 1px $secondary-color, 7px 6px 1px $color, 7px 8px 0 $secondary-color, 8px 7px 0 $color;
+}
+
+@mixin box-shadow($color: $goodBlackGray-color, $secondary-color: gray) {
+    box-shadow: 0 1px 0 $secondary-color, 1px 0 0 $color, 1px 2px 1px $secondary-color, 2px 1px 1px $color,
+    2px 3px 2px $secondary-color, 3px 2px 2px $color, 3px 4px 2px $secondary-color, 4px 3px 3px $color,
+    4px 5px 3px $secondary-color, 5px 4px 2px $color, 5px 6px 2px $secondary-color, 6px 5px 2px $color,
+    6px 7px 1px $secondary-color, 7px 6px 1px $color, 7px 8px 0 $secondary-color, 8px 7px 0 $color;
+}
+
+@mixin customHeadingTitle {
+    @include text-shadow(#CCC, $primary-color);
+    color: transparent;
+    -webkit-background-clip: text;
+    letter-spacing: 3px;
 }

@@ -8,12 +8,12 @@ section.our-skills {
         margin-bottom: 2rem;
 
         h2 {
-            @include custom-heading;
+            @include customHeadingTitle;
             text-align: center;
         }
 
         hr {
-            @include custom-hr;
+            @include customHorizontalRule;
             width: 40%;
             margin: 1% auto 2%;
         }

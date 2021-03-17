@@ -5,9 +5,14 @@ export enum EDataPersistKeys {
     ColorOption = 'color-option'
 }
 
-export enum EObservables {
+export enum EObservablesDescriptors {
     EnableRandomBackground = 'enableRandomBg',
     DisableRandomBackground = 'disableRandomBg',
     ShowNavigationBullets = 'showNavigationBullets',
     HideNavigationBullets = 'hideNavigationBullets'
+}
+
+export enum EPersistedNavigationBulletsOptions {
+    ShowNavigationBullets = 'block',
+    HideNavigationBullets = 'none',
 }

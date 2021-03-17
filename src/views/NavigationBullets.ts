@@ -1,9 +1,9 @@
 import { View } from '@views/*';
-import { EDataPersistKeys, EObservables, HTMLElementEvent } from '@appTypes/*';
+import { EDataPersistKeys, EObservablesDescriptors, EPersistedNavigationBulletsOptions, HTMLElementEvent } from '@appTypes/*';
 import { Model } from '@models/*';
 
 interface INavigationBulletsState {
-    showNavigationBullets: 'block' | 'none';
+    showNavigationBullets: EPersistedNavigationBulletsOptions;
 }
 
 interface INavigationBulletsElements {
@@ -11,7 +11,7 @@ interface INavigationBulletsElements {
 }
 
 export class NavigationBullets extends View<Model, INavigationBulletsState> {
-    protected readonly state: INavigationBulletsState = { showNavigationBullets: this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption) ?? 'block' };
+    protected readonly state: INavigationBulletsState = { showNavigationBullets: this.dataPersister.readData<EPersistedNavigationBulletsOptions>(EDataPersistKeys.BulletsOption) ?? EPersistedNavigationBulletsOptions.ShowNavigationBullets };
 
     private readonly bullets = [
         { goTo: '.about--us', content: 'about us' },
@@ -38,16 +38,14 @@ export class NavigationBullets extends View<Model, INavigationBulletsState> {
     }
 
     protected onRender(): void {
-        this.model.on(EObservables.ShowNavigationBullets, () => this.onBulletsOptionChosen('block'));
-        this.model.on(EObservables.HideNavigationBullets, () => this.onBulletsOptionChosen('none'));
+        this.model.on(EObservablesDescriptors.ShowNavigationBullets, () => this.onBulletsOptionChosen(EPersistedNavigationBulletsOptions.ShowNavigationBullets));
+        this.model.on(EObservablesDescriptors.HideNavigationBullets, () => this.onBulletsOptionChosen(EPersistedNavigationBulletsOptions.HideNavigationBullets));
     }
 
     protected eventsMap(): { [p: string]: EventListener & any } {
         const { navigationBulletsContainer } = this.selectors;
 
-        return {
-            [`click:${ navigationBulletsContainer }`]: this.navigationController,
-        };
+        return { [`click:${ navigationBulletsContainer }`]: this.navigationController };
     }
 
     private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>): void => {
@@ -57,7 +55,7 @@ export class NavigationBullets extends View<Model, INavigationBulletsState> {
     };
 
     //#region Bullets Option Controller
-    private onBulletsOptionChosen = (showNavigationBullets: 'block' | 'none'): void => {
+    private onBulletsOptionChosen = (showNavigationBullets: EPersistedNavigationBulletsOptions): void => {
         this.elements.navigationBulletsContainer.style.display = showNavigationBullets;
 
         this.setState({ showNavigationBullets });

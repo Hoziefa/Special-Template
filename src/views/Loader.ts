@@ -1,7 +1,7 @@
 import { View } from '@views/*';
 
 export class Loader extends View {
-    protected template() {
+    protected template(): string {
         return `<div class="loader"></div>`;
     }
 

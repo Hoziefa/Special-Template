@@ -7,11 +7,11 @@ section.our-gallery {
         text-align: center;
 
         h2 {
-            @include custom-heading;
+            @include customHeadingTitle;
         }
 
         hr {
-            @include custom-hr;
+            @include customHorizontalRule;
             margin: 1% auto 3%;
             width: 35%;
         }

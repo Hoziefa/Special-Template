@@ -11,11 +11,11 @@ section.about--us {
 
     .info-box {
         h2 {
-            @include custom-heading;
+            @include customHeadingTitle;
         }
 
         hr {
-            @include custom-hr;
+            @include customHorizontalRule;
         }
 
         p {

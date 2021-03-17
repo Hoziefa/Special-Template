@@ -9,11 +9,11 @@ section.our-features {
         h2 {
             text-transform: capitalize;
             text-align: center;
-            @include custom-heading;
+            @include customHeadingTitle;
         }
 
         hr {
-            @include custom-hr;
+            @include customHorizontalRule;
             width: 35%;
             margin: 1.25% auto;
         }

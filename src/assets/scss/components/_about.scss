@@ -3,7 +3,7 @@
 section.about--us {
     padding: 5% 0 0;
 
-    > div {
+    .container {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(476px, 1fr));
         gap: 1.5rem;
@@ -11,18 +11,15 @@ section.about--us {
 
     .info-box {
         h2 {
-            color: $primary-color;
-            letter-spacing: 3px;
-            @include text-shadow;
+            @include custom-heading;
         }
 
         hr {
-            @include hr-elm-custom-styling;
-            @include box-shadow;
+            @include custom-hr;
         }
 
         p {
-            font-size: 1.35rem;
+            font-size: 1.15rem;
             font-weight: 500;
 
             @media screen and (max-width: 768px) {
@@ -41,6 +38,12 @@ section.about--us {
             object-fit: cover;
             object-position: center;
             animation: swapImgColors 5s infinite alternate;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            display: block;
         }
     }
 }

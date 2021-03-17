@@ -7,6 +7,6 @@ export interface IEventing {
 
 export interface IDataPersister {
     persistData<T>(key: string, data: T): void;
-    readData<T>(key: string): T;
+    readData<T>(key: string): T | null;
     clearData(): void;
 }

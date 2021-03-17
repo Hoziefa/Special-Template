@@ -8,16 +8,16 @@ interface IGalleryElements {
 
 export class Gallery extends View {
     private readonly images = [
-        { url: '/images/gallery/H4DcmF.jpg"', alt: 'grass green' },
-        { url: '/images/gallery/10.jpg', alt: 'artist' },
-        { url: '/images/gallery/4.jpg', alt: 'wave' },
-        { url: '/images/gallery/9rQ3DP.jpg', alt: 'wave sea' },
-        { url: 'https://eskipaper.com/images/sci-fi-wallpaper-1.jpg', alt: 'something' },
-        { url: 'https://wallpaperaccess.com/full/439756.jpg', alt: 'storm' },
-        { url: 'https://i.imgur.com/5VOiHDo.jpg', alt: 'nice look' },
-        { url: '/images/gallery/cool-nature-background.jpg', alt: 'nature' },
-        { url: '/images/gallery/548309.jpg', alt: 'something' },
-        { url: '/images/gallery/Shenandoah-national.jpg', alt: 'Shenandoah' },
+        { url: 'assets/images/gallery/H4DcmF.jpg"', alt: 'grass green' },
+        { url: 'assets/images/gallery/10.jpg', alt: 'artist' },
+        { url: 'assets/images/gallery/4.jpg', alt: 'wave' },
+        { url: 'assets/images/gallery/9rQ3DP.jpg', alt: 'wave sea' },
+        { url: 'assets/images/gallery/12051.jpg', alt: 'night view' },
+        { url: 'assets/images/gallery/3254161.jpg', alt: 'storm' },
+        { url: 'assets/images/gallery/butterfly.jpg', alt: 'nice look' },
+        { url: 'assets/images/gallery/cool-nature-background.jpg', alt: 'nature' },
+        { url: 'assets/images/gallery/548309.jpg', alt: 'castle vania' },
+        { url: 'assets/images/gallery/Shenandoah-national.jpg', alt: 'Shenandoah' },
     ];
 
     readonly selectors: Record<keyof IGalleryElements, string> = { galleryContainer: 'section.our-gallery', galleryPopup: '.images-box .popup' };
@@ -58,11 +58,11 @@ export class Gallery extends View {
         return { [`click:${ galleryPopup }`]: this.hidePopupController, [`click:${ galleryContainer }`]: this.galleryPopup };
     }
 
-    private hidePopupController = ({ currentTarget, target }: HTMLElementEvent<HTMLButtonElement, HTMLDivElement>) => {
+    private hidePopupController = ({ currentTarget, target }: HTMLElementEvent<HTMLButtonElement, HTMLDivElement>): void => {
         target.matches(`${ this.selectors.galleryPopup }, ${ this.selectors.galleryPopup } button, ${ this.selectors.galleryPopup } button *`) && currentTarget.classList.remove('active');
     };
 
-    private galleryPopup = ({ target }: HTMLElementEvent<HTMLImageElement>) => {
+    private galleryPopup = ({ target }: HTMLElementEvent<HTMLImageElement>): void => {
         // if (!target.matches(`${ this.selectors.galleryContainer } .images-box img`)) return;
 
         //>: Second approach is to do @Type=Guard;.

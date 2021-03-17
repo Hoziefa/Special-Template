@@ -21,12 +21,13 @@ export class Skills extends View {
     }
 
     protected template(): string {
-
         return `
-            <section class="our-skills" style="background: url('/images/skills/fav-1.jpg') no-repeat">
+            <section class="our-skills" style="background: url('assets/images/skills/fav-1.jpg') no-repeat">
                 <div class="container">
-                    <h2>our skills</h2>
-                    <hr />
+                    <header>
+                        <h2>our skills</h2>
+                        <hr />
+                    </header>
                     <div class="skills-container">
                         ${ this.skillsList.map(({ number, text }) => `
                             <div class="card">
@@ -49,12 +50,12 @@ export class Skills extends View {
         return { 'scroll:html': this.scrollController };
     }
 
-    private scrollController = () => {
+    private scrollController = (): void => {
         const domCardsNumber = document.querySelectorAll<HTMLDivElement>('.card .number')!;
 
         const texts = Array.from(domCardsNumber).map(domElm => domElm?.textContent?.trim().replace('%', ''));
 
-        texts.forEach((text, idx) => {
+        texts.forEach((text, idx): void => {
             const svgCircleDomElm = document.querySelector<SVGCircleElement>(`.card:nth-child(${ idx + 1 }) svg circle:nth-child(2)`);
 
             pageYOffset + 250 > this.elements.skillsContainer.offsetTop && svgCircleDomElm?.style.setProperty('stroke-dashoffset', `calc(440 - (440 * ${ text }) / 100)`);

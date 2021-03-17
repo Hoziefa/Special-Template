@@ -1,26 +1,26 @@
 import { DataPersister, Eventing, Model } from '@models/*';
 import { About, AppFooter, Contact, Features, Gallery, GoToTop, Hero, Loader, NavigationBullets, SettingsBox, Skills, Testimonials, TimeLine } from '@views/*';
 
-import 'assets/scss/index.scss';
+import 'assets/scss/main.scss';
 
 class State {
     private static instance: State;
 
     //>: Based:
-    readonly root = document.getElementById('root')!;
+    private readonly root = document.getElementById('root')!;
 
-    readonly model = new Model(new Eventing());
+    private readonly model = new Model(new Eventing());
 
-    readonly dataPersister = DataPersister;
+    private readonly dataPersister = DataPersister;
 
     //>: DOM:
     readonly loader = new Loader(this.root, this.model, this.dataPersister);
 
     readonly settingsBox = new SettingsBox(this.root, this.model, this.dataPersister);
 
-    readonly goToTop = new GoToTop(this.root, this.model, this.dataPersister);
-
     readonly navigationBullets = new NavigationBullets(this.root, this.model, this.dataPersister);
+
+    readonly goToTop = new GoToTop(this.root, this.model, this.dataPersister);
 
     readonly hero = new Hero(this.root, this.model, this.dataPersister);
 
@@ -52,8 +52,8 @@ class State {
     renderElementsToDOM(): void {
         this.loader.render();
         this.settingsBox.render();
-        this.goToTop.render();
         this.navigationBullets.render();
+        this.goToTop.render();
         this.hero.render();
         this.about.render();
         this.skills.render();
@@ -75,15 +75,7 @@ window.addEventListener('load', () => {
 
     state.settingsBox.getPersistedData();
 
+    state.navigationBullets.getPersistedData();
+
     state.hero.getPersistedData();
 });
-
-//>: Replaced with code above with @event=load;
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     state.renderElementsToDOM();
-
-//     state.loader.onLoadDisplayLoader();
-
-//     state.settingsBox.onDomLoads();
-// });

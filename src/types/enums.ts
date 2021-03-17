@@ -8,4 +8,6 @@ export enum EDataPersistKeys {
 export enum EObservables {
     EnableRandomBackground = 'enableRandomBg',
     DisableRandomBackground = 'disableRandomBg',
+    ShowNavigationBullets = 'showNavigationBullets',
+    HideNavigationBullets = 'hideNavigationBullets'
 }

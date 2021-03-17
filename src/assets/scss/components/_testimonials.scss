@@ -42,68 +42,69 @@ section.testimonials {
         align-items: center;
 
         .testimonials-box {
-            background-color: whitesmoke;
             flex: 1;
+            background-color: whitesmoke;
+            border-radius: 0.5rem;
             padding: 2rem 1rem;
+            overflow: hidden;
             transition: transform 0.3s;
 
             .description {
-                font-size: 1.25rem;
+                font-size: 1.05rem;
                 margin-bottom: 2%;
                 font-weight: 500;
                 color: $bootstrap-black-color;
             }
 
-            .person-info {
-                img {
-                    display: block;
-                    max-width: 100%;
-                    height: auto;
-                    margin: 0 auto;
+            img {
+                display: block;
+                max-width: 100%;
+                height: auto;
+                margin: 0 auto;
+            }
+
+            .person-name {
+                @include text-shadow;
+                display: block;
+                font-size: 1.75rem;
+                font-weight: bold;
+                color: $primary-color;
+                text-align: center;
+                margin: 1.5rem 0 0;
+                position: relative;
+                z-index: 1;
+
+                &::before,
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background-color: $primary-color;
+                    width: 110px;
+                    height: 3px;
+                    z-index: -1;
+                    transition-property: left, right, transform;
+                    transition-duration: 0.5s;
+                    transition-timing-function: cubic-bezier(.8, .5, .2, 1.4);
                 }
 
-                .person-name {
-                    @include text-shadow;
-                    display: block;
-                    font-size: 1.75rem;
-                    font-weight: bold;
-                    color: $primary-color;
-                    text-align: center;
-                    margin: 1.5rem 0;
-                    position: relative;
-                    z-index: 1;
-
-                    &::before,
-                    &::after {
-                        content: "";
-                        position: absolute;
-                        top: 50%;
-                        transform: translateY(-50%);
-                        background-color: $primary-color;
-                        width: 30%;
-                        height: 3px;
-                        z-index: -1;
-                    }
-
-                    &::before {
-                        left: 0;
-                    }
-
-                    &::after {
-                        right: 0;
-                    }
+                &::before {
+                    left: 0;
                 }
 
-                .person-job--title {
-                    text-align: center;
-                    display: block;
-                    text-transform: uppercase;
-                    font-size: 1.35rem;
-                    font-weight: 500;
-                    @include text-shadow;
-                    color: $primary-color;
-                    filter: opacity(0.8);
+                &::after {
+                    right: 0;
                 }
+            }
+
+            .person-job--title {
+                display: block;
+                text-align: right;
+                text-transform: capitalize;
+                font-weight: 600;
+                margin: 0.5rem 0;
+                color: $primary-color;
             }
 
             &:not(:last-of-type) {
@@ -112,6 +113,16 @@ section.testimonials {
 
             &:hover {
                 transform: translateY(-2%);
+
+                .person-name {
+                    &::before {
+                        left: -100%;
+                    }
+
+                    &::after {
+                        right: -100%;
+                    }
+                }
             }
 
             @media only screen and (max-width: 992px) {

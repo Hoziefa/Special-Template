@@ -8,38 +8,25 @@ section.contact {
         margin-bottom: 3rem;
 
         h2 {
-            @include text-shadow;
-            color: $primary-color;
+            @include custom-heading;
             text-align: center;
             margin-top: 2.65%;
             margin-bottom: 3%;
             position: relative;
             z-index: 1;
-            letter-spacing: 3px;
-            @media (max-width: 1000px) {
-                &::before,
-                &::after {
-                    width: 25% !important;
-                }
-            }
-            @media (max-width: 400px) {
-                &::before,
-                &::after {
-                    width: 18% !important;
-                }
-            }
 
             &::before,
             &::after {
                 content: "";
                 position: absolute;
                 top: 50%;
+                z-index: -1;
                 transform: translateY(-50%);
-                background-color: $primary-color;
                 width: 35%;
                 height: 6px;
-                z-index: -1;
-                @include box-shadow;
+                background-color: $primary-color;
+                border-radius: 0.5rem;
+                @include box-shadow($primary-color, #CCC);
             }
 
             &::before {
@@ -49,6 +36,16 @@ section.contact {
             &::after {
                 right: 0;
             }
+
+            @media (max-width: 1000px) {
+                &::before,
+                &::after { width: 25%; }
+            }
+
+            @media (max-width: 400px) {
+                &::before,
+                &::after { width: 18%; }
+            }
         }
     }
 
@@ -57,12 +54,10 @@ section.contact {
         margin: 0 auto;
 
         form {
-            > div {
+            .field {
                 position: relative;
-                // width: 50%;
-                // margin: auto;
                 z-index: 1;
-                margin-bottom: 6.25%;
+                margin-bottom: 2.25rem;
 
                 &::before {
                     content: "";
@@ -84,13 +79,10 @@ section.contact {
 
                 input,
                 textarea {
-                    background-color: transparent;
-                    width: 100%;
-                    height: 100%;
-                    padding: 1em;
+                    padding: 1rem;
                     border-bottom: 3px solid $primary-color;
-                    color: $grayOverlay-color;
-                    font-size: 1.22rem;
+                    font-size: 1.25rem;
+                    font-family: $title-font;
 
                     &:focus::placeholder {
                         color: white;
@@ -109,12 +101,12 @@ section.contact {
                     position: absolute;
                     top: 50%;
                     left: 1%;
-                    text-transform: uppercase;
-                    pointer-events: none;
-                    font-weight: 600;
-                    transition: 0.2s;
                     color: $darkBlackBlue-color;
+                    pointer-events: none;
+                    text-transform: uppercase;
+                    font-weight: 600;
                     font-size: 1.1rem;
+                    transition: 0.2s;
                 }
             }
 
@@ -129,7 +121,6 @@ section.contact {
                 text-transform: uppercase;
                 padding: 0.5em 0;
                 box-shadow: 0 8px 2px $bootstrap-primaryGray-color;
-                cursor: pointer;
                 border-radius: 10px;
                 overflow: hidden;
 

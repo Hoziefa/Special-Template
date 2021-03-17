@@ -4,41 +4,6 @@ section.hero {
     min-height: 100vh;
     position: relative;
     overflow: hidden;
-    transition: 1.3s;
-
-    .slides-container {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        z-index: -1;
-
-        //>: Slider
-        // display: flex;
-
-        .slide-image {
-            height: 100%;
-            animation: zoom 1.55s linear forwards;
-            background-size: cover !important;
-
-            //>: Fade
-            width: 100%;
-            display: none;
-
-            &.active {
-                display: flex;
-            }
-
-            //>: Slider
-            // position: absolute;
-            // flex: 1 0 100%;
-            // transform: translateX(100%);
-            // &.active {
-            //     transform: translateX(0);
-            // }
-        }
-    }
 
     .header-area {
         color: $floralwhite-color;
@@ -52,22 +17,17 @@ section.hero {
 
             .logo {
                 h2 {
-                    text-transform: uppercase;
-                    font-size: 2.55rem; // 2.25vw
+                    text-transform: lowercase;
+                    font-size: 3rem;
+                    font-family: $logo-font;
                     color: transparent;
                     -webkit-background-clip: text;
-                    background-image: repeating-linear-gradient(
-                            90deg,
-                            $primary-color 50%,
-                            $primaryWhite-color 51%,
-                            $primary-color 100%
-                    );
+                    background-image: repeating-linear-gradient(90deg, $primary-color 50%, $primaryWhite-color 51%, $primary-color 100%);
                     line-height: 2;
                 }
             }
 
             .links-container {
-                flex-wrap: wrap;
                 flex: 1 0 50%;
                 max-width: 50%;
 
@@ -104,7 +64,6 @@ section.hero {
                     display: none;
                     margin-left: auto;
                     margin-right: 20px;
-                    cursor: pointer;
 
                     &::before {
                         content: "";
@@ -112,9 +71,9 @@ section.hero {
                         border-style: solid;
                         border-color: transparent transparent $primaryWhite-color transparent;
                         position: absolute;
-                        bottom: -39px;
+                        bottom: 0;
                         left: 50%;
-                        transform: translateX(-50%);
+                        transform: translate(-50%, calc(15px + 87%));
                         pointer-events: none;
                         opacity: 0;
                         overflow: hidden;
@@ -208,6 +167,78 @@ section.hero {
                     }
                 }
             }
+
+            @media (max-width: 900px) {
+                flex-wrap: nowrap;
+
+                .links-container {
+                    flex-basis: auto;
+                    max-width: available;
+                }
+            }
+        }
+    }
+
+    .slides-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+
+        //>: Slider
+        // display: flex;
+
+        .slide-image {
+            height: 100%;
+            animation: zoom 1.5s;
+            background-size: cover !important;
+
+            //>: Fade
+            width: 100%;
+            display: none;
+
+            &.active {
+                display: flex;
+            }
+
+            //>: Slider
+            // position: absolute;
+            // flex: 1 0 100%;
+            // transform: translateX(100%);
+            // &.active {
+            //     transform: translateX(0);
+            // }
+        }
+    }
+
+    .pagination-container {
+        position: absolute;
+        bottom: 2.5%;
+        left: 50%;
+        z-index: 5;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+
+        button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #EEE;
+            transition: background-color 0.3s;
+
+            &:hover,
+            &.active {
+                background-color: $primary-color;
+                box-shadow: 0 0 50px $primary-color;
+            }
+        }
+
+        @media (max-width: 600px) {
+            display: none;
         }
     }
 
@@ -247,13 +278,19 @@ section.hero {
 
 @keyframes zoom {
     0% {
+        transform: scale(1.08);
+        filter: hue-rotate(180deg);
+        lighting-color: $primary-color;
+    }
+
+    50% {
         transform: scale(1.05);
         filter: hue-rotate(90deg);
         lighting-color: $primary-color;
     }
 
     100% {
-        transform: scale(1); // 1.05
+        transform: scale(1);
         filter: hue-rotate(0);
         lighting-color: $primary-color;
     }

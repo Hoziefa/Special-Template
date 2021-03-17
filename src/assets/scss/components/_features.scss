@@ -8,14 +8,12 @@ section.our-features {
 
         h2 {
             text-transform: capitalize;
-            @include text-shadow;
-            color: $primary-color;
             text-align: center;
+            @include custom-heading;
         }
 
         hr {
-            @include hr-elm-custom-styling;
-            @include box-shadow;
+            @include custom-hr;
             width: 35%;
             margin: 1.25% auto;
         }

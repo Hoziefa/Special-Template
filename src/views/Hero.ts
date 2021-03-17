@@ -11,24 +11,25 @@ interface IHeroState {
 
 interface IHeroElements {
     linksContainer?: HTMLDivElement;
-    menuLinksUl: HTMLLinkElement;
+    menuLinksUl: HTMLUListElement;
     toggleMenuBtn: HTMLButtonElement;
     slides: NodeListOf<HTMLDivElement>;
+    paginationContainer: HTMLDivElement;
 }
 
 export class Hero extends View<Model, IHeroState> {
-    protected readonly state: IHeroState = { currentSlide: 0, timer: NaN, duration: 5000 };
+    protected readonly state: IHeroState = { currentSlide: 0, timer: NaN, duration: 3000 };
 
     private readonly images = [
-        '/images/slider/slide-1.jpg',
-        '/images/slider/slide-2.jpg',
-        '/images/slider/slide-3.jpg',
-        '/images/slider/slide-4.jpg',
-        '/images/slider/slide-5.jpg',
-        '/images/slider/slide-6.jpg',
-        '/images/slider/slide-7.jpg',
-        '/images/slider/slide-8.jpg',
-        '/images/slider/slide-9.png',
+        'assets/images/slider/slide-1.jpg',
+        'assets/images/slider/slide-2.jpg',
+        'assets/images/slider/slide-3.jpg',
+        'assets/images/slider/slide-4.jpg',
+        'assets/images/slider/slide-5.jpg',
+        'assets/images/slider/slide-6.jpg',
+        'assets/images/slider/slide-7.jpg',
+        'assets/images/slider/slide-8.jpg',
+        'assets/images/slider/slide-9.png',
     ];
 
     private readonly links = [
@@ -47,13 +48,17 @@ export class Hero extends View<Model, IHeroState> {
         menuLinksUl: '.links-container .links',
         toggleMenuBtn: '.links-container .toggle-menu',
         slides: '.slides-container .slide-image',
+        paginationContainer: '.pagination-container',
     };
 
     get elements(): IHeroElements {
+        const { menuLinksUl, toggleMenuBtn, slides, paginationContainer } = this.selectors;
+
         return {
-            menuLinksUl: document.querySelector<HTMLLinkElement>(this.selectors.menuLinksUl)!,
-            toggleMenuBtn: document.querySelector<HTMLButtonElement>(this.selectors.toggleMenuBtn)!,
-            slides: document.querySelectorAll<HTMLDivElement>(this.selectors.slides)!,
+            menuLinksUl: document.querySelector<HTMLUListElement>(menuLinksUl)!,
+            toggleMenuBtn: document.querySelector<HTMLButtonElement>(toggleMenuBtn)!,
+            slides: document.querySelectorAll<HTMLDivElement>(slides)!,
+            paginationContainer: document.querySelector<HTMLDivElement>(paginationContainer)!,
         };
     }
 
@@ -64,7 +69,7 @@ export class Hero extends View<Model, IHeroState> {
                 <header class="header-area">
                     <nav>
                         <div class="logo">
-                            <h2>special design</h2>
+                            <h2>dmc</h2>
                         </div>
 
                         <div class="links-container">
@@ -82,11 +87,13 @@ export class Hero extends View<Model, IHeroState> {
                     </nav>
                 </header>
             </div>
-
+        
             <div class="slides-container">
                 ${ this.images.map((url, idx) => `<div class="slide-image ${ idx === 0 ? 'active' : '' }" style="background: linear-gradient(#000000a6, #000000a6), url('${ url }') center no-repeat fixed"></div>`).join('') }
             </div>
-
+        
+            <div class="pagination-container">${ this.images.map((_, idx) => `<button aria-label="pagination-${ idx + 1 }" data-pagination="${ idx }"></button>`).join('') }</div>
+                
             <div class="introduction-text">
                 <h1>we are <span>creative</span> agency</h1>
                 <p>
@@ -99,30 +106,29 @@ export class Hero extends View<Model, IHeroState> {
     }
 
     protected onRender(): void {
-        //>: This What caused the issue with slider not stopping even after clicking `no` random background option cause here we are running the slider when this component mounts,and then in
-        // @method=.persistedRandomBgOption(); we are checking if user didn't cash anything in browser we are running another interval without stopping this one
-        // and this interval will be lost and can't track it anymore so for this, this interval keep running so we had to just keep in the @method=persist; and it will do the job and must consider
-        // that any interval we run must track it and stop it.
-        // this.setState({ timer: setInterval(this.autoSlide, this.state.duration) });
-
-        this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBg(true));
-        this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBg(false));
+        this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBackgroundOptionChange(true));
+        this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBackgroundOptionChange(false));
     }
 
     protected eventsMap(): { [key: string]: (e: Event & any) => void } {
-        const { linksContainer, toggleMenuBtn } = this.selectors;
+        const { linksContainer, toggleMenuBtn, paginationContainer } = this.selectors;
 
-        return { [`click:${ toggleMenuBtn }`]: this.toggleMenu, 'click:html': this.closeMenuOnBlur, [`click:${ linksContainer }`]: this.navigationController };
+        return {
+            [`click:${ toggleMenuBtn }`]: this.toggleMenu,
+            'click:html': this.closeMenuOnBlur,
+            [`click:${ linksContainer }`]: this.navigationController,
+            [`click:${ paginationContainer }`]: this.onPaginationChange,
+        };
     }
 
     //#region Toggle Menu
-    private toggleMenu = () => {
+    private toggleMenu = (): void => {
         this.elements.menuLinksUl.classList.toggle('show');
 
         this.elements.toggleMenuBtn.classList.toggle('menu-active');
     };
 
-    private closeMenuOnBlur = ({ target }: HTMLElementEvent<HTMLElement>) => {
+    private closeMenuOnBlur = ({ target }: HTMLElementEvent<HTMLElement>): void => {
         if (target.matches(`${ this.selectors.linksContainer }, ${ this.selectors.linksContainer } *`)) return;
 
         this.elements.menuLinksUl.classList.remove('show');
@@ -133,78 +139,74 @@ export class Hero extends View<Model, IHeroState> {
     //#endregion Toggle Menu
 
     //#region Slider Implementation
-    private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>) => {
+    private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>): void => {
         const { currentSlide, timer, duration } = this.state;
+        const { paginationContainer } = this.elements;
+        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
 
-        //> 1-) SPECIFY DIRECTION OF SLIDE TO GO PREVIOUS.
         if (direction === 'prev') this.setState({ currentSlide: currentSlide === 0 ? slides.length - 1 : currentSlide - 1 });
 
-        //> 2-) SPECIFY DIRECTION OF SLIDE TO GO NEXT.
         if (direction === 'next') this.setState({ currentSlide: currentSlide === slides.length - 1 ? 0 : currentSlide + 1 });
 
-        //> 3-) STOP AUTO SLIDE WHEN USER CLICK.
         timer && clearInterval(timer);
 
-        //> 4-) THEN AFTER CLEAR PREVIOUS START AUTO SLIDE AGAIN FOR KEEP WORKING FROM WHERE THE USER STOPPED.
-        this.setState({ timer: setInterval(this.autoSlide, duration) });
+        (isRandomBackgroundPersisted === null || isRandomBackgroundPersisted) && this.setState({ timer: setInterval(this.autoSlide, duration) });
 
-        //> 5-) REMOVE ACTIVE CLASS FROM SLIDES ITEMS \\ USING .from-METHOD AND SND ARGUMENT OF IT WHICH IS A CALLBACK LOOP-HELPER.
         removeClassAttr(slides);
+        removeClassAttr(paginationContainer.children);
 
-        //> 6-) ADD CLASS ACTIVE TO CURRENT ITEM.
         slides[currentSlide].classList.add('active');
-        // slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+        paginationContainer.children[currentSlide].classList.add('active');
 
-        //> 7-) SAVE CURRENT SLIDE NUMBER IN LOCAL-STORAGE TO KEEP THE ACTIVE SLIDE ON THE CURRENT IMAGE AND KEEP THIS VARIABLE UPDATED WITH EACH setInterval CALL.
         this.dataPersister.persistData(EDataPersistKeys.CurrentSlide, currentSlide);
     };
 
-    private autoSlide = (direction: 'prev' | 'next' = 'next', slides = this.elements.slides): void => {
-        this.slide(direction, slides);
-    };
+    private autoSlide = (direction: 'prev' | 'next' = 'next', slides = this.elements.slides): void => this.slide(direction, slides);
 
     //#endregion Slider Implementation
 
     //#region Random Background Controller
-    private onRandomBg = (isActive: boolean) => {
+    private onRandomBackgroundOptionChange = (enableRandomBackground: boolean): void => {
         const { timer, duration } = this.state;
 
-        isActive ? this.setState({ timer: setInterval(this.autoSlide, duration) }) : clearInterval(timer);
+        enableRandomBackground ? this.setState({ timer: setInterval(this.autoSlide, duration) }) : clearInterval(timer);
     };
 
-    private persistedRandomBgOption = () => {
+    private persistedRandomBgOption = (): void => {
         const { timer, duration } = this.state;
-        const { slides } = this.elements;
-
-        this.setState({ currentSlide: parseInt(this.dataPersister.readData(EDataPersistKeys.CurrentSlide), 10) || 0 });
-
+        const { slides, paginationContainer } = this.elements;
+        const currentSlide = this.dataPersister.readData<number>(EDataPersistKeys.CurrentSlide) ?? 0;
         const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
 
-        if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) {
-            removeClassAttr(slides);
+        this.setState({ currentSlide });
 
-            slides[this.state.currentSlide].classList.add('active');
+        removeClassAttr(slides);
+        removeClassAttr(paginationContainer.children);
 
-            this.setState({ timer: setInterval(this.autoSlide, duration) });
-        }
-        else if (!isRandomBackgroundPersisted) {
-            removeClassAttr(slides);
+        slides[currentSlide].classList.add('active');
+        paginationContainer.children[currentSlide].classList.add('active');
 
-            slides[this.state.currentSlide].classList.add('active');
-
-            clearInterval(timer);
-        }
+        if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) this.setState({ timer: setInterval(this.autoSlide, duration) });
+        else if (!isRandomBackgroundPersisted) clearInterval(timer);
     };
 
     //#endregion Random Background Controller
 
-    private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>) => {
+    private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>): void => {
         if (!target.matches(`${ this.selectors.linksContainer } .links li a`)) return;
 
         document.querySelector(target.dataset.goto!)?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    getPersistedData = () => {
+    private onPaginationChange = ({ target }: HTMLElementEvent<HTMLButtonElement>): void => {
+        if (!target.matches('button, button *')) return;
+
+        this.setState({ currentSlide: +target.dataset.pagination! });
+
+        this.autoSlide();
+    };
+
+    getPersistedData = (): void => {
         this.persistedRandomBgOption();
     };
 }

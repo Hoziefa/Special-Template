@@ -1,11 +1,18 @@
 import { View } from '@views/*';
-import { HTMLElementEvent } from '@appTypes/*';
+import { EDataPersistKeys, EObservables, HTMLElementEvent } from '@appTypes/*';
+import { Model } from '@models/*';
 
-interface INavigationBulletsElements {
-    navBulletsContainer: HTMLDivElement;
+interface INavigationBulletsState {
+    showNavigationBullets: 'block' | 'none';
 }
 
-export class NavigationBullets extends View {
+interface INavigationBulletsElements {
+    navigationBulletsContainer: HTMLDivElement;
+}
+
+export class NavigationBullets extends View<Model, INavigationBulletsState> {
+    protected readonly state: INavigationBulletsState = { showNavigationBullets: this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption) ?? 'block' };
+
     private readonly bullets = [
         { goTo: '.about--us', content: 'about us' },
         { goTo: '.our-skills', content: 'our skills' },
@@ -16,11 +23,11 @@ export class NavigationBullets extends View {
         { goTo: '.contact', content: 'contact us' },
     ];
 
-    readonly selectors: Record<keyof INavigationBulletsElements, string> = { navBulletsContainer: '.nav-bullets' };
+    readonly selectors: Record<keyof INavigationBulletsElements, string> = { navigationBulletsContainer: '.nav-bullets' };
 
-    // get elements(): INavigationBulletsElements {
-    //     return { navBulletsContainer: document.querySelector<HTMLDivElement>(this.selectors.navBulletsContainer)! };
-    // }
+    get elements(): INavigationBulletsElements {
+        return { navigationBulletsContainer: document.querySelector<HTMLDivElement>(this.selectors.navigationBulletsContainer)! };
+    }
 
     protected template(): string {
         return `
@@ -30,17 +37,37 @@ export class NavigationBullets extends View {
         `;
     }
 
+    protected onRender(): void {
+        this.model.on(EObservables.ShowNavigationBullets, () => this.onBulletsOptionChosen('block'));
+        this.model.on(EObservables.HideNavigationBullets, () => this.onBulletsOptionChosen('none'));
+    }
+
     protected eventsMap(): { [p: string]: EventListener & any } {
-        const { navBulletsContainer } = this.selectors;
+        const { navigationBulletsContainer } = this.selectors;
 
         return {
-            [`click:${ navBulletsContainer }`]: this.navigationController,
+            [`click:${ navigationBulletsContainer }`]: this.navigationController,
         };
     }
 
-    private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>) => {
-        if (!target.matches(`${ this.selectors.navBulletsContainer }, ${ this.selectors.navBulletsContainer } *`)) return;
+    private navigationController = ({ target }: HTMLElementEvent<HTMLDivElement>): void => {
+        if (!target.matches(`${ this.selectors.navigationBulletsContainer }, ${ this.selectors.navigationBulletsContainer } *`)) return;
 
         document.querySelector(target.dataset.goto!)?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    //#region Bullets Option Controller
+    private onBulletsOptionChosen = (showNavigationBullets: 'block' | 'none'): void => {
+        this.elements.navigationBulletsContainer.style.display = showNavigationBullets;
+
+        this.setState({ showNavigationBullets });
+    };
+
+    private persistedBulletsOption = (): void => (this.elements.navigationBulletsContainer.style.display = this.state.showNavigationBullets) && undefined;
+
+    //#endregion Bullets Option Controller
+
+    getPersistedData = (): void => {
+        this.persistedBulletsOption();
     };
 }

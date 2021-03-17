@@ -24,5 +24,5 @@ export class GoToTop extends View {
         };
     }
 
-    private toggleGoTopBtnDisplay = () => pageYOffset > innerHeight - 100 ? this.elements.gotoTop.classList.add('render') : this.elements.gotoTop.classList.remove('render');
+    private toggleGoTopBtnDisplay = (): void => pageYOffset > innerHeight - 100 ? this.elements.gotoTop.classList.add('render') : this.elements.gotoTop.classList.remove('render');
 }

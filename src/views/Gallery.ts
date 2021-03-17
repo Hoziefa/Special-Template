@@ -63,10 +63,6 @@ export class Gallery extends View {
     };
 
     private galleryPopup = ({ target }: HTMLElementEvent<HTMLImageElement>): void => {
-        // if (!target.matches(`${ this.selectors.galleryContainer } .images-box img`)) return;
-
-        //>: Second approach is to do @Type=Guard;.
-        //>: || this.elements.galleryPopup.contains(target) ->> Must do this part to determine the image element that we want cause the popup has a image child but we don't this logic to run on.
         if (!(target instanceof HTMLImageElement) || this.elements.galleryPopup.contains(target)) return;
 
         this.elements.galleryPopup.classList.add('active');

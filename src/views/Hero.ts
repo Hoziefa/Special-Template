@@ -1,4 +1,4 @@
-import { EDataPersistKeys, EObservables, HTMLElementEvent } from '@appTypes/*';
+import { EDataPersistKeys, EObservablesDescriptors, HTMLElementEvent } from '@appTypes/*';
 import { Model } from '@models/*';
 import { removeClassAttr } from '@utils/*';
 import { View } from '@views/*';
@@ -106,8 +106,8 @@ export class Hero extends View<Model, IHeroState> {
     }
 
     protected onRender(): void {
-        this.model.on(EObservables.EnableRandomBackground, () => this.onRandomBackgroundOptionChange(true));
-        this.model.on(EObservables.DisableRandomBackground, () => this.onRandomBackgroundOptionChange(false));
+        this.model.on(EObservablesDescriptors.EnableRandomBackground, () => this.onRandomBackgroundOptionChange(true));
+        this.model.on(EObservablesDescriptors.DisableRandomBackground, () => this.onRandomBackgroundOptionChange(false));
     }
 
     protected eventsMap(): { [key: string]: (e: Event & any) => void } {
@@ -186,7 +186,7 @@ export class Hero extends View<Model, IHeroState> {
         slides[currentSlide].classList.add('active');
         paginationContainer.children[currentSlide].classList.add('active');
 
-        if (isRandomBackgroundPersisted || isRandomBackgroundPersisted === null) this.setState({ timer: setInterval(this.autoSlide, duration) });
+        if (isRandomBackgroundPersisted === null || isRandomBackgroundPersisted) this.setState({ timer: setInterval(this.autoSlide, duration) });
         else if (!isRandomBackgroundPersisted) clearInterval(timer);
     };
 

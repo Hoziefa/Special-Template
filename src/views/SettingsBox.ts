@@ -1,4 +1,4 @@
-import { EDataPersistKeys, EObservables, HTMLElementEvent } from '@appTypes/*';
+import { EDataPersistKeys, EObservablesDescriptors, EPersistedNavigationBulletsOptions, HTMLElementEvent } from '@appTypes/*';
 import { removeClassAttr } from '@utils/*';
 import { View } from '@views/*';
 
@@ -22,13 +22,15 @@ export class SettingsBox extends View {
     };
 
     get elements(): ISettingsBoxElements {
+        const { settingsBox, settingsBoxToggleBtn, optionBoxColorsList, optionBoxRandomBg, optionBoxBullets, resetAllBtn } = this.selectors;
+
         return {
-            settingsBox: document.querySelector<HTMLDivElement>(this.selectors.settingsBox)!,
-            settingsBoxToggleBtn: document.querySelector<HTMLButtonElement>(this.selectors.settingsBoxToggleBtn)!,
-            optionBoxColorsList: document.querySelectorAll<HTMLLIElement>(this.selectors.optionBoxColorsList)!,
-            optionBoxRandomBg: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxRandomBg)!,
-            optionBoxBullets: document.querySelectorAll<HTMLSpanElement>(this.selectors.optionBoxBullets)!,
-            resetAllBtn: document.querySelector<HTMLButtonElement>(this.selectors.resetAllBtn)!,
+            settingsBox: document.querySelector<HTMLDivElement>(settingsBox)!,
+            settingsBoxToggleBtn: document.querySelector<HTMLButtonElement>(settingsBoxToggleBtn)!,
+            optionBoxColorsList: document.querySelectorAll<HTMLLIElement>(optionBoxColorsList)!,
+            optionBoxRandomBg: document.querySelectorAll<HTMLSpanElement>(optionBoxRandomBg)!,
+            optionBoxBullets: document.querySelectorAll<HTMLSpanElement>(optionBoxBullets)!,
+            resetAllBtn: document.querySelector<HTMLButtonElement>(resetAllBtn)!,
         };
     }
 
@@ -72,15 +74,15 @@ export class SettingsBox extends View {
         const { settingsBoxToggleBtn, optionBoxColorsList, optionBoxRandomBg, optionBoxBullets, resetAllBtn } = this.selectors;
 
         return {
-            [`click:${ settingsBoxToggleBtn }`]: this.toggleSettingsBoxController,
-            [`click:${ optionBoxColorsList }`]: this.colorOptionsController,
-            [`click:${ optionBoxRandomBg }`]: this.randomBgController,
-            [`click:${ optionBoxBullets }`]: this.bulletsOptionController,
+            [`click:${ settingsBoxToggleBtn }`]: this.onToggleSettingsBox,
+            [`click:${ optionBoxColorsList }`]: this.onColorOptionChange,
+            [`click:${ optionBoxRandomBg }`]: this.onRandomBackgroundActivationOptionChange,
+            [`click:${ optionBoxBullets }`]: this.onBulletsActivationOptionChange,
             [`click:${ resetAllBtn }`]: this.resetAllController,
         };
     }
 
-    private toggleSettingsBoxController = ({ currentTarget }: HTMLElementEvent<HTMLButtonElement>): void => {
+    private onToggleSettingsBox = ({ currentTarget }: HTMLElementEvent<HTMLButtonElement>): void => {
         const { settingsBox } = this.elements;
 
         settingsBox.classList.toggle('show');
@@ -93,26 +95,21 @@ export class SettingsBox extends View {
     };
 
     //#region Color Option Controller
-    private colorOptionsController = ({ currentTarget }: HTMLElementEvent<HTMLLIElement>): void => {
-        // 1->) REMOVE CLASS ACTIVE FROM ALL LI-ELEMENTS
+    private onColorOptionChange = ({ currentTarget }: HTMLElementEvent<HTMLLIElement>): void => {
         removeClassAttr(currentTarget.parentElement?.children!);
 
-        // 2->) ADD CLASS ACTIVE TO THE LI-ELEMENT THAT WE CLICK ON
         currentTarget.classList.add('active');
 
-        // 3->) SET COLOR ON ROOT ELEMENT
         const chosenColorOption = getComputedStyle(currentTarget).backgroundColor;
 
         document.documentElement.style.setProperty('--primary-color', chosenColorOption);
 
-        // 4->) SAVE THE CHOSEN COLOR TO THE persisting provider
         this.dataPersister.persistData(EDataPersistKeys.ColorOption, chosenColorOption);
     };
 
     private persistedColorOption = (): void => {
         const { optionBoxColorsList } = this.elements;
 
-        // 5->) SET THE SAVED CHOSEN COLOR TO THE UI FROM LOCAL-STORAGE \ WHEN THE WINDOW LOADS OR CLOSE
         const persistedColorOption = this.dataPersister.readData<string>(EDataPersistKeys.ColorOption) ?? '';
 
         document.documentElement.style.setProperty('--primary-color', persistedColorOption || getComputedStyle(optionBoxColorsList[0]).backgroundColor);
@@ -125,53 +122,49 @@ export class SettingsBox extends View {
     //#endregion Color Option Controller
 
     //#region Bullets Option Controller
-    private bulletsOptionController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>): void => {
-        // 1->) REMOVE CLASS ACTIVE FROM ALL SPAN-ELEMENTS
+    private onBulletsActivationOptionChange = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>): void => {
         removeClassAttr(currentTarget.parentElement?.children!);
 
-        // 2->) ADD CLASS ACTIVE TO THE SPAN-ELEMENT THAT WE CLICK ON
         currentTarget.classList.add('active');
 
-        // 3->) CHECK WHICH OPTION IS CLICKED TO SET THE LOGIC
-        // 4->) STORE OPTION IN LOCAL-STORAGE
         if (currentTarget.classList.contains('yes')) {
-            this.model.trigger(EObservables.ShowNavigationBullets);
+            this.model.trigger(EObservablesDescriptors.ShowNavigationBullets);
 
-            this.dataPersister.persistData(EDataPersistKeys.BulletsOption, 'block');
+            this.dataPersister.persistData(EDataPersistKeys.BulletsOption, EPersistedNavigationBulletsOptions.ShowNavigationBullets);
         }
         else if (currentTarget.classList.contains('no')) {
-            this.model.trigger(EObservables.HideNavigationBullets);
+            this.model.trigger(EObservablesDescriptors.HideNavigationBullets);
 
-            this.dataPersister.persistData(EDataPersistKeys.BulletsOption, 'none');
+            this.dataPersister.persistData(EDataPersistKeys.BulletsOption, EPersistedNavigationBulletsOptions.HideNavigationBullets);
         }
     };
 
     private persistedBulletsOption = (): void => {
         const { optionBoxBullets } = this.elements;
 
-        const persistedBulletsOption = this.dataPersister.readData<'block' | 'none'>(EDataPersistKeys.BulletsOption);
+        const persistedBulletsOption = this.dataPersister.readData<EPersistedNavigationBulletsOptions>(EDataPersistKeys.BulletsOption);
 
         persistedBulletsOption && removeClassAttr(optionBoxBullets);
 
-        if (persistedBulletsOption?.includes('block')) optionBoxBullets[0].classList.add('active');
-        else if (persistedBulletsOption?.includes('none')) optionBoxBullets[1].classList.add('active');
+        if (persistedBulletsOption?.includes(EPersistedNavigationBulletsOptions.ShowNavigationBullets)) optionBoxBullets[0].classList.add('active');
+        else if (persistedBulletsOption?.includes(EPersistedNavigationBulletsOptions.HideNavigationBullets)) optionBoxBullets[1].classList.add('active');
     };
 
     //#endregion Bullets Option Controller
 
     //#region Random Background Controller
-    private randomBgController = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>): void => {
+    private onRandomBackgroundActivationOptionChange = ({ currentTarget }: HTMLElementEvent<HTMLSpanElement>): void => {
         removeClassAttr(currentTarget.parentElement?.children!);
 
         currentTarget.classList.add('active');
 
         if (currentTarget.classList.contains('yes')) {
-            this.model.trigger(EObservables.EnableRandomBackground);
+            this.model.trigger(EObservablesDescriptors.EnableRandomBackground);
 
             this.dataPersister.persistData(EDataPersistKeys.RandomBackground, true);
         }
         else if (currentTarget.classList.contains('no')) {
-            this.model.trigger(EObservables.DisableRandomBackground);
+            this.model.trigger(EObservablesDescriptors.DisableRandomBackground);
 
             this.dataPersister.persistData(EDataPersistKeys.RandomBackground, false);
         }
@@ -184,7 +177,7 @@ export class SettingsBox extends View {
 
         removeClassAttr(optionBoxRandomBg);
 
-        optionBoxRandomBg[isRandomBackgroundPersisted || isRandomBackgroundPersisted === null ? 0 : 1].classList.add('active');
+        optionBoxRandomBg[isRandomBackgroundPersisted === null || isRandomBackgroundPersisted ? 0 : 1].classList.add('active');
     };
 
     //#endregion Random Background Controller

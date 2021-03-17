@@ -4,8 +4,8 @@ import { About, AppFooter, Contact, Features, Gallery, GoToTop, Hero, Loader, Na
 import 'assets/scss/main.scss';
 
 //>: Controller
-class StateController {
-    private static instance: StateController;
+class AppController {
+    private static instance: AppController;
 
     //>: Based Models:
     private readonly root = document.getElementById('root')!;
@@ -41,13 +41,12 @@ class StateController {
 
     readonly appFooter = new AppFooter(this.root, this.model, this.dataPersister);
 
-    private constructor() {
-    }
+    private constructor() {}
 
-    static state(): StateController {
-        if (!StateController.instance) StateController.instance = new StateController();
+    static get state(): AppController {
+        if (!AppController.instance) AppController.instance = new AppController();
 
-        return StateController.instance;
+        return AppController.instance;
     }
 
     renderElementsToDOM(): void {
@@ -67,7 +66,7 @@ class StateController {
     }
 }
 
-const state = StateController.state();
+const { state } = AppController;
 
 state.renderElementsToDOM();
 

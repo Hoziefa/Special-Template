@@ -18,10 +18,7 @@ export class GoToTop extends View {
     protected eventsMap(): { [p: string]: EventListener } {
         const { gotoTop } = this.selectors;
 
-        return {
-            [`click:${ gotoTop }`]: () => document.documentElement.scrollIntoView({ behavior: 'smooth' }),
-            'scroll:html': this.toggleGoTopBtnDisplay,
-        };
+        return { [`click:${ gotoTop }`]: () => document.documentElement.scrollIntoView({ behavior: 'smooth' }), 'scroll:html': this.toggleGoTopBtnDisplay };
     }
 
     private toggleGoTopBtnDisplay = (): void => pageYOffset > innerHeight - 100 ? this.elements.gotoTop.classList.add('render') : this.elements.gotoTop.classList.remove('render');

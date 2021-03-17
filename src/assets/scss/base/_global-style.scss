@@ -1,0 +1,177 @@
+@import "../abstracts/variables";
+
+:root {
+    font-size: 16px;
+
+    @media screen and (max-width: 600px) {
+        font-size: 10px;
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    max-width: 100vw;
+    min-height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    font-size: $default-font-size;
+    font-family: $main-font;
+    color: $text-color;
+    background-color: $primary-background-color;
+    transition: padding 0.3s;
+
+    &::-webkit-scrollbar {
+        width: 0.45rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #1E1E24;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $primary-color;
+        border-radius: 0.5rem;
+    }
+}
+
+ul {
+    list-style: none;
+}
+
+h2,
+h3 {
+    text-transform: capitalize;
+}
+
+h2 {
+    font-size: 2.5rem;
+
+    @media (max-width: 700px) {
+        font-size: 2rem;
+    }
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: inherit;
+    }
+}
+
+button,
+input,
+textarea {
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    font-family: inherit;
+}
+
+button:not(:disabled),
+select,
+input[type="submit"],
+input[type="date"],
+input[type="color"] { cursor: pointer; }
+
+input,
+textarea {
+    color: inherit;
+
+    &::-webkit-input-placeholder {
+        color: #CECECE;
+        text-transform: capitalize;
+        font: 600 smaller inherit;
+        transition: opacity 0.3s;
+    }
+
+    &:focus::-webkit-input-placeholder {
+        opacity: 0;
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+        box-shadow: 0 0 0 5rem $primary-color inset !important;
+        color: ghostwhite !important;
+    }
+}
+
+textarea {
+    resize: none;
+}
+
+input {
+    &[type="number"] {
+        appearance: none;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            appearance: none;
+            margin: 0;
+        }
+    }
+
+    &[type="color"] {
+        appearance: none;
+
+        &::-webkit-color-swatch {
+            border: none;
+        }
+    }
+}
+
+button:disabled { cursor: auto; }
+
+p {
+    line-height: 1.6;
+
+    &::first-letter {
+        text-transform: uppercase;
+    }
+}
+
+hr {
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    height: 3px;
+    @media (max-width: 600px) {
+        height: 3px !important;
+    }
+}
+
+:focus {
+    outline: none !important;
+}
+
+.container {
+    width: 92%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0 auto;
+    position: relative;
+
+    @media (max-width: 476px) {
+        width: 100% !important;
+    }
+}

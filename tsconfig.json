@@ -3,9 +3,6 @@
         "target": "ESNext",
         "module": "commonjs",
 
-        // "outDir": "./build",
-        // "rootDir": "./src",
-
         "baseUrl": "src",
         "paths": {
             "@appTypes/*": ["types/*", "types/index.ts"],
@@ -15,7 +12,7 @@
         },
 
         "noEmitOnError": true,
-        // "isolatedModules": true,
+        "isolatedModules": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,
@@ -25,8 +22,9 @@
         "typeRoots": ["./types", "./node_modules/@types"],
         "skipLibCheck": true,
 
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true
     },
+    "files": ["src/index.ts"],
     "exclude": ["node_modules"]
 }

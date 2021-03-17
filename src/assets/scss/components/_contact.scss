@@ -54,12 +54,10 @@ section.contact {
         margin: 0 auto;
 
         form {
-            > div {
+            .field {
                 position: relative;
-                // width: 50%;
-                // margin: auto;
                 z-index: 1;
-                margin-bottom: 6.25%;
+                margin-bottom: 2.25rem;
 
                 &::before {
                     content: "";
@@ -81,13 +79,10 @@ section.contact {
 
                 input,
                 textarea {
-                    background-color: transparent;
-                    width: 100%;
-                    height: 100%;
-                    padding: 1em;
+                    padding: 1rem;
                     border-bottom: 3px solid $primary-color;
-                    color: $grayOverlay-color;
-                    font-size: 1.22rem;
+                    font-size: 1.25rem;
+                    font-family: $title-font;
 
                     &:focus::placeholder {
                         color: white;
@@ -106,12 +101,12 @@ section.contact {
                     position: absolute;
                     top: 50%;
                     left: 1%;
-                    text-transform: uppercase;
-                    pointer-events: none;
-                    font-weight: 600;
-                    transition: 0.2s;
                     color: $darkBlackBlue-color;
+                    pointer-events: none;
+                    text-transform: uppercase;
+                    font-weight: 600;
                     font-size: 1.1rem;
+                    transition: 0.2s;
                 }
             }
 
@@ -126,7 +121,6 @@ section.contact {
                 text-transform: uppercase;
                 padding: 0.5em 0;
                 box-shadow: 0 8px 2px $bootstrap-primaryGray-color;
-                cursor: pointer;
                 border-radius: 10px;
                 overflow: hidden;
 

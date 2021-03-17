@@ -22,7 +22,7 @@ export class Skills extends View {
 
     protected template(): string {
         return `
-            <section class="our-skills" style="background: url('/images/skills/fav-1.jpg') no-repeat">
+            <section class="our-skills" style="background: url('assets/images/skills/fav-1.jpg') no-repeat">
                 <div class="container">
                     <header>
                         <h2>our skills</h2>

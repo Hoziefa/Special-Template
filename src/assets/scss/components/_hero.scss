@@ -5,40 +5,6 @@ section.hero {
     position: relative;
     overflow: hidden;
 
-    .slides-container {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        z-index: -1;
-
-        //>: Slider
-        // display: flex;
-
-        .slide-image {
-            height: 100%;
-            animation: zoom 1.5s;
-            background-size: cover !important;
-
-            //>: Fade
-            width: 100%;
-            display: none;
-
-            &.active {
-                display: flex;
-            }
-
-            //>: Slider
-            // position: absolute;
-            // flex: 1 0 100%;
-            // transform: translateX(100%);
-            // &.active {
-            //     transform: translateX(0);
-            // }
-        }
-    }
-
     .header-area {
         color: $floralwhite-color;
 
@@ -98,7 +64,6 @@ section.hero {
                     display: none;
                     margin-left: auto;
                     margin-right: 20px;
-                    cursor: pointer;
 
                     &::before {
                         content: "";
@@ -211,6 +176,69 @@ section.hero {
                     max-width: available;
                 }
             }
+        }
+    }
+
+    .slides-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+
+        //>: Slider
+        // display: flex;
+
+        .slide-image {
+            height: 100%;
+            animation: zoom 1.5s;
+            background-size: cover !important;
+
+            //>: Fade
+            width: 100%;
+            display: none;
+
+            &.active {
+                display: flex;
+            }
+
+            //>: Slider
+            // position: absolute;
+            // flex: 1 0 100%;
+            // transform: translateX(100%);
+            // &.active {
+            //     transform: translateX(0);
+            // }
+        }
+    }
+
+    .pagination-container {
+        position: absolute;
+        bottom: 2.5%;
+        left: 50%;
+        z-index: 5;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+
+        button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #EEE;
+            transition: background-color 0.3s;
+
+            &:hover,
+            &.active {
+                background-color: $primary-color;
+                box-shadow: 0 0 50px $primary-color;
+            }
+        }
+
+        @media (max-width: 600px) {
+            display: none;
         }
     }
 

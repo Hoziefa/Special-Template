@@ -87,12 +87,11 @@ section.our-gallery {
                 position: absolute;
                 top: 13%;
                 right: 14.5%;
+                z-index: 1;
                 font-size: 1.75rem;
                 background-color: $primaryWhite-color;
                 color: $primary-color;
-                cursor: pointer;
                 transition: 0.3s;
-                z-index: 1;
 
                 &:hover {
                     color: $primaryWhite-color;

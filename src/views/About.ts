@@ -15,7 +15,7 @@ export class About extends View {
                         </p>
                     </div>
                 
-                    <div class="image-box"><img src="/images/about/web-dev.jpg" alt="code" width="640" height="640" /></div>
+                    <div class="image-box"><img src="assets/images/about/web-dev.jpg" alt="code" width="640" height="640" /></div>
                 </div>
             </section>
         `;

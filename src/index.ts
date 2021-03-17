@@ -1,7 +1,7 @@
 import { DataPersister, Eventing, Model } from '@models/*';
 import { About, AppFooter, Contact, Features, Gallery, GoToTop, Hero, Loader, NavigationBullets, SettingsBox, Skills, Testimonials, TimeLine } from '@views/*';
 
-import 'assets/scss/index.scss';
+import 'assets/scss/main.scss';
 
 class State {
     private static instance: State;
@@ -79,13 +79,3 @@ window.addEventListener('load', () => {
 
     state.hero.getPersistedData();
 });
-
-//>: Replaced with code above with @event=load;
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     state.renderElementsToDOM();
-
-//     state.loader.onLoadDisplayLoader();
-
-//     state.settingsBox.onDomLoads();
-// });

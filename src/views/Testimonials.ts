@@ -6,19 +6,19 @@ export class Testimonials extends View {
             description: `Adversity is like a strong wind. I don't mean just that it holds us back from places we might
                                 otherwise go. It also tears away from us all but the things that cannot be torn, so that
                                 afterward we see ourselves as we really are, and not merely as we might like to be.`,
-            personInfo: { url: '/images/testimonials/avatar.png', name: 'John Doe', jobTitle: 'Programmer' },
+            personInfo: { url: 'assets/images/testimonials/avatar.png', name: 'John Doe', jobTitle: 'Programmer' },
         },
         {
             description: `Adversity is like a strong wind. I don't mean just that it holds us back from places we might
                                 otherwise go. It also tears away from us all but the things that cannot be torn, so that
                                 afterward we see ourselves as we really are, and not merely as we might like to be.`,
-            personInfo: { url: '/images/testimonials/user.png', name: 'Steve Jobs', jobTitle: 'American business magnate' },
+            personInfo: { url: 'assets/images/testimonials/user.png', name: 'Steve Jobs', jobTitle: 'American business magnate' },
         },
         {
             description: `Adversity is like a strong wind. I don't mean just that it holds us back from places we might
                                 otherwise go. It also tears away from us all but the things that cannot be torn, so that
                                 afterward we see ourselves as we really are, and not merely as we might like to be.`,
-            personInfo: { url: '/images/testimonials/avatar-two.png', name: 'Bill Gates', jobTitle: 'American business magnate' },
+            personInfo: { url: 'assets/images/testimonials/avatar-two.png', name: 'Bill Gates', jobTitle: 'American business magnate' },
         },
     ];
 

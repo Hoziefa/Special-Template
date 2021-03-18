@@ -7,9 +7,9 @@ section.our-features {
         margin-bottom: 3rem;
 
         h2 {
+            @include customHeadingTitle;
             text-transform: capitalize;
             text-align: center;
-            @include customHeadingTitle;
         }
 
         hr {
@@ -20,30 +20,19 @@ section.our-features {
     }
 
     .feat-box__container {
-        display: flex;
-        justify-content: space-evenly;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(27vmax, 1fr)); // 22rem | 250pt
         align-items: center;
-        flex-wrap: wrap;
+        gap: 3rem;
 
         .feat-box {
-            flex: 1 0 (100% / 3);
-            max-width: 100%;
             text-align: center;
-            height: 425px;
-
-            &:nth-of-type(-n + 3) {
-                margin-bottom: 4%;
-            }
-
-            &:not(:nth-of-type(3n-6)) {
-                margin-right: 3%;
-                flex: 1 0 (100% / 3 - 3%);
-            }
 
             img {
                 display: block;
                 max-width: 100%;
-                height: 65%;
+                height: auto;
+                object-fit: cover;
                 margin: 0 auto;
             }
 
@@ -67,35 +56,9 @@ section.our-features {
                 }
             }
 
-            .description {
-                font-size: 1.05rem;
-            }
+            .description { font-size: 1.05rem; }
 
-            @media only screen and (max-width: 992px) {
-                flex: 1 0 (100% / 2) !important;
-                margin-right: 0 !important;
-                &:nth-of-type(-2n + 6) {
-                    margin-right: 3% !important;
-                    flex: 1 0 (100% / 2 - 3%) !important;
-                }
-                &:nth-of-type(-n + 3) {
-                    margin-bottom: 4%;
-                }
-                img {
-                    height: 50%;
-                }
-            }
-            @media only screen and (max-width: 768px) {
-                flex: 1 0 100% !important;
-                margin-bottom: 4% !important;
-                margin-right: 0 !important;
-                &:last-of-type {
-                    margin-bottom: 0 !important;
-                }
-                img {
-                    height: 50%;
-                }
-            }
+            @media only screen and (max-width: 768px) {}
         }
     }
 }

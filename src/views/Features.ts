@@ -6,8 +6,8 @@ export class Features extends View {
         { url: 'assets/images/features/icon-2.png', title: 'development', description: 'we are professional marketeers, we will do anything you imagine in no time.' },
         { url: 'assets/images/features/icon-3.jpg', title: 'development', description: 'we are professional marketeers, we will do anything you imagine in no time.' },
         { url: 'assets/images/features/icon-4.png', title: 'development', description: 'we are professional marketeers, we will do anything you imagine in no time.' },
+        { url: 'assets/images/features/icon-5.png', title: 'development', description: 'we are professional marketeers, we will do anything you imagine in no time.' },
         { url: 'assets/images/features/icon-6.png', title: 'development', description: 'we are professional marketeers, we will do anything you imagine in no time.' },
-        { url: 'assets/images/features/icon-7.png', title: 'development', description: 'we are professional marketeers, we will do anything you imagine in no time.' },
     ];
 
     protected template(): string {

@@ -1,13 +1,13 @@
-import { Callback } from '@appTypes/*';
+import { Callback, IEventing } from '@appTypes/*';
 
-export class Eventing {
+export class Eventing implements IEventing {
     private events: { [key: string]: Callback[] } = {};
 
-    on(eventType: string, callback: Callback): void {
+    on<T>(eventType: string, callback: Callback<T>): void {
         Object.assign(this.events, { [eventType]: [...(this.events[eventType] ?? []), callback] });
     }
 
-    trigger(eventType: string): void {
-        this.events[eventType]?.forEach(callback => callback());
+    trigger<T>(eventType: string, ...args: T[]): void {
+        this.events[eventType]?.forEach(callback => callback(...args));
     }
 }

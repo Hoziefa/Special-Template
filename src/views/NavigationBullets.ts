@@ -11,7 +11,9 @@ interface INavigationBulletsElements {
 }
 
 export class NavigationBullets extends View<Model, INavigationBulletsState> {
-    protected readonly state: INavigationBulletsState = { showNavigationBullets: this.dataPersister.readData<EPersistedNavigationBulletsOptions>(EDataPersistKeys.BulletsOption) ?? EPersistedNavigationBulletsOptions.ShowNavigationBullets };
+    protected readonly state: INavigationBulletsState = {
+        showNavigationBullets: this.dataPersister.readData<EPersistedNavigationBulletsOptions>(EDataPersistKeys.BulletsOption) ?? EPersistedNavigationBulletsOptions.ShowNavigationBullets,
+    };
 
     private readonly bullets = [
         { goTo: '.about--us', content: 'about us' },
@@ -38,8 +40,7 @@ export class NavigationBullets extends View<Model, INavigationBulletsState> {
     }
 
     protected onRender(): void {
-        this.model.on(EObservablesDescriptors.ShowNavigationBullets, () => this.onBulletsOptionChosen(EPersistedNavigationBulletsOptions.ShowNavigationBullets));
-        this.model.on(EObservablesDescriptors.HideNavigationBullets, () => this.onBulletsOptionChosen(EPersistedNavigationBulletsOptions.HideNavigationBullets));
+        this.model.on<EPersistedNavigationBulletsOptions>(EObservablesDescriptors.ShowHideNavigationBullets, this.onBulletsOptionChosen);
     }
 
     protected eventsMap(): { [p: string]: EventListener & any } {

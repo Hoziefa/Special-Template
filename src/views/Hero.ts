@@ -106,8 +106,7 @@ export class Hero extends View<Model, IHeroState> {
     }
 
     protected onRender(): void {
-        this.model.on(EObservablesDescriptors.EnableRandomBackground, () => this.onRandomBackgroundOptionChange(true));
-        this.model.on(EObservablesDescriptors.DisableRandomBackground, () => this.onRandomBackgroundOptionChange(false));
+        this.model.on<boolean>(EObservablesDescriptors.EnableDisableRandomBackground, this.onRandomBackgroundOptionChange);
     }
 
     protected eventsMap(): { [key: string]: (e: Event & any) => void } {

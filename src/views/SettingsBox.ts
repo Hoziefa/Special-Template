@@ -128,12 +128,12 @@ export class SettingsBox extends View {
         currentTarget.classList.add('active');
 
         if (currentTarget.classList.contains('yes')) {
-            this.model.trigger(EObservablesDescriptors.ShowNavigationBullets);
+            this.model.trigger<EPersistedNavigationBulletsOptions>(EObservablesDescriptors.ShowHideNavigationBullets, EPersistedNavigationBulletsOptions.ShowNavigationBullets);
 
             this.dataPersister.persistData(EDataPersistKeys.BulletsOption, EPersistedNavigationBulletsOptions.ShowNavigationBullets);
         }
         else if (currentTarget.classList.contains('no')) {
-            this.model.trigger(EObservablesDescriptors.HideNavigationBullets);
+            this.model.trigger<EPersistedNavigationBulletsOptions>(EObservablesDescriptors.ShowHideNavigationBullets, EPersistedNavigationBulletsOptions.HideNavigationBullets);
 
             this.dataPersister.persistData(EDataPersistKeys.BulletsOption, EPersistedNavigationBulletsOptions.HideNavigationBullets);
         }
@@ -159,12 +159,12 @@ export class SettingsBox extends View {
         currentTarget.classList.add('active');
 
         if (currentTarget.classList.contains('yes')) {
-            this.model.trigger(EObservablesDescriptors.EnableRandomBackground);
+            this.model.trigger<boolean>(EObservablesDescriptors.EnableDisableRandomBackground, true);
 
             this.dataPersister.persistData(EDataPersistKeys.RandomBackground, true);
         }
         else if (currentTarget.classList.contains('no')) {
-            this.model.trigger(EObservablesDescriptors.DisableRandomBackground);
+            this.model.trigger<boolean>(EObservablesDescriptors.EnableDisableRandomBackground, false);
 
             this.dataPersister.persistData(EDataPersistKeys.RandomBackground, false);
         }

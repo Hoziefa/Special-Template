@@ -1,8 +1,8 @@
 import { Callback } from '@appTypes/*';
 
 export interface IEventing {
-    on(eventType: string, callback: Callback): void;
-    trigger(eventType: string): void;
+    on<T>(eventType: string, callback: Callback<T>): void;
+    trigger<T>(eventType: string, ...args: T[]): void;
 }
 
 export interface IDataPersister {

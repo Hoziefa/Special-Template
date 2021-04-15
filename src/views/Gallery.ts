@@ -1,5 +1,5 @@
-import { HTMLElementEvent } from '@appTypes/*';
 import { View } from '@views/*';
+import { HTMLElementEvent } from '@appTypes/*';
 
 interface IGalleryElements {
     galleryContainer: HTMLElement;
@@ -20,9 +20,9 @@ export class Gallery extends View {
         { url: 'assets/images/gallery/Shenandoah-national.jpg', alt: 'Shenandoah' },
     ];
 
-    readonly selectors: Record<keyof IGalleryElements, string> = { galleryContainer: 'section.our-gallery', galleryPopup: '.images-box .popup' };
+    public readonly selectors: Record<keyof IGalleryElements, string> = { galleryContainer: 'section.our-gallery', galleryPopup: '.our-gallery .popup' };
 
-    get elements(): IGalleryElements {
+    public get elements(): IGalleryElements {
         return { galleryContainer: document.querySelector<HTMLElement>(this.selectors.galleryContainer)!, galleryPopup: document.querySelector<HTMLDivElement>(this.selectors.galleryPopup)! };
     }
 
@@ -35,20 +35,17 @@ export class Gallery extends View {
                         <hr />
                     </header>
 
-                    <div class="images-box">
-                        ${ this.images.map(({ url, alt }) => `<div class="image-box"><img src="${ url }" alt="${ alt }" /></div>`).join('') }
-                        <div class="popup">
-                            <button aria-label="cancel-popup"><i class="fas fa-times"></i></button>
-                            <div class="popup-box">
-                                <img src="" alt="" />
-                                <span class="title"></span>
-                            </div>
-                        </div>
+                    <div class="images-box">${ this.images.map(({ url, alt }): string => `<div class="image-box"><img src="${ url }" alt="${ alt }" /></div>`).join('') }</div>
+                    
+                    <div class="popup">
+                        <button aria-label="cancel-popup"><i class="fas fa-times"></i></button>
+                        <figure class="popup-box">
+                            <img src="" alt="" />
+                            <figcaption class="title"></figcaption>
+                        </figure>
                     </div>
                 </div>
             </section>
-
-
         `;
     }
 
@@ -59,7 +56,9 @@ export class Gallery extends View {
     }
 
     private hidePopupController = ({ currentTarget, target }: HTMLElementEvent<HTMLButtonElement, HTMLDivElement>): void => {
-        target.matches(`${ this.selectors.galleryPopup }, ${ this.selectors.galleryPopup } button, ${ this.selectors.galleryPopup } button *`) && currentTarget.classList.remove('active');
+        const { galleryPopup } = this.selectors;
+
+        target.matches(`${ galleryPopup }, ${ galleryPopup } button, ${ galleryPopup } button *`) && currentTarget.classList.remove('active');
     };
 
     private galleryPopup = ({ target }: HTMLElementEvent<HTMLImageElement>): void => {

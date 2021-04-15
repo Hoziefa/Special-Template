@@ -12,8 +12,8 @@ export class Loader extends View {
         `;
     }
 
-    onLoadDisplayLoader = (): void => {
-        setTimeout(() => {
+    public onLoadDisplayLoader = (): void => {
+        setTimeout((): void => {
             const domLoader = document.querySelector<HTMLDivElement>('.loader');
 
             domLoader?.classList.add('active');

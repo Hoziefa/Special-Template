@@ -14,9 +14,9 @@ export class Skills extends View {
         { number: 70, text: 'git' },
     ];
 
-    readonly selectors: Record<keyof ISkillsElements, string> = { skillsContainer: '.our-skills' };
+    public readonly selectors: Record<keyof ISkillsElements, string> = { skillsContainer: '.our-skills' };
 
-    get elements(): ISkillsElements {
+    public get elements(): ISkillsElements {
         return { skillsContainer: document.querySelector<HTMLDivElement>(this.selectors.skillsContainer)! };
     }
 
@@ -29,7 +29,7 @@ export class Skills extends View {
                         <hr />
                     </header>
                     <div class="skills-container">
-                        ${ this.skillsList.map(({ number, text }) => `
+                        ${ this.skillsList.map(({ number, text }): string => `
                             <div class="card">
                                 <div class="box">
                                     <div class="percent">
@@ -53,7 +53,7 @@ export class Skills extends View {
     private scrollController = (): void => {
         const domCardsNumber = document.querySelectorAll<HTMLDivElement>('.card .number')!;
 
-        const texts = Array.from(domCardsNumber).map(domElm => domElm?.textContent?.trim().replace('%', ''));
+        const texts = Array.from(domCardsNumber).map((domElm): string | undefined => domElm?.textContent?.trim().replace('%', ''));
 
         texts.forEach((text, idx): void => {
             const svgCircleDomElm = document.querySelector<SVGCircleElement>(`.card:nth-child(${ idx + 1 }) svg circle:nth-child(2)`);

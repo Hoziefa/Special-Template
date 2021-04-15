@@ -168,7 +168,7 @@ section.our-skills {
             }
         }
 
-        @media (max-width: 991px) {
+        @include respond(custom-media, 0, 991px) {
             .card {
                 flex: 0 0 70% !important;
                 margin: 0 auto;

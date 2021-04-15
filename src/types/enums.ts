@@ -1,16 +1,16 @@
-export enum EDataPersistKeys {
+export enum DataPersistKeys {
     RandomBackground = 'randomBackground',
     CurrentSlide = 'currentSlide',
     BulletsOption = 'bullets-option',
     ColorOption = 'color-option'
 }
 
-export enum EObservablesDescriptors {
+export enum ObservablesDescriptors {
     EnableDisableRandomBackground = 'enableDisableRandomBg',
     ShowHideNavigationBullets = 'showHideNavigationBullets',
 }
 
-export enum EPersistedNavigationBulletsOptions {
+export enum PersistedNavigationBulletsOptions {
     ShowNavigationBullets = 'block',
     HideNavigationBullets = 'none',
 }

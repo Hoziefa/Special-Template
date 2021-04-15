@@ -1,9 +1,9 @@
 import { View } from '@views/*';
-import { EDataPersistKeys, EObservablesDescriptors, EPersistedNavigationBulletsOptions, HTMLElementEvent } from '@appTypes/*';
 import { Model } from '@models/*';
+import { DataPersistKeys, ObservablesDescriptors, PersistedNavigationBulletsOptions, HTMLElementEvent } from '@appTypes/*';
 
 interface INavigationBulletsState {
-    showNavigationBullets: EPersistedNavigationBulletsOptions;
+    showNavigationBullets: PersistedNavigationBulletsOptions;
 }
 
 interface INavigationBulletsElements {
@@ -12,7 +12,7 @@ interface INavigationBulletsElements {
 
 export class NavigationBullets extends View<Model, INavigationBulletsState> {
     protected readonly state: INavigationBulletsState = {
-        showNavigationBullets: this.dataPersister.readData<EPersistedNavigationBulletsOptions>(EDataPersistKeys.BulletsOption) ?? EPersistedNavigationBulletsOptions.ShowNavigationBullets,
+        showNavigationBullets: this.dataPersister.readData<PersistedNavigationBulletsOptions>(DataPersistKeys.BulletsOption) ?? PersistedNavigationBulletsOptions.ShowNavigationBullets,
     };
 
     private readonly bullets = [
@@ -25,22 +25,22 @@ export class NavigationBullets extends View<Model, INavigationBulletsState> {
         { goTo: '.contact', content: 'contact us' },
     ];
 
-    readonly selectors: Record<keyof INavigationBulletsElements, string> = { navigationBulletsContainer: '.nav-bullets' };
+    public readonly selectors: Record<keyof INavigationBulletsElements, string> = { navigationBulletsContainer: '.nav-bullets' };
 
-    get elements(): INavigationBulletsElements {
+    public get elements(): INavigationBulletsElements {
         return { navigationBulletsContainer: document.querySelector<HTMLDivElement>(this.selectors.navigationBulletsContainer)! };
     }
 
     protected template(): string {
         return `
             <div class="nav-bullets">
-                ${ this.bullets.map(({ goTo, content }) => `<div class="bullet" data-goto="${ goTo }"><div class="tooltip">${ content }</div></div>`).join('') }
+                ${ this.bullets.map(({ goTo, content }): string => `<div class="bullet" data-goto="${ goTo }"><div class="tooltip">${ content }</div></div>`).join('') }
             </div>
         `;
     }
 
     protected onRender(): void {
-        this.model.on<EPersistedNavigationBulletsOptions>(EObservablesDescriptors.ShowHideNavigationBullets, this.onBulletsOptionChosen);
+        this.model.on<PersistedNavigationBulletsOptions>(ObservablesDescriptors.ShowHideNavigationBullets, this.onBulletsOptionChosen);
     }
 
     protected eventsMap(): { [p: string]: EventListener & any } {
@@ -56,7 +56,7 @@ export class NavigationBullets extends View<Model, INavigationBulletsState> {
     };
 
     //#region Bullets Option Controller
-    private onBulletsOptionChosen = (showNavigationBullets: EPersistedNavigationBulletsOptions): void => {
+    private onBulletsOptionChosen = (showNavigationBullets: PersistedNavigationBulletsOptions): void => {
         this.elements.navigationBulletsContainer.style.display = showNavigationBullets;
 
         this.setState({ showNavigationBullets });
@@ -66,7 +66,7 @@ export class NavigationBullets extends View<Model, INavigationBulletsState> {
 
     //#endregion Bullets Option Controller
 
-    getPersistedData = (): void => {
+    public getPersistedData = (): void => {
         this.persistedBulletsOption();
     };
 }

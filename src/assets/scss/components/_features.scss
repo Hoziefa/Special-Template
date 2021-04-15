@@ -42,7 +42,7 @@ section.our-features {
                 color: $primary-color;
                 font-weight: bold;
                 position: relative;
-                text-shadow: 0 0 2px $text-color;
+                text-shadow: 0 0 2px $primary-text-color;
 
                 &::before {
                     content: "";
@@ -57,8 +57,6 @@ section.our-features {
             }
 
             .description { font-size: 1.05rem; }
-
-            @media only screen and (max-width: 768px) {}
         }
     }
 }

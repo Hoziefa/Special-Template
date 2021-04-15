@@ -1,7 +1,7 @@
 import { View } from '@views/*';
 
 export class TimeLine extends View {
-    readonly timelines = [
+    private readonly timelines = [
         {
             year: 2018,
             left: {
@@ -36,7 +36,7 @@ export class TimeLine extends View {
         return `
             <section class="timeline">
                 <div class="container">
-                    ${ this.timelines.map(({ year, left, right }) => `
+                    ${ this.timelines.map(({ year, left, right }): string => `
                         <div class="timeline-content">
                             <div class="year">${ year }</div>
         

@@ -20,7 +20,7 @@ export class Features extends View {
                     </header>
         
                     <div class="feat-box__container">
-                        ${ this.featBoxes.map(({ url, title, description }) => `
+                        ${ this.featBoxes.map(({ url, title, description }): string => `
                             <div class="feat-box">
                                 <img src="${ url }" alt="${ title }" width="225" height="225" />
                                 <div class="title">${ title }</div>

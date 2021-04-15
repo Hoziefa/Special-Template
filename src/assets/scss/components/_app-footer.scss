@@ -1,24 +1,22 @@
-@import "../abstracts/variables";
+@import "../abstracts/mixins";
 
 footer.app--footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 3% 0;
     background: linear-gradient(to right, black 35%, $primary-color 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     p {
-        color: $primaryWhite-color;
-        text-transform: capitalize;
         font-size: 1.25rem;
+        text-transform: capitalize;
+        color: $primaryWhite-color;
 
         span {
-            text-transform: capitalize;
-            background-image: linear-gradient($primaryWhite-color, $primary-color);
-            font-size: larger;
-            color: transparent;
-            -webkit-background-clip: text;
             font-family: $raleway-font;
+            font-size: larger;
+            text-transform: capitalize;
+            @include gradient-text(linear-gradient($primaryWhite-color, $primary-color));
         }
     }
 }

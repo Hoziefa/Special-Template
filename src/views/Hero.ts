@@ -1,7 +1,7 @@
-import { EDataPersistKeys, EObservablesDescriptors, HTMLElementEvent } from '@appTypes/*';
+import { View } from '@views/*';
+import { DataPersistKeys, ObservablesDescriptors, HTMLElementEvent } from '@appTypes/*';
 import { Model } from '@models/*';
 import { removeClassAttr } from '@utils/*';
-import { View } from '@views/*';
 
 interface IHeroState {
     currentSlide: number;
@@ -43,7 +43,7 @@ export class Hero extends View<Model, IHeroState> {
         { goTo: '.contact', content: 'contact' },
     ];
 
-    readonly selectors: Record<keyof IHeroElements, string> = {
+    public readonly selectors: Record<keyof IHeroElements, string> = {
         linksContainer: '.links-container',
         menuLinksUl: '.links-container .links',
         toggleMenuBtn: '.links-container .toggle-menu',
@@ -51,7 +51,7 @@ export class Hero extends View<Model, IHeroState> {
         paginationContainer: '.pagination-container',
     };
 
-    get elements(): IHeroElements {
+    public get elements(): IHeroElements {
         const { menuLinksUl, toggleMenuBtn, slides, paginationContainer } = this.selectors;
 
         return {
@@ -74,14 +74,14 @@ export class Hero extends View<Model, IHeroState> {
 
                         <div class="links-container">
                             <ul class="links">
-                                ${ this.links.map(({ goTo, content }, idx) => `
+                                ${ this.links.map(({ goTo, content }, idx): string => `
                                     <li class="list-item">
                                         <a href="#${ goTo.replace('.', '') }" class="${ idx === 0 ? 'active' : '' }" data-goto="${ goTo }">${ content }</a>
                                     </li>`).join('') }
                             </ul>
 
                             <button class="toggle-menu" aria-label="toggle menu">
-                                ${ Array.from({ length: 3 }).map(() => `<span></span>`).join('') }
+                                ${ Array.from({ length: 3 }).map((): string => `<span></span>`).join('') }
                             </button>
                         </div>
                     </nav>
@@ -89,10 +89,10 @@ export class Hero extends View<Model, IHeroState> {
             </div>
         
             <div class="slides-container">
-                ${ this.images.map((url, idx) => `<div class="slide-image ${ idx === 0 ? 'active' : '' }" style="background: linear-gradient(#000000a6, #000000a6), url('${ url }') center no-repeat fixed"></div>`).join('') }
+                ${ this.images.map((url, idx): string => `<div class="slide-image ${ idx === 0 ? 'active' : '' }" style="background: linear-gradient(#000000a6, #000000a6), url('${ url }') center no-repeat fixed"></div>`).join('') }
             </div>
         
-            <div class="pagination-container">${ this.images.map((_, idx) => `<button aria-label="pagination-${ idx + 1 }" data-pagination="${ idx }"></button>`).join('') }</div>
+            <div class="pagination-container">${ this.images.map((_, idx): string => `<button aria-label="pagination-${ idx + 1 }" data-pagination="${ idx }"></button>`).join('') }</div>
                 
             <div class="introduction-text">
                 <h1>we are <span>creative</span> agency</h1>
@@ -106,7 +106,7 @@ export class Hero extends View<Model, IHeroState> {
     }
 
     protected onRender(): void {
-        this.model.on<boolean>(EObservablesDescriptors.EnableDisableRandomBackground, this.onRandomBackgroundOptionChange);
+        this.model.on<boolean>(ObservablesDescriptors.EnableDisableRandomBackground, this.onRandomBackgroundOptionChange);
     }
 
     protected eventsMap(): { [key: string]: (e: Event & any) => void } {
@@ -141,7 +141,7 @@ export class Hero extends View<Model, IHeroState> {
     private slide = (direction: 'prev' | 'next', slides: Element[] | NodeListOf<Element>): void => {
         const { currentSlide, timer, duration } = this.state;
         const { paginationContainer } = this.elements;
-        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
+        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(DataPersistKeys.RandomBackground);
 
         if (direction === 'prev') this.setState({ currentSlide: currentSlide === 0 ? slides.length - 1 : currentSlide - 1 });
 
@@ -157,7 +157,7 @@ export class Hero extends View<Model, IHeroState> {
         slides[currentSlide].classList.add('active');
         paginationContainer.children[currentSlide].classList.add('active');
 
-        this.dataPersister.persistData(EDataPersistKeys.CurrentSlide, currentSlide);
+        this.dataPersister.persistData(DataPersistKeys.CurrentSlide, currentSlide);
     };
 
     private autoSlide = (direction: 'prev' | 'next' = 'next', slides = this.elements.slides): void => this.slide(direction, slides);
@@ -174,8 +174,8 @@ export class Hero extends View<Model, IHeroState> {
     private persistedRandomBgOption = (): void => {
         const { timer, duration } = this.state;
         const { slides, paginationContainer } = this.elements;
-        const currentSlide = this.dataPersister.readData<number>(EDataPersistKeys.CurrentSlide) ?? 0;
-        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
+        const currentSlide = this.dataPersister.readData<number>(DataPersistKeys.CurrentSlide) ?? 0;
+        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(DataPersistKeys.RandomBackground);
 
         this.setState({ currentSlide });
 
@@ -205,7 +205,7 @@ export class Hero extends View<Model, IHeroState> {
         this.autoSlide();
     };
 
-    getPersistedData = (): void => {
+    public getPersistedData = (): void => {
         this.persistedRandomBgOption();
     };
 }

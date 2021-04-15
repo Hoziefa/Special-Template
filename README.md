@@ -8,5 +8,5 @@
 2. Slider with pagination
 3. Control to start the slider or stop it
 4. Show/hide navigation bullets
-5. Persisting your personal preferences
-6. Ability to remove your preferences
+5. Persisting user personal preferences
+6. Ability to remove user personal preferences

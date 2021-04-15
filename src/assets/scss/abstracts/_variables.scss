@@ -1,163 +1,34 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap");
 
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap");
-
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
 
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;500&display=swap");
 
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
 
-@import url("https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@400;500;600;700&display=swap");
-
 @import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
-
-//@import url("https://fonts.googleapis.com/css2?family=Fascinate&display=swap");
-
-//@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-
-//@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
-
-//@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
-
-/*=============================================
-//%=        START VARIABLES SECTION        =%//
-=============================================*/
 
 //-*----------  START COLORS BASE  ----------*/
 
 $fancyFuchsiaColor-color: #E91E63;
-
-$fancyGreenColor-color: #4CAF50;
-
-$GrassGreenColor: #7EB908;
-$LightGreenColor: #3AD890;
-$teal: #00ABA9;
-$maximumBlueGreen-color: #2BCBBA;
-$turquoiseTopaz-color: #0FB9B1;
-
-$reptileGreen-color: #26DE81;
-$algalFuelGreen-color: #20BF6B;
-$algalFuelGreenLight-color: #2ECC71;
-
 $creamWhite-color: #F8F8FF;
-$floralwhite-color: #FFFAF0;
-$whitesmoke-color: #F5F5F5;
-$lightGray-color: #B6B6B6;
-$whiteLittleDark-color: #ECECEC;
-$grayText-color: #9E9E9E;
-$goodBlackGray-color: #212121;
-$goodBlackDark-color: #121212;
-$blackBlueGray-color: #252F31;
-$blackBlueDark-color: #191E22; //- #232323 little lighter
-$darkGray-color: #6A6E71; //- #6C6C6C little grayer
-
-$grayOverlay-color: rgba(49, 55, 61, 0.9);
-
-$darkLessNavy-color: #23232E;
-$darkestNavy-color: #141418;
-
-$fancyNavy-color: #6649B8;
-
-$SkyBlueColor: #A4E4F1;
-
-$LightOrangeColor: #EAB022;
-
-$fancyLightYellow-color: #FFEB3B;
-$flirtatiousYellow-color: #FED330;
-
-$PinkColor: #FA86C1;
-
-$DarkOrangeColor-one: #F7600E;
-$DarkOrangeColor-two: #DA532C;
-$w3DeepOrange: #FF5722;
-$orangeHibiscus-color: #FD9644;
-$beniukonBronzeOrange-color: #FA8231;
-
-$DarkBlueColor: #2B5797;
-$BlueColor: #04A0EA;
-$flat-midnight-blue: #34495E;
-$flat-babyBlue-blue: #609CE1;
-$flat-azure-blue: #069AF3;
-$BluerBlueColor: #0BADCC;
-$twinkleBlue-color: #D1D8E0;
-$highBlue-color: #45AAF2;
-$fancyBlue-color: #09F;
-
-$FuchsiaColor: #E82F69;
-$FuchsiaColor: #FF0048;
-$bloodyRed-color: #E11;
-$w3Red: #F44336;
-$fusionRed-color: #FC5C65;
-$desire-color: #EB3B5A;
-$redPigment-color: #EA2027;
-
-$flat-silver: #BDC3C7;
-
-$w3Indigo: #3F51B5;
-
-$google-blue: #4285F4;
-$google-yellow: #FBBC05;
 $google-green: #34A853;
-$google-redOrange: #EA4335;
-
-$twitter-skyBlue: #55ACEE;
-$twitter-black: #292F33;
-$twitter-blueGray: #66757F;
-$twitter-lightGray: #CCD6DD;
-$twitter-blueLight: #E1E8ED;
-
-$facebook-Darkblue: #3B5998;
-$facebook-lightBlue: #8B9DC3;
-$facebook-lighterBlue: #DFE3EE;
-$facebook-white: #F7F7F7;
-
-$microsoft-orange: #F65314;
-$microsoft-green: #7CBB00;
-$microsoft-blue: #00A1F1;
-$microsoft-yellow: #FB0;
-
-$intel-blue: #0F7DC2;
-
-$instagram-blue: #3F729B;
-
-$ibm-blue: #069;
-
-$yahoo-blue: #7B0099;
-
 $amazon-orange: #F90;
-$amazon-blue: #146EB4;
-
-$netflix-black: #221F1F;
-$netflix-red: #E50914;
-$netflix-white: #F5F5F1;
-
-$coca-cola-red: #ED1C16;
-
-$pepsi-fire: #E32934;
-$pepsi-blue: #004883;
-
-$ikea-orange: #FC0;
-$ikea-blue: #039;
-
-$android-green: #A4C639;
-
-$royalblueWhite-color: #BABECC;
-$royalblueWhiter-color: #EBECF0;
-$darkBlackBlue-color: #495057;
-$blueLight-color: #607D8B;
 $fancyPureBlue-color: #03A9F4;
-$fancyNormBlue-color: #2196F3;
 $littleDarkTeal-color: #009688;
-$bootstrap-success-color: #28A745;
-$bootstrap-danger-color: #DC3545;
-$bootstrap-warning-color: #FFC107;
-$bootstrap-info-color: #17A2B8;
-$bootstrap-light-color: #F8F9FA;
-$bootstrap-primary-color: #007BFF;
-$bootstrap-primaryGray-color: #6C757D;
+$optionPurple-box: #4A148C;
+$floralwhite-color: #FFFAF0;
+$flat-silver: #BDC3C7;
+$goodBlackGray-color: #212121;
 $bootstrap-black-color: #343A40;
-$bootstrap-white-color: #F8F9FA;
+$darkBlackBlue-color: #495057;
+$bootstrap-primaryGray-color: #6C757D;
+$optionGreen-box: $google-green;
+$optionOrange-box: $amazon-orange;
+$optionPink-box: $fancyFuchsiaColor-color;
+$optionBlue-box: $fancyPureBlue-color;
+$optionTeal-box: $littleDarkTeal-color;
+$primaryWhite-color: $creamWhite-color;
 
 //-*----------  END COLORS BASE  ----------*/
 
@@ -165,7 +36,6 @@ $bootstrap-white-color: #F8F9FA;
 
 $montserrat-font: "Montserrat";
 $raleway-font: "raleway";
-$caveat-font: "Caveat";
 $workSans-font: "Work Sans", sans-serif;
 $lobster-font: "Lobster", sans-serif;
 $righteous-font: "Righteous", sans-serif;
@@ -174,24 +44,15 @@ $righteous-font: "Righteous", sans-serif;
 
 //%-*=====  End of GLOBAL STYLE SECTION  ======*-//
 
-$primary-color: $google-green;
-
-$optionGreen-box: $primary-color;
-$optionOrange-box: $amazon-orange;
-$optionPink-box: $fancyFuchsiaColor-color;
-$optionBlue-box: $fancyPureBlue-color;
-$optionTeal-box: $littleDarkTeal-color;
-$optionPurple-box: #4A148C;
-
-$primaryWhite-color: $creamWhite-color;
-
 $main-font: $montserrat-font;
 $title-font: $raleway-font;
 $logo-font: $lobster-font;
 $decorated-font: $righteous-font;
 
-$text-color: #2D2D2D;
+$primary-color: $google-green;
+$primary-text-color: #2D2D2D;
 $primary-background-color: white;
+$secondary-background-color: #ECECEC;
 
 $default-font-size: 1rem;
 

@@ -29,7 +29,7 @@ export class Testimonials extends View {
                     <header><h2>testimonials</h2></header>
                     
                     <div class="testimonials-content">
-                        ${ this.testimonials.map(({ description, personInfo: { url, name, jobTitle } }) => `
+                        ${ this.testimonials.map(({ description, personInfo: { url, name, jobTitle } }): string => `
                             <div class="testimonials-box">
                                 <img src="${ url }" alt="${ name }" width="256" height="256"/>
                                 <span class="person-name">${ name }</span>

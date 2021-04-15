@@ -48,55 +48,55 @@
 .loader {
     position: fixed;
     top: 0;
-    left: 0;
     bottom: 0;
+    left: 0;
     right: 0;
     z-index: 100;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: $whiteLittleDark-color;
+    justify-content: center;
+    background-color: $secondary-background-color;
 
     .wrapper {
         text-align: center;
 
         .title {
-            color: var(--color-crayon);
-            font-size: 2.5rem;
             font-family: $decorated-font;
-            text-transform: uppercase;
+            font-size: 2.5rem;
             letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--color-crayon);
         }
 
         .rainbow-marker-loader {
-            height: 4rem;
+            position: relative;
+            box-sizing: border-box;
             width: 20rem;
             max-width: 100%;
+            height: 4rem;
+            margin: 1rem;
+            background: var(--bg-01-a), var(--bg-02-a), var(--bg-03-a), var(--bg-04-a), var(--bg-05-a), var(--bg-06-a), var(--bg-07-a), var(--bg-08-a), var(--bg-09-a), var(--bg-10-a);
             border: .5rem solid var(--color-crayon);
             border-radius: .5rem;
             animation: infinite alternate rainbow-fill var(--duration) ease-in-out;
-            box-sizing: border-box;
-            position: relative;
-            margin: 1rem;
-            background: var(--bg-01-a), var(--bg-02-a), var(--bg-03-a), var(--bg-04-a), var(--bg-05-a), var(--bg-06-a), var(--bg-07-a), var(--bg-08-a), var(--bg-09-a), var(--bg-10-a);
 
             &::after {
-                content: "";
-                display: block;
                 position: absolute;
                 top: 0;
                 left: 0;
+                display: block;
+                box-sizing: border-box;
                 width: 100%;
                 height: 100%;
-                transform-origin: left center;
-                border-radius: .5rem;
-                box-sizing: border-box;
                 margin-top: -7.5%;
                 margin-left: -2.5%;
-                animation: infinite alternate move-marker var(--duration) ease-in-out;
+                content: "";
                 background: no-repeat left 0 top    / 3rem 50% linear-gradient(to bottom right, transparent, transparent 40%, var(--color-crayon) 40%),
                 no-repeat left 0 bottom / 3rem 50% linear-gradient(to top right, transparent, transparent 40%, var(--color-crayon) 40%),
                 no-repeat left 3rem bottom / 100% 100% linear-gradient(to right, var(--color-crayon), var(--color-crayon));
+                border-radius: .5rem;
+                transform-origin: left center;
+                animation: infinite alternate move-marker var(--duration) ease-in-out;
             }
         }
     }

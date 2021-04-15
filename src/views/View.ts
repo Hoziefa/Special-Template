@@ -6,15 +6,15 @@ interface IState {
 }
 
 export abstract class View<T extends Model = Model, S extends Readonly<IState> = {}> {
-    protected abstract template(): string;
-
     protected regions: { [key: string]: Element } = {};
 
-    protected state: S = {} as S;
+    protected state = {} as S;
 
     constructor(private parent: Element, public model: T, public dataPersister: IDataPersister) {
         this.model.on('change', this.render);
     }
+
+    protected abstract template(): string;
 
     protected setState(newState: PartialRequired<S>): void {
         Object.assign(this.state, newState);
@@ -28,25 +28,25 @@ export abstract class View<T extends Model = Model, S extends Readonly<IState> =
         return {};
     }
 
+    protected onRender(): void {}
+
     private bindEvents(fragment: DocumentFragment | Element): void {
-        Object.entries(this.eventsMap()).forEach(([eventType, callback]) => {
+        Object.entries(this.eventsMap()).forEach(([eventType, callback]): void => {
             const [eventName, selector] = eventType.split(':');
 
             if (selector === 'html') return document.addEventListener(eventName, callback);
 
-            fragment.querySelectorAll(selector).forEach(elm => elm.addEventListener(eventName, callback));
+            fragment.querySelectorAll(selector).forEach((domElement): void => domElement.addEventListener(eventName, callback));
         });
     }
 
     private bindRegions(fragment: DocumentFragment | Element): void {
-        Object.entries(this.regionsMap()).forEach(([regionKey, regionValue]) => {
+        Object.entries(this.regionsMap()).forEach(([regionKey, regionValue]): void => {
             this.regions[regionKey] = fragment.querySelector(regionValue)!;
         });
     }
 
-    protected onRender(): void {}
-
-    render(): void {
+    public render(): void {
         const templateElement = document.createElement('template');
 
         templateElement.innerHTML = this.template();

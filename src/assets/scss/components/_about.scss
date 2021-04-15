@@ -22,7 +22,7 @@ section.about--us {
             font-size: 1.15rem;
             font-weight: 500;
 
-            @media screen and (max-width: 768px) {
+            @include respond(tab-port) {
                 width: 100%;
                 margin: 0;
             }
@@ -41,7 +41,7 @@ section.about--us {
         }
     }
 
-    @media (max-width: 600px) {
+    @include respond(tab-port) {
         .container {
             display: block;
         }

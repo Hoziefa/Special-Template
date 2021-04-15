@@ -1,6 +1,6 @@
-import { EDataPersistKeys, EObservablesDescriptors, EPersistedNavigationBulletsOptions, HTMLElementEvent } from '@appTypes/*';
-import { removeClassAttr } from '@utils/*';
 import { View } from '@views/*';
+import { removeClassAttr } from '@utils/*';
+import { DataPersistKeys, HTMLElementEvent, ObservablesDescriptors, PersistedNavigationBulletsOptions } from '@appTypes/*';
 
 interface ISettingsBoxElements {
     settingsBox: HTMLDivElement;
@@ -12,7 +12,7 @@ interface ISettingsBoxElements {
 }
 
 export class SettingsBox extends View {
-    readonly selectors: Record<keyof ISettingsBoxElements, string> = {
+    public readonly selectors: Record<keyof ISettingsBoxElements, string> = {
         settingsBox: '.settings-box',
         settingsBoxToggleBtn: '.toggle-settings',
         optionBoxColorsList: '.option-box--colors-switch .colors-list li',
@@ -21,7 +21,7 @@ export class SettingsBox extends View {
         resetAllBtn: '.option-box--reset button',
     };
 
-    get elements(): ISettingsBoxElements {
+    public get elements(): ISettingsBoxElements {
         const { settingsBox, settingsBoxToggleBtn, optionBoxColorsList, optionBoxRandomBg, optionBoxBullets, resetAllBtn } = this.selectors;
 
         return {
@@ -104,19 +104,19 @@ export class SettingsBox extends View {
 
         document.documentElement.style.setProperty('--primary-color', chosenColorOption);
 
-        this.dataPersister.persistData(EDataPersistKeys.ColorOption, chosenColorOption);
+        this.dataPersister.persistData(DataPersistKeys.ColorOption, chosenColorOption);
     };
 
     private persistedColorOption = (): void => {
         const { optionBoxColorsList } = this.elements;
 
-        const persistedColorOption = this.dataPersister.readData<string>(EDataPersistKeys.ColorOption) ?? '';
+        const persistedColorOption = this.dataPersister.readData<string>(DataPersistKeys.ColorOption) ?? '';
 
         document.documentElement.style.setProperty('--primary-color', persistedColorOption || getComputedStyle(optionBoxColorsList[0]).backgroundColor);
 
         removeClassAttr(optionBoxColorsList);
 
-        (Array.from(optionBoxColorsList).find(option => getComputedStyle(option).backgroundColor.includes(persistedColorOption)) ?? optionBoxColorsList[0]).classList.add('active');
+        (Array.from(optionBoxColorsList).find((option): boolean => getComputedStyle(option).backgroundColor.includes(persistedColorOption)) ?? optionBoxColorsList[0]).classList.add('active');
     };
 
     //#endregion Color Option Controller
@@ -128,26 +128,26 @@ export class SettingsBox extends View {
         currentTarget.classList.add('active');
 
         if (currentTarget.classList.contains('yes')) {
-            this.model.trigger<EPersistedNavigationBulletsOptions>(EObservablesDescriptors.ShowHideNavigationBullets, EPersistedNavigationBulletsOptions.ShowNavigationBullets);
+            this.model.trigger<PersistedNavigationBulletsOptions>(ObservablesDescriptors.ShowHideNavigationBullets, PersistedNavigationBulletsOptions.ShowNavigationBullets);
 
-            this.dataPersister.persistData(EDataPersistKeys.BulletsOption, EPersistedNavigationBulletsOptions.ShowNavigationBullets);
+            this.dataPersister.persistData(DataPersistKeys.BulletsOption, PersistedNavigationBulletsOptions.ShowNavigationBullets);
         }
         else if (currentTarget.classList.contains('no')) {
-            this.model.trigger<EPersistedNavigationBulletsOptions>(EObservablesDescriptors.ShowHideNavigationBullets, EPersistedNavigationBulletsOptions.HideNavigationBullets);
+            this.model.trigger<PersistedNavigationBulletsOptions>(ObservablesDescriptors.ShowHideNavigationBullets, PersistedNavigationBulletsOptions.HideNavigationBullets);
 
-            this.dataPersister.persistData(EDataPersistKeys.BulletsOption, EPersistedNavigationBulletsOptions.HideNavigationBullets);
+            this.dataPersister.persistData(DataPersistKeys.BulletsOption, PersistedNavigationBulletsOptions.HideNavigationBullets);
         }
     };
 
     private persistedBulletsOption = (): void => {
         const { optionBoxBullets } = this.elements;
 
-        const persistedBulletsOption = this.dataPersister.readData<EPersistedNavigationBulletsOptions>(EDataPersistKeys.BulletsOption);
+        const persistedBulletsOption = this.dataPersister.readData<PersistedNavigationBulletsOptions>(DataPersistKeys.BulletsOption);
 
         persistedBulletsOption && removeClassAttr(optionBoxBullets);
 
-        if (persistedBulletsOption?.includes(EPersistedNavigationBulletsOptions.ShowNavigationBullets)) optionBoxBullets[0].classList.add('active');
-        else if (persistedBulletsOption?.includes(EPersistedNavigationBulletsOptions.HideNavigationBullets)) optionBoxBullets[1].classList.add('active');
+        if (persistedBulletsOption?.includes(PersistedNavigationBulletsOptions.ShowNavigationBullets)) optionBoxBullets[0].classList.add('active');
+        else if (persistedBulletsOption?.includes(PersistedNavigationBulletsOptions.HideNavigationBullets)) optionBoxBullets[1].classList.add('active');
     };
 
     //#endregion Bullets Option Controller
@@ -159,21 +159,21 @@ export class SettingsBox extends View {
         currentTarget.classList.add('active');
 
         if (currentTarget.classList.contains('yes')) {
-            this.model.trigger<boolean>(EObservablesDescriptors.EnableDisableRandomBackground, true);
+            this.model.trigger<boolean>(ObservablesDescriptors.EnableDisableRandomBackground, true);
 
-            this.dataPersister.persistData(EDataPersistKeys.RandomBackground, true);
+            this.dataPersister.persistData(DataPersistKeys.RandomBackground, true);
         }
         else if (currentTarget.classList.contains('no')) {
-            this.model.trigger<boolean>(EObservablesDescriptors.EnableDisableRandomBackground, false);
+            this.model.trigger<boolean>(ObservablesDescriptors.EnableDisableRandomBackground, false);
 
-            this.dataPersister.persistData(EDataPersistKeys.RandomBackground, false);
+            this.dataPersister.persistData(DataPersistKeys.RandomBackground, false);
         }
     };
 
     private persistedRandomBgOption = (): void => {
         const { optionBoxRandomBg } = this.elements;
 
-        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(EDataPersistKeys.RandomBackground);
+        const isRandomBackgroundPersisted = this.dataPersister.readData<boolean>(DataPersistKeys.RandomBackground);
 
         removeClassAttr(optionBoxRandomBg);
 
@@ -187,7 +187,7 @@ export class SettingsBox extends View {
         location.reload();
     };
 
-    getPersistedData = (): void => {
+    public getPersistedData = (): void => {
         this.persistedColorOption();
         this.persistedBulletsOption();
         this.persistedRandomBgOption();

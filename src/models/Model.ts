@@ -1,9 +1,9 @@
 import { IEventing } from '@appTypes/*';
 
 export class Model {
+    public readonly on = this.eventing.on.bind(this.eventing);
+
+    public readonly trigger = this.eventing.trigger.bind(this.eventing);
+
     constructor(private eventing: IEventing) {}
-
-    on = this.eventing.on.bind(this.eventing);
-
-    trigger = this.eventing.trigger.bind(this.eventing);
 }

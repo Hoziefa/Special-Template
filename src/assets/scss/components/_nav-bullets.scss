@@ -67,7 +67,7 @@
         }
     }
 
-    @media (max-width: 600px) {
+    @include respond(custom-media, 0, 600px) {
         width: 20px;
         .bullet {
             width: 13px;

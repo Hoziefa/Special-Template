@@ -1,5 +1,6 @@
 @import "abstracts/mixins";
 @import "abstracts/variables";
+@import "base/global-style";
 @import "components/loader";
 @import "components/settings-box";
 @import "components/nav-bullets";
@@ -13,4 +14,3 @@
 @import "components/testimonials";
 @import "components/contact";
 @import "components/app-footer";
-@import "base/global-style";

@@ -37,12 +37,12 @@ section.contact {
                 right: 0;
             }
 
-            @media (max-width: 1000px) {
+            @include respond(custom-media, 0, 1000px) {
                 &::before,
                 &::after { width: 25%; }
             }
 
-            @media (max-width: 400px) {
+            @include respond(phone) {
                 &::before,
                 &::after { width: 18%; }
             }

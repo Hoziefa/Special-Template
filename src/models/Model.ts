@@ -5,5 +5,5 @@ export class Model {
 
     public readonly trigger = this.eventing.trigger.bind(this.eventing);
 
-    constructor(private eventing: IEventing) {}
+    constructor(private readonly eventing: IEventing) {}
 }

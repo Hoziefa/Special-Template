@@ -10,8 +10,21 @@ export abstract class View<T extends Model = Model, S extends Readonly<IState> =
 
     protected state = {} as S;
 
-    constructor(private parent: Element, public model: T, public dataPersister: IDataPersister) {
+    constructor(private readonly parent: Element, public readonly model: T, public readonly dataPersister: IDataPersister) {
         this.model.on('change', this.render);
+    }
+
+    public render(): void {
+        const templateElement = document.createElement('template');
+
+        templateElement.innerHTML = this.template();
+
+        this.bindEvents(templateElement.content);
+        this.bindRegions(templateElement.content);
+
+        this.onRender();
+
+        this.parent.append(templateElement.content);
     }
 
     protected abstract template(): string;
@@ -44,18 +57,5 @@ export abstract class View<T extends Model = Model, S extends Readonly<IState> =
         Object.entries(this.regionsMap()).forEach(([regionKey, regionValue]): void => {
             this.regions[regionKey] = fragment.querySelector(regionValue)!;
         });
-    }
-
-    public render(): void {
-        const templateElement = document.createElement('template');
-
-        templateElement.innerHTML = this.template();
-
-        this.bindEvents(templateElement.content);
-        this.bindRegions(templateElement.content);
-
-        this.onRender();
-
-        this.parent.append(templateElement.content);
     }
 }

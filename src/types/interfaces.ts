@@ -1,4 +1,4 @@
-import { Callback } from '@appTypes/*';
+import { Callback, DataPersistKeys } from '@appTypes/*';
 
 export interface IEventing {
     on<T>(eventType: string, callback: Callback<T>): void;
@@ -6,8 +6,8 @@ export interface IEventing {
 }
 
 export interface IDataPersister {
-    persistData<T>(key: string, data: T): void;
-    deleteData(key: string): void;
-    readData<T>(key: string): T | null;
+    persistData<T>(key: DataPersistKeys, data: T): void;
+    deleteData(key: DataPersistKeys): void;
+    readData<T>(key: DataPersistKeys): T | null;
     clearData(): void;
 }
